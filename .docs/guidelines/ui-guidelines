@@ -184,7 +184,7 @@ Components with CVA variants export a `*Base` string and a `*VariantClasses` / `
 
 ```tsx
 import { cva } from 'class-variance-authority'
-import { statusBadgeBase, statusBadgeVariantClasses } from '@lizi-teo/ai-chat-ui/primitives'
+import { statusBadgeBase, statusBadgeVariantClasses } from '@lizzie-teo/conjure-ui/primitives'
 
 const extendedVariants = cva(statusBadgeBase, {
   variants: {
@@ -214,7 +214,7 @@ All primitives accept `className`. Use it with token-based Tailwind classes when
 `EntityAvatar` exports `entityAvatarSizeClasses`. Add extra sizes the same way:
 
 ```tsx
-import { entityAvatarBase, entityAvatarSizeClasses } from '@lizi-teo/ai-chat-ui/primitives'
+import { entityAvatarBase, entityAvatarSizeClasses } from '@lizzie-teo/conjure-ui/primitives'
 
 const myAvatarVariants = cva(entityAvatarBase, {
   variants: {

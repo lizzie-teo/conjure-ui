@@ -16,7 +16,7 @@ network's brand portal and place them in your app's `public/payment-logos/` dire
 ## Usage
 
 ```tsx
-import { PaymentLogo } from '@lizi-teo/ai-chat-ui'
+import { PaymentLogo } from '@lizzie-teo/conjure-ui'
 
 <PaymentLogo src="/payment-logos/wallets/apple-pay.svg" alt="Apple Pay" size="md" />
 ```

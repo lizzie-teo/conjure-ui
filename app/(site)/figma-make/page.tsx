@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 }
 
 const STEP1_PROMPT = `Clone the following GitHub repository into this Figma Make project:
-https://github.com/lizi-teo/ai-chat.git
+https://github.com/lizzie-teo/conjure-ui.git
 
 Import ONLY these paths — do not clone the full repo:
 - components/         (component source files — skip any *.stories.tsx files)

@@ -212,7 +212,7 @@ import { cva } from 'class-variance-authority'
 import {
   statusBadgeBase,
   statusBadgeVariantClasses,
-} from '@lizi-teo/ai-chat-ui/primitives'
+} from '@lizzie-teo/conjure-ui/primitives'
 
 const myBadgeVariants = cva(statusBadgeBase, {
   variants: {

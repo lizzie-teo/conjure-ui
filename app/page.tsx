@@ -19,7 +19,7 @@ export default function HomePage() {
       <section className="site-hero border-b border-border">
         <div className="mx-auto max-w-5xl px-4 md:px-8 py-20 md:py-28 lg:py-36">
           <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            @lizi-teo/ai-chat-ui
+            @lizzie-teo/conjure-ui
           </p>
           <h1 className="mb-5 text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-foreground leading-[1.1] max-w-2xl">
             White-label AI chat components

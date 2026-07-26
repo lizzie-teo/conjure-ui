@@ -2,7 +2,7 @@
 
 ## What we're building
 
-A polished Next.js documentation site (inside the existing `app/` directory) that acts as the public-facing framework reference for `@lizi-teo/ai-chat-ui`. Audience: product designers and design managers. Think shadcn/ui or Radix UI docs — visual, clean, premium. Not a developer tool.
+A polished Next.js documentation site (inside the existing `app/` directory) that acts as the public-facing framework reference for `@lizzie-teo/conjure-ui`. Audience: product designers and design managers. Think shadcn/ui or Radix UI docs — visual, clean, premium. Not a developer tool.
 
 Deployed to Vercel. Storybook (on Chromatic) stays separate as the interactive component browser for internal/dev use.
 

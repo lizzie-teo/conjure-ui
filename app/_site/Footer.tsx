@@ -10,7 +10,7 @@ export function Footer() {
           <span className="text-sm font-semibold text-foreground">AI Chat UI</span>
           <span className="text-xs text-muted-foreground">
             White-label AI chat components by{' '}
-            <a href="https://github.com/lizi-teo" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+            <a href="https://github.com/lizzie-teo" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
               Lizzie Teo
             </a>
             {' '}— MIT License © 2026
@@ -19,8 +19,8 @@ export function Footer() {
         <nav className="flex items-center gap-5 text-sm text-muted-foreground">
           <Link href="/figma-make" className="hover:text-foreground transition-colors">Figma Make</Link>
           <a href={STORYBOOK_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Storybook ↗</a>
-          <a href="https://www.npmjs.com/package/@lizi-teo/ai-chat-ui" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">npm ↗</a>
-          <a href="https://github.com/lizi-teo/ai-chat" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub ↗</a>
+          <a href="https://www.npmjs.com/package/@lizzie-teo/conjure-ui" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">npm ↗</a>
+          <a href="https://github.com/lizzie-teo/conjure-ui" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub ↗</a>
         </nav>
       </div>
     </footer>

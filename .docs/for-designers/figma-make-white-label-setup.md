@@ -1,6 +1,6 @@
 # White-Label Theming in Figma Make — Designer Setup Guide
 
-This guide walks you through setting up a client-branded prototype in Figma Make using the `@lizi-teo/ai-chat-ui` component library. You will clone the components, extract the client's brand colours, and have an AI agent remap the CSS so every component automatically picks up the client's look.
+This guide walks you through setting up a client-branded prototype in Figma Make using the `@lizzie-teo/conjure-ui` component library. You will clone the components, extract the client's brand colours, and have an AI agent remap the CSS so every component automatically picks up the client's look.
 
 ---
 
@@ -15,7 +15,7 @@ A white-label AI chat UI kit built in React + Tailwind CSS. Every colour, radius
 - **Tailwind CSS v4** — utility classes are generated from CSS variables, not hardcoded values.
 
 **License**
-`@lizi-teo/ai-chat-ui` is released under the **MIT License** © 2026 Lizzie Teo.
+`@lizzie-teo/conjure-ui` is released under the **MIT License** © 2026 Lizzie Teo.
 It includes components derived from [shadcn/ui](https://ui.shadcn.com) (also MIT © shadcn).
 You are free to use, copy, modify, and distribute this library in client work. The MIT licence notice must be kept in any distributed build.
 
@@ -29,7 +29,7 @@ Open a new Figma Make project. Paste the following prompt into the Figma Make ch
 
 ```
 Clone the following GitHub repository into this Figma Make project:
-https://github.com/lizi-teo/ai-chat.git
+https://github.com/lizzie-teo/conjure-ui.git
 
 Import ONLY these paths — do not clone the full repo:
 - components/         (component source files — skip any *.stories.tsx files)

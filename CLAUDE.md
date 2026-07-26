@@ -1,8 +1,8 @@
 @AGENTS.md
 
-# ai-chat-ui
+# conjure-ui
 
-White-label AI chat component library (`@lizi-teo/ai-chat-ui`) published to npm. Consumers install this package and apply their brand via `ThemeProvider` or a `.theme-{client}` CSS class. **This is a library, not a standalone app.**
+White-label AI chat component library (`@lizzie-teo/conjure-ui`) published to npm. Consumers install this package and apply their brand via `ThemeProvider` or a `.theme-{client}` CSS class. **This is a library, not a standalone app.**
 
 ## Dev environment
 
