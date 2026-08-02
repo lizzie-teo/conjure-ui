@@ -48,10 +48,18 @@ jobs:
         run: |
           echo "Files npm would publish:"
           npm pack --dry-run
-          for f in dist/index.js dist/index.d.ts \
+          for f in dist/index.js dist/index.d.ts dist/package.json \
                    dist/components/primitives/index.d.ts \
                    dist/components/core/index.d.ts \
                    dist/components/layouts/index.d.ts; do
             test -f "$f" || { echo "::error::missing published entry point: $f"; exit 1; }
           done
           echo "All entry points and type declarations present."
+
+      # Installs the packed tarball into a throwaway project outside the repo and
+      # consumes it as a stranger would: ESM imports of every entry point, an SSR
+      # render, a typecheck under both resolution modes, and a Tailwind build
+      # against the shipped CSS. The step above only proves files exist — this
+      # proves they resolve.
+      - name: Consumer smoke test
+        run: npm run test:consumer

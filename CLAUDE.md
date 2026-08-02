@@ -12,6 +12,7 @@ class or `ThemeProvider`. **This is a library, not a standalone app.**
 npm run storybook    # ← primary dev environment (port 6006)
 npm run dev          # Vite demo harness (demo/) — fast component preview
 npm test             # renders every story + runs interaction tests (~10s)
+npm run test:consumer # packs and installs the package elsewhere, imports it (~90s)
 npm run typecheck
 npm run lint         # --max-warnings 0: warnings fail
 npm run build        # library build → dist/
@@ -111,13 +112,31 @@ import there forces a third-party request (and a GDPR problem) on every consumer
 Inter themselves — `.storybook/preview-head.html`, `demo/index.html` — neither of which is
 published.
 
+**`app/globals.css` carries a load-bearing `@source "../dist/**/*.js"`.** Tailwind never scans
+`node_modules` on its own, so without it a consumer who imports `@lizzie-teo/conjure-ui/styles`
+gets the tokens and none of the utilities — every component renders unstyled. It is a glob rather
+than a bare `../dist` so a missing dist during local dev is a no-op instead of a build error.
+`npm run test:consumer` fails if it ever goes missing.
+
 Token names follow the shadcn/ui convention, so a theme authored against that vocabulary drops in
-without renaming. Leave `app/globals.css` alone — it is shared infrastructure.
+without renaming. Otherwise leave `app/globals.css` alone — it is shared infrastructure.
 
 ## Build & publish
 
 `npm run build` = Vite library build (`vite.lib.config.ts`) → `dist/`, then `tsc -p
-tsconfig.build.json` for declarations. `prepublishOnly` runs it before publish. `package.json`
+tsconfig.build.json` for declarations, then two post-processing steps that make the output
+consumable off npm — both verified by `npm run test:consumer`:
+
+- `scripts/fix-dts-extensions.mjs` appends `.js` to every relative specifier in the emitted
+  `.d.ts` (directory specifiers become `/index.js`). The source is written for
+  `moduleResolution: "bundler"`, tsc emits those extensionless paths verbatim, and a consumer on
+  `node16`/`nodenext` then gets TS2834/TS2835 on all of them.
+- `scripts/write-dist-package-type.mjs` writes `dist/package.json` = `{"type":"module"}`. The root
+  package.json cannot carry `"type": "module"` — Vite loads `vite.lib.config.ts` as CJS and that
+  config uses `__dirname` — so without the nested file Node reads the ESM output as CommonJS and
+  only Node 22's syntax detection saves the import.
+
+`prepublishOnly` runs the whole chain before publish. `package.json`
 `files` is `["dist", "app/globals.css", "app/theme.css", "CHANGELOG.md"]` — the changelog ships so a
 consumer's agent can read what changed straight from `node_modules`.
 
@@ -186,8 +205,26 @@ component actually promises consumers.
 - Anything animating out via `AnimatePresence` stays mounted for the length of its exit
   animation. Assertions that something disappeared must be wrapped in `waitFor`.
 
+### The consumer smoke test
+
+`npm run test:consumer` (`scripts/consumer-smoke.mjs`) answers a question the story suite cannot:
+*can a stranger install this and import it?* It `npm pack`s the library, installs the tarball into
+a temp project **outside this repo**, and consumes it — ESM imports of all four entry points, an
+SSR render, `tsc` under both `bundler` and `nodenext`, a real Tailwind v4 build against the shipped
+CSS, plus `publint` and `are-the-types-wrong` — pinned devDependencies, not `npx …@latest`, so a
+release of either tool cannot turn CI red on a day nothing changed.
+
+Outside the repo is the entire point. A fixture inside the working tree resolves against this
+repo's own `node_modules`, so it passes for a package that is broken on npm.
+
+Two narrowings in the `attw` invocation are deliberate: the `styles`/`theme` CSS entry points are
+excluded (attw resolves JS and types, so CSS always reads as a resolution failure — the script
+asserts their presence directly), and `--profile esm-only` scopes it to what the package claims to
+be. Legacy TS `node10` resolution and CJS `require` are unsupported by design, not by accident.
+
 CI (`.github/workflows/ci.yml`) runs typecheck → lint → tests → clean rebuild → a check that every
-published entry point and `.d.ts` exists, on every push and PR. Two workflows run alongside it:
+published entry point and `.d.ts` exists → the consumer smoke test, on every push and PR. Two
+workflows run alongside it:
 Chromatic for visual regressions, and `pages.yml` to publish Storybook (see above). Neither gates
 the other — a Chromatic diff does not block the deploy.
 

@@ -6,6 +6,12 @@
 @import "./theme.css";
 @import "tailwindcss";
 
+/* Tailwind never scans node_modules on its own, so without this a consumer who
+   imports this stylesheet gets the tokens and no utilities — every component
+   renders unstyled. The glob (rather than a bare `../dist`) means a missing dist
+   during local dev is a no-op instead of a build error. */
+@source "../dist/**/*.js";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

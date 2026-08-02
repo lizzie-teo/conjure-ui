@@ -46,6 +46,23 @@ repository, so there is no upgrade path from those installs — pin the npm vers
 - `app/theme.css` ships with no `.theme-{client}` classes. The example client themes live in
   `.storybook/themes.css`, which is not published.
 
+### Fixed
+
+Three packaging faults, all found by the consumer smoke test the first time it ran. They never
+reached npm — nothing was published before this release — but anyone who installed from the git
+repository hit them.
+
+- **Components rendered unstyled.** Tailwind does not scan `node_modules`, so importing
+  `@lizzie-teo/conjure-ui/styles` delivered the design tokens and none of the utility classes the
+  library's own markup uses. `app/globals.css` now carries `@source "../dist/**/*.js"`.
+- **`dist` was not declared as ESM.** The build emits ESM, but with no `type` field Node read
+  `dist/*.js` as CommonJS — imports worked only through Node 22's syntax detection and threw on
+  Node 20. The build now writes `dist/package.json` as `{"type":"module"}`.
+- **Type declarations did not resolve under `node16`/`nodenext`.** The source is written for
+  `moduleResolution: "bundler"` and tsc emits extensionless relative paths verbatim, so every
+  `.d.ts` failed with TS2834/TS2835. The build now rewrites those specifiers with explicit
+  extensions.
+
 ### Removed
 
 - The Next.js marketing site under `app/`. The package now ships only the two stylesheets.
@@ -54,6 +71,8 @@ repository, so there is no upgrade path from those installs — pin the npm vers
 
 ### Notes for consumers
 
+- **The package is ESM-only.** `require()` fails by design, and TypeScript's legacy `node10`
+  resolution is unsupported. Use `bundler`, `node16`, or `nodenext`.
 - **The library loads no webfont.** `--font-sans` falls back to the system stack; load your brand
   face yourself and override that one token.
 - **Payment network logos are not bundled.** Source official assets from each network's brand portal

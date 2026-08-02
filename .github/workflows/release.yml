@@ -59,15 +59,23 @@ jobs:
       - name: Verify package contents
         run: |
           npm pack --dry-run
-          for f in dist/index.js dist/index.d.ts \
+          for f in dist/index.js dist/index.d.ts dist/package.json \
                    dist/components/primitives/index.d.ts \
                    dist/components/core/index.d.ts \
                    dist/components/layouts/index.d.ts; do
             test -f "$f" || { echo "::error::missing published entry point: $f"; exit 1; }
           done
 
+      # The last gate before the registry, and the only one that judges the
+      # artifact rather than the repo: it installs the packed tarball into a
+      # throwaway project outside the checkout and imports it as a stranger
+      # would. A publish that fails here would have shipped unstyled components
+      # or unresolvable types — both of which it has caught before.
+      - name: Consumer smoke test
+        run: npm run test:consumer
+
       # `prepublishOnly` would rebuild here too; --ignore-scripts skips that
-      # rather than throwing away the dist the previous two steps just verified.
+      # rather than throwing away the dist the previous steps just verified.
       - name: Publish to npm
         run: npm publish --ignore-scripts
         env:
