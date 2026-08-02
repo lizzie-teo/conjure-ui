@@ -243,6 +243,18 @@ workflows run alongside it:
 Chromatic for visual regressions, and `pages.yml` to publish Storybook (see above). Neither gates
 the other — a Chromatic diff does not block the deploy.
 
+**Chromatic is the only thing here that can see a visual regression.** `npm test` proves every story
+renders without throwing; it cannot see that a renamed token restyled all 47 components. That is the
+breaking change this library is most exposed to (see *Releasing*), and a green story suite says
+nothing about it. Chromatic screenshots all 287 stories per build and diffs them against the last
+approved baseline — baseline set 2 Aug 2026, build 1.
+
+`onlyChanged: true` (TurboSnap) is set to keep that off the free snapshot allowance, but **Chromatic
+withholds TurboSnap until an account has 10 CI builds**, so early builds cost the full 287 regardless
+and the warning in the log is a gate, not a fault. Shared config — `theme.css`, `globals.css`,
+`.storybook/*` — forces a full run even after it unlocks, which is correct: that is exactly the edit
+that changes everything at once.
+
 ## Third-party assets
 
 Payment logos are **not bundled**. Consumers source official brand assets from each network's

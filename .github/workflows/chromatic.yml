@@ -39,4 +39,11 @@ jobs:
           # config — theme.css, globals.css, .storybook/* — still force a full
           # run, which is the behaviour you want: a renamed token changes every
           # component's appearance without throwing anywhere.
+          #
+          # Chromatic gates TurboSnap until an account has 10 CI builds, so this
+          # is inert at first and every build costs the full 287 until then —
+          # "⚠ TurboSnap not available for your account" in the log is that gate,
+          # not a misconfiguration. The flag still does something meanwhile: it
+          # makes the action pass --stats-json and upload preview-stats, which is
+          # what TurboSnap needs in place to start working the moment it unlocks.
           onlyChanged: true
