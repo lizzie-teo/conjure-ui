@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
 import faceIdUrl from '../../primitives/Apple-objects/face-id.svg'
+import type { Ref } from 'react'
+import type { MotionButtonProps, MotionDivProps } from '../../../lib/prop-types'
 
 // ── Timing constants ──────────────────────────────────────────────────────────
 
@@ -16,10 +18,14 @@ const FACE_ID_COMPLETE_MS = 3600
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-export interface DoubleClickToPayProps {
+export interface DoubleClickToPayProps extends Omit<MotionDivProps, 'children' | 'ref'> {
   /** Called after Face ID finishes scanning — use to advance payment state */
   onActivate?: () => void
-  className?: string
+  /**
+   * The root element swaps between a `<button>` (idle) and a `<div>` (scanning),
+   * so the ref is typed as their common `HTMLElement`.
+   */
+  ref?: Ref<HTMLElement>
 }
 
 // ── Sub-animation: double-click side button ───────────────────────────────────
@@ -93,7 +99,7 @@ function SideButton({ shouldReduce }: { shouldReduce: boolean | null }) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function DoubleClickToPay({ onActivate, className }: DoubleClickToPayProps) {
+export function DoubleClickToPay({ onActivate, className, ...props }: DoubleClickToPayProps) {
   const shouldReduce = useReducedMotion()
   const [phase, setPhase] = useState<'idle' | 'scanning'>('idle')
 
@@ -112,6 +118,9 @@ export function DoubleClickToPay({ onActivate, className }: DoubleClickToPayProp
       {phase === 'idle' ? (
         <motion.button
           key="double-click-idle"
+          // Spread first: this root owns the activate handler and its a11y label.
+          // Cast because the props are declared against the `<div>` branch.
+          {...(props as MotionButtonProps)}
           type="button"
           onClick={handleActivate}
           aria-label="Double click side button to pay"
@@ -134,6 +143,8 @@ export function DoubleClickToPay({ onActivate, className }: DoubleClickToPayProp
       ) : (
         <motion.div
           key="double-click-scanning"
+          // Spread first: this root owns the live-region a11y contract.
+          {...(props as MotionDivProps)}
           role="status"
           aria-label="Scanning with Face ID"
           initial={{ opacity: 0, scale: shouldReduce ? 1 : 0.75 }}

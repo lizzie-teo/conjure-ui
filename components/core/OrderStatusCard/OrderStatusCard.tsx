@@ -4,6 +4,7 @@ import { cn } from '../../../lib/utils'
 import { ProgressStep } from '../../primitives/ProgressStep/ProgressStep'
 import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { TimestampLabel } from '../../primitives/TimestampLabel/TimestampLabel'
+import type { ComponentPropsWithRef } from 'react'
 
 export interface OrderStatusStep {
   label: string
@@ -11,14 +12,19 @@ export interface OrderStatusStep {
   status: 'complete' | 'active' | 'pending'
 }
 
-export interface OrderStatusCardProps {
+export interface OrderStatusCardProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   orderId: string
   steps: OrderStatusStep[]
   eta?: string
-  className?: string
 }
 
-export function OrderStatusCard({ orderId, steps, eta, className }: OrderStatusCardProps) {
+export function OrderStatusCard({
+  orderId,
+  steps,
+  eta,
+  className,
+  ...props
+}: OrderStatusCardProps) {
   return (
     <div
       className={cn(
@@ -26,6 +32,7 @@ export function OrderStatusCard({ orderId, steps, eta, className }: OrderStatusC
         'flex flex-col gap-4 md:gap-5 p-4 md:p-5',
         className
       )}
+      {...props}
     >
       {eta && (
         <div className="flex flex-col gap-0.5">

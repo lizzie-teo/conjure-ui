@@ -7,6 +7,8 @@ import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
 import { ConfirmIcon } from '../../primitives/Apple-objects/ConfirmIcon'
 import { CreditCardGold } from '../../primitives/Apple-objects/CreditCardIcons'
+import { mergeRefs } from '../../../lib/merge-refs'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -28,7 +30,7 @@ export interface ApplePayShipping {
   country?: string
 }
 
-export interface ApplePaySheetProps {
+export interface ApplePaySheetProps extends Omit<MotionDivProps, 'children'> {
   open: boolean
   onClose: () => void
   onConfirm: () => void
@@ -43,7 +45,6 @@ export interface ApplePaySheetProps {
   onChangeShipping?: () => void
   cardIcon?: React.ReactNode
   loading?: boolean
-  className?: string
 }
 
 // ── Account icon (contact row) ────────────────────────────────────────────────
@@ -205,6 +206,9 @@ export function ApplePaySheet({
   cardIcon,
   loading = false,
   className,
+  ref: forwardedRef,
+  style,
+  ...props
 }: ApplePaySheetProps) {
   const shouldReduce = useReducedMotion()
   const sheetRef = useRef<HTMLDivElement>(null)
@@ -273,11 +277,14 @@ export function ApplePaySheet({
           {/* Sheet */}
           <motion.div
             key="applepay-sheet"
-            ref={sheetRef}
+            // Spread first: the sheet owns the dialog a11y contract and its
+            // focus trap, which a consumer prop must not silently break.
+            {...props}
+            ref={mergeRefs(sheetRef, forwardedRef)}
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            style={{ fontFamily: 'var(--font-apple)' }}
+            style={{ fontFamily: 'var(--font-apple)', ...style }}
             className={cn(
               'fixed inset-x-0 bottom-0 z-50',
               'flex flex-col',

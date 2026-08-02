@@ -5,34 +5,32 @@ import { Button } from '../../ui/button'
 import { PriceDisplay } from '../../primitives/PriceDisplay/PriceDisplay'
 import { Tag } from '../../primitives/Tag/Tag'
 import { cn } from '../../../lib/utils'
+import type { ComponentPropsWithRef } from 'react'
 
 // ── Sub-component interfaces ──────────────────────────────────────────────────
 
-interface LineItemProps {
+interface LineItemProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   name: string
   quantity: number
   price: number
   currency: string
-  className?: string
 }
 
-interface TotalProps {
+interface TotalProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   subtotal: number
   discount?: number
   total: number
   currency: string
-  className?: string
 }
 
-interface PromoFieldProps {
+interface PromoFieldProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   onApply: (code: string) => void
   appliedCode?: string
-  className?: string
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function LineItem({ name, quantity, price, currency, className }: LineItemProps) {
+function LineItem({ name, quantity, price, currency, className, ...props }: LineItemProps) {
   return (
     <div
       className={cn(
@@ -40,6 +38,7 @@ function LineItem({ name, quantity, price, currency, className }: LineItemProps)
         'border-b border-border last:border-0',
         className
       )}
+      {...props}
     >
       <span className="text-xs md:text-sm text-foreground truncate min-w-0">
         {name}
@@ -52,9 +51,12 @@ function LineItem({ name, quantity, price, currency, className }: LineItemProps)
   )
 }
 
-function Total({ subtotal, discount, total, currency, className }: TotalProps) {
+function Total({ subtotal, discount, total, currency, className, ...props }: TotalProps) {
   return (
-    <div className={cn('border-t border-border px-4 md:px-5 py-3 md:py-4 space-y-2', className)}>
+    <div
+      className={cn('border-t border-border px-4 md:px-5 py-3 md:py-4 space-y-2', className)}
+      {...props}
+    >
       <div className="flex items-center justify-between">
         <span className="text-xs md:text-sm text-muted-foreground">Subtotal</span>
         <PriceDisplay amount={subtotal} currency={currency} />
@@ -79,11 +81,11 @@ function Total({ subtotal, discount, total, currency, className }: TotalProps) {
   )
 }
 
-function PromoField({ onApply, appliedCode, className }: PromoFieldProps) {
+function PromoField({ onApply, appliedCode, className, ...props }: PromoFieldProps) {
   const [code, setCode] = useState('')
 
   return (
-    <div className={cn('space-y-2', className)}>
+    <div className={cn('space-y-2', className)} {...props}>
       {appliedCode && (
         <div className="flex items-center gap-2">
           <Tag label={appliedCode} />
@@ -130,14 +132,13 @@ function PromoField({ onApply, appliedCode, className }: PromoFieldProps) {
 
 // ── Main component ─────────────────────────────────────────────────────────────
 
-export interface CartSummaryProps {
+export interface CartSummaryProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   items: { name: string; price: number; quantity: number }[]
   currency?: string
   promoCode?: string
   discount?: number
   onPromoApply?: (code: string) => void
   onCheckout: () => void
-  className?: string
 }
 
 export function CartSummary({
@@ -148,6 +149,7 @@ export function CartSummary({
   onPromoApply,
   onCheckout,
   className,
+  ...props
 }: CartSummaryProps) {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const total = subtotal - (discount ?? 0)
@@ -158,6 +160,7 @@ export function CartSummary({
         'bg-card border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden',
         className
       )}
+      {...props}
     >
       {items.length > 0 ? (
         <div className="px-4 md:px-5 pt-3 md:pt-4">

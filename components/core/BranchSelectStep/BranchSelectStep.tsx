@@ -6,14 +6,29 @@ import { SelectionGroup } from '../SelectionGroup/SelectionGroup'
 import { AvailabilityDot } from '../../primitives/AvailabilityDot/AvailabilityDot'
 import { cn } from '../../../lib/utils'
 import type { Branch, CarBootDetails } from '../DeliveryConfirmation/deliveryFlow.types'
+import type { ComponentProps, ComponentPropsWithRef } from 'react'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
-export interface BranchSelectStepProps {
+export interface BranchSelectStepProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   branches: Branch[]
   selectedBranchId?: string
   carBootDetails?: CarBootDetails
   onBranchSelect: (branchId: string) => void
   onCarBootChange: (details: CarBootDetails) => void
-  className?: string
+}
+
+export interface BranchListProps
+  extends Omit<ComponentProps<typeof SelectionGroup>, 'children' | 'type' | 'value' | 'onChange'> {
+  branches: Branch[]
+  selectedBranchId?: string
+  onBranchSelect: (id: string) => void
+}
+
+export interface CarBootFormProps extends Omit<MotionDivProps, 'children' | 'onChange'> {
+  details: CarBootDetails
+  /** Overrides the DOM `onChange` handler — fires with the updated car boot details. */
+  onChange: (d: CarBootDetails) => void
+  shouldReduce: boolean
 }
 
 const inputClass = cn(
@@ -48,13 +63,10 @@ const formItemVariants = {
   }),
 }
 
-function BranchList({ branches, selectedBranchId, onBranchSelect }: {
-  branches: Branch[]
-  selectedBranchId?: string
-  onBranchSelect: (id: string) => void
-}) {
+function BranchList({ branches, selectedBranchId, onBranchSelect, ...props }: BranchListProps) {
   return (
     <SelectionGroup
+      {...props}
       type="radio"
       value={selectedBranchId}
       onChange={(v) => onBranchSelect(v as string)}
@@ -88,18 +100,17 @@ function CarBootForm({
   details,
   onChange,
   shouldReduce,
-}: {
-  details: CarBootDetails
-  onChange: (d: CarBootDetails) => void
-  shouldReduce: boolean
-}) {
+  className,
+  ...props
+}: CarBootFormProps) {
   return (
     <motion.div
       variants={formVariants}
       initial="hidden"
       animate="show"
       exit="exit"
-      className="mt-3"
+      className={cn('mt-3', className)}
+      {...props}
     >
       <div className="rounded-xl border border-border bg-muted/30 p-4 md:p-5 space-y-3 md:space-y-4">
         <p className="text-xs md:text-sm font-medium text-foreground">
@@ -189,6 +200,7 @@ export function BranchSelectStep({
   onBranchSelect,
   onCarBootChange,
   className,
+  ...props
 }: BranchSelectStepProps) {
   const shouldReduce = useReducedMotion() ?? false
   const defaultDetails: CarBootDetails = carBootDetails ?? {
@@ -199,7 +211,7 @@ export function BranchSelectStep({
   }
 
   return (
-    <div className={cn('space-y-1', className)}>
+    <div className={cn('space-y-1', className)} {...props}>
       <BranchList
         branches={branches}
         selectedBranchId={selectedBranchId}

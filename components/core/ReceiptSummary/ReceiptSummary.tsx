@@ -5,6 +5,7 @@ import { DetailList } from '../DetailList/DetailList'
 import { PriceDisplay } from '../../primitives/PriceDisplay/PriceDisplay'
 import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { TimestampLabel } from '../../primitives/TimestampLabel/TimestampLabel'
+import type { ComponentPropsWithRef } from 'react'
 
 export interface ReceiptItem {
   name: string
@@ -13,7 +14,7 @@ export interface ReceiptItem {
   image?: string
 }
 
-export interface ReceiptSummaryProps {
+export interface ReceiptSummaryProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   orderId: string
   items: ReceiptItem[]
   subtotal: number
@@ -21,7 +22,6 @@ export interface ReceiptSummaryProps {
   total: number
   currency?: string
   paidAt?: string
-  className?: string
 }
 
 export function ReceiptSummary({
@@ -33,6 +33,7 @@ export function ReceiptSummary({
   currency = 'USD',
   paidAt,
   className,
+  ...props
 }: ReceiptSummaryProps) {
   return (
     <div
@@ -41,6 +42,7 @@ export function ReceiptSummary({
         'flex flex-col',
         className
       )}
+      {...props}
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-3 px-4 md:px-5 py-4 md:py-5 border-b border-border">

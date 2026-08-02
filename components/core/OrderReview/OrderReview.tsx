@@ -8,28 +8,26 @@ import { AddressTile } from '../../primitives/AddressTile/AddressTile'
 import type { AddressTileProps } from '../../primitives/AddressTile/AddressTile'
 import { PriceDisplay } from '../../primitives/PriceDisplay/PriceDisplay'
 import { cn } from '../../../lib/utils'
+import type { ComponentProps, ComponentPropsWithRef } from 'react'
 
 // ── Sub-component interfaces ──────────────────────────────────────────────────
 
-interface SectionProps {
+interface SectionProps extends ComponentPropsWithRef<'div'> {
   title: string
-  children: React.ReactNode
-  className?: string
 }
 
-interface TotalsProps {
+interface TotalsProps extends Omit<ComponentProps<typeof DetailList>, 'children'> {
   subtotal: number
   shipping: number
   total: number
   currency: string
-  className?: string
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function Section({ title, children, className }: SectionProps) {
+function Section({ title, children, className, ...props }: SectionProps) {
   return (
-    <div className={cn('space-y-2 md:space-y-3', className)}>
+    <div className={cn('space-y-2 md:space-y-3', className)} {...props}>
       <h3 className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wide px-4 md:px-5">
         {title}
       </h3>
@@ -38,9 +36,9 @@ function Section({ title, children, className }: SectionProps) {
   )
 }
 
-function Totals({ subtotal, shipping, total, currency, className }: TotalsProps) {
+function Totals({ subtotal, shipping, total, currency, ...props }: TotalsProps) {
   return (
-    <DetailList className={className}>
+    <DetailList {...props}>
       <DetailList.Row
         label="Subtotal"
         value={<PriceDisplay amount={subtotal} currency={currency} />}
@@ -71,7 +69,7 @@ function Totals({ subtotal, shipping, total, currency, className }: TotalsProps)
 
 // ── Main component ─────────────────────────────────────────────────────────────
 
-export interface OrderReviewProps {
+export interface OrderReviewProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   items: CartItemProps[]
   shippingAddress: AddressTileProps
   subtotal: number
@@ -79,7 +77,6 @@ export interface OrderReviewProps {
   total: number
   currency?: string
   onConfirm: () => void
-  className?: string
 }
 
 export function OrderReview({
@@ -91,6 +88,7 @@ export function OrderReview({
   currency = 'USD',
   onConfirm,
   className,
+  ...props
 }: OrderReviewProps) {
   return (
     <div
@@ -99,6 +97,7 @@ export function OrderReview({
         'flex flex-col gap-5 md:gap-6 py-5 md:py-6',
         className
       )}
+      {...props}
     >
       <Section title="Items">
         <div className="flex flex-col gap-2 md:gap-3 px-4 md:px-5">

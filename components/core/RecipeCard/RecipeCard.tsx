@@ -6,6 +6,8 @@ import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { QuantityStepper } from '../../primitives/QuantityStepper/QuantityStepper'
 import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
+import type { ComponentPropsWithRef } from 'react'
+import type { MotionDivProps, MotionUlProps } from '../../../lib/prop-types'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -23,7 +25,8 @@ export interface ScaledIngredient extends Ingredient {
   scaledQuantity: number
 }
 
-export interface RecipeCardProps {
+export interface RecipeCardProps extends Omit<MotionDivProps, 'children' | 'title'> {
+  /** Overrides the DOM `title` attribute — the recipe name. */
   title: string
   prepTime: string
   difficulty: Difficulty
@@ -33,7 +36,6 @@ export interface RecipeCardProps {
   imageAlt?: string
   onIngredientClick?: (ingredient: Ingredient) => void
   onAddToCart?: (ingredients: ScaledIngredient[], servings: number) => void
-  className?: string
 }
 
 // ── Context ───────────────────────────────────────────────────────────────────
@@ -89,30 +91,29 @@ function formatQuantity(quantity: number, unit: string): string {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-interface ImageProps {
+interface ImageProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   src: string
   alt?: string
-  className?: string
 }
 
-function Image({ src, alt = '', className }: ImageProps) {
+function Image({ src, alt = '', className, ...props }: ImageProps) {
   return (
-    <div className={cn('overflow-hidden rounded-t-xl', className)}>
+    <div className={cn('overflow-hidden rounded-t-xl', className)} {...props}>
       <img src={src} alt={alt} className="w-full h-40 md:h-48 object-cover" />
     </div>
   )
 }
 
-interface HeaderProps {
+interface HeaderProps extends Omit<ComponentPropsWithRef<'div'>, 'children' | 'title'> {
+  /** Overrides the DOM `title` attribute — the recipe name. */
   title: string
   prepTime: string
   difficulty: Difficulty
-  className?: string
 }
 
-function Header({ title, prepTime, difficulty, className }: HeaderProps) {
+function Header({ title, prepTime, difficulty, className, ...props }: HeaderProps) {
   return (
-    <div className={cn('px-4 md:px-5 pt-4 md:pt-5 pb-3', className)}>
+    <div className={cn('px-4 md:px-5 pt-4 md:pt-5 pb-3', className)} {...props}>
       <h3 className="text-base md:text-lg font-semibold text-foreground leading-snug">{title}</h3>
       <div className="flex items-center gap-2 mt-2 flex-wrap">
         <StatusBadge label={prepTime} variant="info" />
@@ -125,12 +126,11 @@ function Header({ title, prepTime, difficulty, className }: HeaderProps) {
   )
 }
 
-interface IngredientListProps {
+interface IngredientListProps extends Omit<MotionUlProps, 'children'> {
   ingredients: Ingredient[]
-  className?: string
 }
 
-function IngredientList({ ingredients, className }: IngredientListProps) {
+function IngredientList({ ingredients, className, ...props }: IngredientListProps) {
   const { servings, ingredientState, toggleIngredient, onIngredientClick } = useRecipeCtx()
   const shouldReduce = useReducedMotion()
 
@@ -141,6 +141,7 @@ function IngredientList({ ingredients, className }: IngredientListProps) {
       initial="hidden"
       animate="show"
       className={cn('flex flex-col gap-1.5 md:gap-2 list-none p-0 m-0', className)}
+      {...props}
     >
       {ingredients.map(ingredient => {
         const isSelected = ingredientState[ingredient.id] ?? true
@@ -213,17 +214,16 @@ function IngredientList({ ingredients, className }: IngredientListProps) {
   )
 }
 
-interface ActionsProps {
+interface ActionsProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   selectedCount: number
   onAddToCart?: () => void
-  className?: string
 }
 
-function Actions({ selectedCount, onAddToCart, className }: ActionsProps) {
+function Actions({ selectedCount, onAddToCart, className, ...props }: ActionsProps) {
   const { servings, setServings } = useRecipeCtx()
 
   return (
-    <div className={cn('flex flex-col gap-3 md:gap-4', className)}>
+    <div className={cn('flex flex-col gap-3 md:gap-4', className)} {...props}>
       <div className="flex items-center justify-between gap-3">
         <span className="text-xs md:text-sm font-medium text-muted-foreground">Servings</span>
         <QuantityStepper value={servings} min={1} max={20} onChange={setServings} />
@@ -255,6 +255,7 @@ export function RecipeCard({
   onIngredientClick,
   onAddToCart,
   className,
+  ...props
 }: RecipeCardProps) {
   const shouldReduce = useReducedMotion()
 
@@ -285,6 +286,7 @@ export function RecipeCard({
           'bg-card border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden',
           className
         )}
+        {...props}
       >
         {image && <RecipeCard.Image src={image} alt={imageAlt} />}
         <RecipeCard.Header title={title} prepTime={prepTime} difficulty={difficulty} />

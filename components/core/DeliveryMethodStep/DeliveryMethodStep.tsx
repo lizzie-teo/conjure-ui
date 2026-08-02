@@ -8,16 +8,24 @@ import { AddressTile } from '../../primitives/AddressTile/AddressTile'
 import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
 import type { AddressTileProps } from '../../primitives/AddressTile/AddressTile'
+import type { ComponentPropsWithRef } from 'react'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
 export type DeliveryMethod = 'home-delivery' | 'click-collect'
 
-export interface DeliveryMethodStepProps {
+export interface DeliveryMethodStepProps
+  extends Omit<ComponentPropsWithRef<'div'>, 'children' | 'defaultValue'> {
   value?: DeliveryMethod
+  /** Overrides the DOM `defaultValue` — the initially selected delivery method. */
   defaultValue?: DeliveryMethod
   homeAddress?: AddressTileProps
   onMethodChange?: (method: DeliveryMethod) => void
   onAddressEdit?: () => void
-  className?: string
+}
+
+export interface AddressPreviewProps extends Omit<MotionDivProps, 'children'> {
+  address: AddressTileProps
+  onEdit?: () => void
 }
 
 const addressVariants = {
@@ -36,19 +44,14 @@ const addressVariants = {
   },
 }
 
-function AddressPreview({
-  address,
-  onEdit,
-}: {
-  address: AddressTileProps
-  onEdit?: () => void
-}) {
+function AddressPreview({ address, onEdit, ...props }: AddressPreviewProps) {
   return (
     <motion.div
       variants={addressVariants}
       initial="hidden"
       animate="show"
       exit="exit"
+      {...props}
     >
       <div className="mt-3 flex items-start justify-between gap-3 rounded-xl border border-border bg-muted/30 px-4 py-3 md:px-5 md:py-4">
         <AddressTile {...address} />
@@ -75,12 +78,13 @@ export function DeliveryMethodStep({
   onMethodChange,
   onAddressEdit,
   className,
+  ...props
 }: DeliveryMethodStepProps) {
   const shouldReduce = useReducedMotion()
   const isHomeSelected = (value ?? defaultValue) === 'home-delivery'
 
   return (
-    <div className={cn('space-y-1', className)}>
+    <div className={cn('space-y-1', className)} {...props}>
       <SelectionGroup
         type="radio"
         value={value}

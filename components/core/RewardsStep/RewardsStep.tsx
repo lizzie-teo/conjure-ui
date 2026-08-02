@@ -7,14 +7,31 @@ import { SelectionGroup } from '../SelectionGroup/SelectionGroup'
 import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { cn } from '../../../lib/utils'
 import type { RewardsSummary, SubstitutionPreference } from '../DeliveryConfirmation/deliveryFlow.types'
+import type { ComponentPropsWithRef } from 'react'
 
-export interface RewardsStepProps {
+export interface RewardsStepProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   rewards: RewardsSummary
   redeemPoints: boolean
   onRedeemToggle: (redeem: boolean) => void
   substitution: SubstitutionPreference
   onSubstitutionChange: (pref: SubstitutionPreference) => void
-  className?: string
+}
+
+export interface PointsSummaryProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
+  rewards: RewardsSummary
+  redeemPoints: boolean
+  onRedeemToggle: (redeem: boolean) => void
+}
+
+export interface BonusPromptProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
+  prompt: string
+}
+
+export interface SubstitutionSelectorProps
+  extends Omit<ComponentPropsWithRef<'div'>, 'children' | 'onChange'> {
+  value: SubstitutionPreference
+  /** Overrides the DOM `onChange` handler — fires with the chosen preference. */
+  onChange: (v: SubstitutionPreference) => void
 }
 
 const sectionVariants = {
@@ -31,11 +48,9 @@ function PointsSummary({
   rewards,
   redeemPoints,
   onRedeemToggle,
-}: {
-  rewards: RewardsSummary
-  redeemPoints: boolean
-  onRedeemToggle: (redeem: boolean) => void
-}) {
+  className,
+  ...props
+}: PointsSummaryProps) {
   const netPoints = rewards.currentPoints + rewards.pointsEarned
   const currencyFormatter = new Intl.NumberFormat(undefined, {
     style: 'currency',
@@ -43,7 +58,10 @@ function PointsSummary({
   })
 
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
+    <div
+      className={cn('rounded-xl border border-border bg-card overflow-hidden', className)}
+      {...props}
+    >
       <div className="flex items-center gap-2 px-4 md:px-5 py-3 border-b border-border bg-muted/30">
         <Star className="size-4 text-warning shrink-0" />
         <span className="text-sm font-medium text-foreground">{rewards.programName}</span>
@@ -120,9 +138,15 @@ function PointsSummary({
   )
 }
 
-function BonusPrompt({ prompt }: { prompt: string }) {
+function BonusPrompt({ prompt, className, ...props }: BonusPromptProps) {
   return (
-    <div className="flex items-start gap-2 rounded-xl bg-success/5 border border-success/20 px-4 py-3">
+    <div
+      className={cn(
+        'flex items-start gap-2 rounded-xl bg-success/5 border border-success/20 px-4 py-3',
+        className
+      )}
+      {...props}
+    >
       <Sparkles className="size-4 text-success shrink-0 mt-0.5" />
       <p className="text-xs md:text-sm text-success font-medium leading-snug">{prompt}</p>
     </div>
@@ -132,12 +156,11 @@ function BonusPrompt({ prompt }: { prompt: string }) {
 function SubstitutionSelector({
   value,
   onChange,
-}: {
-  value: SubstitutionPreference
-  onChange: (v: SubstitutionPreference) => void
-}) {
+  className,
+  ...props
+}: SubstitutionSelectorProps) {
   return (
-    <div className="space-y-2">
+    <div className={cn('space-y-2', className)} {...props}>
       <p className="text-xs md:text-sm font-medium text-foreground px-1">
         If an item is out of stock
       </p>
@@ -167,11 +190,12 @@ export function RewardsStep({
   substitution,
   onSubstitutionChange,
   className,
+  ...props
 }: RewardsStepProps) {
   const shouldReduce = useReducedMotion()
 
   return (
-    <div className={cn('space-y-4 md:space-y-5', className)}>
+    <div className={cn('space-y-4 md:space-y-5', className)} {...props}>
       <motion.div
         variants={shouldReduce ? sectionVariantsReduced : sectionVariants}
         initial="hidden"

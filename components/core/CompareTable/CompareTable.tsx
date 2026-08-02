@@ -5,6 +5,7 @@ import { cn } from '../../../lib/utils'
 import { PriceDisplay } from '../../primitives/PriceDisplay/PriceDisplay'
 import { Tag } from '../../primitives/Tag/Tag'
 import { Button } from '../../ui/button'
+import type { ComponentPropsWithRef } from 'react'
 
 export interface CompareColumn {
   id: string
@@ -15,11 +16,12 @@ export interface CompareColumn {
   attributes: Record<string, string | boolean>
 }
 
-export interface CompareTableProps {
+export interface CompareTableProps
+  extends Omit<ComponentPropsWithRef<'div'>, 'children' | 'onSelect'> {
   columns: CompareColumn[]
   attributeLabels: Record<string, string>
+  /** Overrides the DOM `onSelect` handler — fires with the chosen column id. */
   onSelect?: (id: string) => void
-  className?: string
 }
 
 const attributeKeys = (
@@ -47,12 +49,12 @@ export function CompareTable({
   attributeLabels,
   onSelect,
   className,
+  ...props
 }: CompareTableProps) {
   const attrKeys = attributeKeys(columns, attributeLabels)
-  const colCount = columns.length
 
   return (
-    <div className={cn('w-full overflow-x-auto', className)}>
+    <div className={cn('w-full overflow-x-auto', className)} {...props}>
       <table className="w-full border-collapse text-sm md:text-base">
         <thead>
           <tr>

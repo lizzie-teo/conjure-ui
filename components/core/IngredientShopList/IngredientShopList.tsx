@@ -7,6 +7,8 @@ import { PriceDisplay } from '../../primitives/PriceDisplay/PriceDisplay'
 import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
+import type { ComponentPropsWithRef } from 'react'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -32,10 +34,9 @@ export interface ResolvedItem extends IngredientProduct {
   selectedProduct: ProductOption
 }
 
-export interface IngredientShopListProps {
+export interface IngredientShopListProps extends Omit<MotionDivProps, 'children'> {
   items: IngredientProduct[]
   onAddToCart?: (resolved: ResolvedItem[]) => void
-  className?: string
 }
 
 // ── Context ───────────────────────────────────────────────────────────────────
@@ -78,13 +79,12 @@ const rowFade = {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-interface RowProps {
+interface RowProps extends Omit<MotionDivProps, 'children'> {
   item: IngredientProduct
   isLast?: boolean
-  className?: string
 }
 
-function Row({ item, isLast, className }: RowProps) {
+function Row({ item, isLast, className, ...props }: RowProps) {
   const { selections, openSwap, selectProduct, toggleSwap } = useShopListCtx()
   const shouldReduce = useReducedMotion()
 
@@ -100,6 +100,7 @@ function Row({ item, isLast, className }: RowProps) {
         !isLast && 'border-b border-border',
         className
       )}
+      {...props}
     >
       <div className="flex items-start gap-3 md:gap-3.5">
         {selected.imageUrl && (
@@ -200,19 +201,18 @@ function Row({ item, isLast, className }: RowProps) {
   )
 }
 
-interface ActionsProps {
+interface ActionsProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   items: IngredientProduct[]
   onAddToCart?: () => void
-  className?: string
 }
 
-function Actions({ items, onAddToCart, className }: ActionsProps) {
+function Actions({ items, onAddToCart, className, ...props }: ActionsProps) {
   const { selections } = useShopListCtx()
   const currency = items[0]?.recommendedProduct.currency ?? 'USD'
   const total = Object.values(selections).reduce((sum, p) => sum + p.price, 0)
 
   return (
-    <div className={cn('px-4 md:px-5 py-3 md:py-4 border-t border-border', className)}>
+    <div className={cn('px-4 md:px-5 py-3 md:py-4 border-t border-border', className)} {...props}>
       <Button
         variant="default"
         className="w-full h-12 md:h-10"
@@ -230,6 +230,7 @@ export function IngredientShopList({
   items,
   onAddToCart,
   className,
+  ...props
 }: IngredientShopListProps) {
   const shouldReduce = useReducedMotion()
 
@@ -264,6 +265,7 @@ export function IngredientShopList({
           'bg-card border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden',
           className
         )}
+        {...props}
       >
         <motion.div variants={listStagger} initial="hidden" animate="show">
           {items.map((item, idx) => (

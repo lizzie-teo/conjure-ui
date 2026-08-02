@@ -11,6 +11,7 @@ import {
   PaymentMethodTile,
   type PaymentMethodTileProps,
 } from '../../primitives/PaymentMethodTile/PaymentMethodTile'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -26,7 +27,7 @@ export interface SummaryRow {
   value: React.ReactNode
 }
 
-export interface PaymentConfirmSheetProps {
+export interface PaymentConfirmSheetProps extends Omit<MotionDivProps, 'children'> {
   total: number
   currency?: string
   /** The active payment method shown in the confirmation row. */
@@ -43,7 +44,6 @@ export interface PaymentConfirmSheetProps {
   onConfirm: () => void
   onChangeMethod?: () => void
   loading?: boolean
-  className?: string
 }
 
 // ---------------------------------------------------------------------------
@@ -149,6 +149,7 @@ export function PaymentConfirmSheet({
   onChangeMethod,
   loading = false,
   className,
+  ...props
 }: PaymentConfirmSheetProps) {
   const shouldReduce = useReducedMotion()
   const isApplePay = paymentMethod.type === 'apple-pay'
@@ -161,6 +162,7 @@ export function PaymentConfirmSheet({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, ease: [0, 0, 0.2, 1] }}
       className={cn('flex flex-col overflow-hidden rounded-[inherit]', className)}
+      {...props}
     >
       {/* Security header */}
       <SecureHeader />

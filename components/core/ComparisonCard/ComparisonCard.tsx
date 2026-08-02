@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence, LayoutGroup, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
 import { Button } from '../../ui/button'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
 export interface ComparisonPlan {
   id: string
@@ -26,7 +27,7 @@ export interface ComparisonScenario {
   insight: string
 }
 
-export interface ComparisonCardProps {
+export interface ComparisonCardProps extends Omit<MotionDivProps, 'children' | 'title'> {
   /** Card heading, e.g. "Why Comprehensive?" */
   title: string
   /** Cost basis note shown below title */
@@ -38,7 +39,6 @@ export interface ComparisonCardProps {
   scenarios?: ComparisonScenario[]
   currency?: string
   onViewDetails?: () => void
-  className?: string
 }
 
 const EASE_OUT = [0, 0, 0.2, 1] as const
@@ -54,6 +54,7 @@ export function ComparisonCard({
   currency = '$',
   onViewDetails,
   className,
+  ...props
 }: ComparisonCardProps) {
   const shouldReduce = useReducedMotion()
 
@@ -86,6 +87,7 @@ export function ComparisonCard({
         'p-4 md:p-5 flex flex-col gap-4',
         className
       )}
+      {...props}
     >
       {/* Header */}
       <div>

@@ -7,8 +7,9 @@ import { TimeSlotStep } from '../TimeSlotStep/TimeSlotStep'
 import { AvailabilityDot } from '../../primitives/AvailabilityDot/AvailabilityDot'
 import { cn } from '../../../lib/utils'
 import type { AvailableDate, TimeSlot } from '../DeliveryConfirmation/deliveryFlow.types'
+import type { ComponentPropsWithRef } from 'react'
 
-export interface ScheduleStepProps {
+export interface ScheduleStepProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   availableDates: AvailableDate[]
   timeSlots: TimeSlot[]
   slotsByDate?: Record<string, TimeSlot[]>
@@ -16,7 +17,6 @@ export interface ScheduleStepProps {
   selectedSlotId?: string
   onDateSelect: (date: string) => void
   onSlotSelect: (slotId: string) => void
-  className?: string
 }
 
 function formatDayDate(isoDate: string): string {
@@ -49,6 +49,7 @@ export function ScheduleStep({
   onDateSelect,
   onSlotSelect,
   className,
+  ...props
 }: ScheduleStepProps) {
   const shouldReduce = useReducedMotion()
 
@@ -63,7 +64,7 @@ export function ScheduleStep({
   }
 
   return (
-    <div className={cn('space-y-3', className)}>
+    <div className={cn('space-y-3', className)} {...props}>
 
       {/* ── Date section ─────────────────────────────────── */}
       <div className="rounded-2xl border border-border overflow-hidden">

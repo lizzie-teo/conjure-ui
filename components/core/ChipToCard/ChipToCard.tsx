@@ -4,8 +4,9 @@ import { useState, useId } from 'react'
 import { motion, AnimatePresence, LayoutGroup, useReducedMotion } from 'motion/react'
 import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
+import type { ComponentPropsWithRef } from 'react'
 
-export interface ChipToCardProps {
+export interface ChipToCardProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   chips: { id: string; label: string; card: React.ReactNode }[]
   /** Controlled selected chip. Pass null to show chips, a chip id to show that card. Omit to use internal state. */
   selectedId?: string | null
@@ -13,7 +14,6 @@ export interface ChipToCardProps {
   onSelectedChange?: (id: string | null) => void
   /** Initial selected chip when uncontrolled. */
   defaultSelectedId?: string
-  className?: string
 }
 
 export function ChipToCard({
@@ -22,6 +22,7 @@ export function ChipToCard({
   onSelectedChange,
   defaultSelectedId,
   className,
+  ...props
 }: ChipToCardProps) {
   const isControlled = selectedId !== undefined
   const [internalSelectedId, setInternalSelectedId] = useState<string | null>(
@@ -45,7 +46,7 @@ export function ChipToCard({
         Chips and card occupy the SAME DOM position so there is no vertical
         offset (mt-3) that could shift the card's FLIP target while chips exit.
       */}
-      <div className={cn('relative', className)}>
+      <div className={cn('relative', className)} {...props}>
         <AnimatePresence mode="popLayout" initial={false}>
           {activeId && selectedChip ? (
             // Card — morphs in from the selected chip via layoutId FLIP

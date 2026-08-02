@@ -3,30 +3,27 @@
 import { useState, useRef, useLayoutEffect, Children } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
+import type { ComponentPropsWithRef } from 'react'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
 const MAX_ITEMS = 5
 const COLLAPSED_OFFSET = 6
 const EXPANDED_GAP = 12
 
-export interface CardStackProps {
-  children?: React.ReactNode
+export interface CardStackProps extends MotionDivProps {
   /** Controlled expanded state. Omit to use internal state. */
   expanded?: boolean
   /** Called whenever the stack expands or collapses. */
   onExpandChange?: (expanded: boolean) => void
   /** Initial expanded state when uncontrolled. */
   defaultExpanded?: boolean
-  className?: string
 }
 
-interface ItemProps {
-  children: React.ReactNode
-  className?: string
-}
+type ItemProps = ComponentPropsWithRef<'div'>
 
-function Item({ children, className }: ItemProps) {
+function Item({ children, className, ...props }: ItemProps) {
   return (
-    <div className={cn('w-full', className)}>
+    <div className={cn('w-full', className)} {...props}>
       {children}
     </div>
   )
@@ -38,6 +35,7 @@ export function CardStack({
   onExpandChange,
   defaultExpanded = false,
   className,
+  ...props
 }: CardStackProps) {
   const isControlled = expanded !== undefined
   const [internalExpanded, setInternalExpanded] = useState(defaultExpanded)
@@ -96,6 +94,9 @@ export function CardStack({
 
   return (
     <motion.div
+      // Spread first: the root owns a button a11y contract (role/tabIndex/
+      // keyboard + click handlers) that a consumer prop must not silently break.
+      {...props}
       className={cn(
         'relative select-none',
         !isExpanded && 'cursor-pointer',

@@ -8,8 +8,10 @@ import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { DeliveryMethodIcon } from '../../primitives/DeliveryMethodIcon/DeliveryMethodIcon'
 import { cn } from '../../../lib/utils'
 import type { TimeSlot } from '../DeliveryConfirmation/deliveryFlow.types'
+import type { ComponentPropsWithRef } from 'react'
 
-export interface DeliveryBookingSuccessProps {
+export interface DeliveryBookingSuccessProps
+  extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   bookingRef: string
   method: 'home-delivery' | 'click-collect'
   scheduledDate: string
@@ -20,7 +22,6 @@ export interface DeliveryBookingSuccessProps {
   ctaLabel?: string
   onCta: () => void
   onAddCalendar?: () => void
-  className?: string
 }
 
 function formatDateDisplay(isoDate: string): string {
@@ -77,6 +78,7 @@ export function DeliveryBookingSuccess({
   onCta,
   onAddCalendar,
   className,
+  ...props
 }: DeliveryBookingSuccessProps) {
   const shouldReduce = useReducedMotion()
 
@@ -86,7 +88,7 @@ export function DeliveryBookingSuccess({
   })
 
   return (
-    <div className={cn('space-y-4 md:space-y-5', className)}>
+    <div className={cn('space-y-4 md:space-y-5', className)} {...props}>
       <motion.div
         variants={shouldReduce ? heroVariantsReduced : heroVariants}
         initial="hidden"

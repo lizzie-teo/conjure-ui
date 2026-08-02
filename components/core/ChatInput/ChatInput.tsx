@@ -5,6 +5,8 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { ArrowUp, Mic } from 'lucide-react'
 import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
+import { mergeRefs } from '../../../lib/merge-refs'
+import type { ComponentProps, ComponentPropsWithRef } from 'react'
 
 interface ChatInputContextValue {
   value: string
@@ -21,23 +23,23 @@ function useChatInput() {
   return ctx
 }
 
-export interface ChatInputProps {
+export interface ChatInputProps extends ComponentPropsWithRef<'div'> {
   onSend: (value: string) => void
   disabled?: boolean
-  className?: string
-  children?: React.ReactNode
 }
 
-interface FieldProps {
-  placeholder?: string
-  className?: string
-}
+/** `value`/`onChange` are owned by the parent `<ChatInput>` and cannot be overridden. */
+type FieldProps = Omit<ComponentPropsWithRef<'textarea'>, 'value' | 'onChange' | 'children'>
 
-interface SendProps {
-  className?: string
-}
+type SendProps = Omit<ComponentProps<typeof Button>, 'children'>
 
-function Field({ placeholder = 'Type a message…', className }: FieldProps) {
+function Field({
+  placeholder = 'Type a message…',
+  className,
+  ref: forwardedRef,
+  'aria-label': ariaLabel = 'Message input',
+  ...props
+}: FieldProps) {
   const { value, setValue, handleSend } = useChatInput()
   const ref = useRef<HTMLTextAreaElement>(null)
 
@@ -50,7 +52,10 @@ function Field({ placeholder = 'Type a message…', className }: FieldProps) {
 
   return (
     <textarea
-      ref={ref}
+      // Spread first: the field owns the controlled value and the Enter-to-send
+      // key contract, which a consumer prop must not silently replace.
+      {...props}
+      ref={mergeRefs(ref, forwardedRef)}
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onKeyDown={(e) => {
@@ -61,7 +66,7 @@ function Field({ placeholder = 'Type a message…', className }: FieldProps) {
       }}
       placeholder={placeholder}
       rows={1}
-      aria-label="Message input"
+      aria-label={ariaLabel}
       className={cn(
         'flex-1 resize-none bg-transparent text-base text-foreground',
         'placeholder:text-muted-foreground leading-relaxed',
@@ -74,17 +79,20 @@ function Field({ placeholder = 'Type a message…', className }: FieldProps) {
   )
 }
 
-function Send({ className }: SendProps) {
+function Send({ className, 'aria-label': ariaLabel = 'Send message', ...props }: SendProps) {
   const { handleSend, value, disabled } = useChatInput()
   const shouldReduce = useReducedMotion()
   const canSend = value.trim().length > 0 && !disabled
 
   return (
     <Button
+      // Spread first: the button owns its send handler and disabled state,
+      // both derived from the parent `<ChatInput>`.
+      {...props}
       size="icon"
       onClick={handleSend}
       disabled={!canSend}
-      aria-label="Send message"
+      aria-label={ariaLabel}
       className={cn('shrink-0 rounded-full size-9 md:size-10', className)}
     >
       <AnimatePresence mode="wait" initial={false}>
@@ -116,7 +124,13 @@ function Send({ className }: SendProps) {
   )
 }
 
-export function ChatInput({ onSend, disabled = false, className, children }: ChatInputProps) {
+export function ChatInput({
+  onSend,
+  disabled = false,
+  className,
+  children,
+  ...props
+}: ChatInputProps) {
   const [value, setValue] = useState('')
 
   const handleSend = useCallback(() => {
@@ -135,6 +149,7 @@ export function ChatInput({ onSend, disabled = false, className, children }: Cha
           'transition-shadow duration-150 focus-within:ring-2 focus-within:ring-ring focus-within:shadow-[var(--shadow-elevated)]',
           className
         )}
+        {...props}
       >
         {children}
       </div>

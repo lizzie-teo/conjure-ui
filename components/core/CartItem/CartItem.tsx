@@ -5,8 +5,9 @@ import { Button } from '../../ui/button'
 import { PriceDisplay } from '../../primitives/PriceDisplay/PriceDisplay'
 import { QuantityStepper } from '../../primitives/QuantityStepper/QuantityStepper'
 import { cn } from '../../../lib/utils'
+import type { ComponentPropsWithRef } from 'react'
 
-export interface CartItemProps {
+export interface CartItemProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   image: string
   name: string
   variant?: string
@@ -15,7 +16,6 @@ export interface CartItemProps {
   quantity: number
   onQuantityChange?: (quantity: number) => void
   onRemove?: () => void
-  className?: string
 }
 
 export function CartItem({
@@ -28,6 +28,7 @@ export function CartItem({
   onQuantityChange,
   onRemove,
   className,
+  ...props
 }: CartItemProps) {
   return (
     <div
@@ -36,6 +37,7 @@ export function CartItem({
         'bg-card border border-border rounded-xl shadow-[var(--shadow-card)]',
         className
       )}
+      {...props}
     >
       <img
         src={image}

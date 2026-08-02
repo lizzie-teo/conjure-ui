@@ -18,8 +18,10 @@ import type {
   RewardsSummary,
   SubstitutionPreference,
 } from './deliveryFlow.types'
+import type { ComponentPropsWithRef } from 'react'
 
-export interface DeliveryConfirmationProps {
+export interface DeliveryConfirmationProps
+  extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   method: 'home-delivery' | 'click-collect'
   deliveryAddress?: AddressTileProps
   branch?: Pick<Branch, 'name' | 'address'>
@@ -32,7 +34,6 @@ export interface DeliveryConfirmationProps {
   onConfirm: () => void
   onEdit: (step: DeliveryStep) => void
   onSetupRecurring?: () => void
-  className?: string
 }
 
 const substitutionLabels: Record<SubstitutionPreference, string> = {
@@ -60,16 +61,22 @@ const sectionVariantsReduced = {
   show: { opacity: 1, transition: { duration: 0.2 } },
 }
 
-interface EditRowProps {
+interface EditRowProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   label: string
   value: React.ReactNode
   step: DeliveryStep
   onEdit: (step: DeliveryStep) => void
 }
 
-function EditRow({ label, value, step, onEdit }: EditRowProps) {
+function EditRow({ label, value, step, onEdit, className, ...props }: EditRowProps) {
   return (
-    <div className="flex items-center justify-between gap-4 py-2 md:py-2.5 border-b border-border last:border-0">
+    <div
+      className={cn(
+        'flex items-center justify-between gap-4 py-2 md:py-2.5 border-b border-border last:border-0',
+        className
+      )}
+      {...props}
+    >
       <span className="text-xs md:text-sm text-muted-foreground shrink-0">{label}</span>
       <div className="flex items-center gap-2 min-w-0">
         <span className="text-xs md:text-sm text-foreground font-medium text-right truncate">{value}</span>
@@ -101,6 +108,7 @@ export function DeliveryConfirmation({
   onEdit,
   onSetupRecurring,
   className,
+  ...props
 }: DeliveryConfirmationProps) {
   const shouldReduce = useReducedMotion()
 
@@ -109,7 +117,7 @@ export function DeliveryConfirmation({
     : null
 
   return (
-    <div className={cn('space-y-4 md:space-y-5', className)}>
+    <div className={cn('space-y-4 md:space-y-5', className)} {...props}>
       <motion.div
         variants={shouldReduce ? sectionVariantsReduced : sectionVariants}
         initial="hidden"

@@ -6,6 +6,7 @@ import { cn } from '../../../lib/utils'
 import { Button } from '../../ui/button'
 import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { DetailList } from '../DetailList/DetailList'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -16,7 +17,7 @@ export interface PaymentSuccessRow {
   value: React.ReactNode
 }
 
-export interface PaymentSuccessProps {
+export interface PaymentSuccessProps extends Omit<MotionDivProps, 'children'> {
   /** Confirmation reference shown prominently — order #, booking ref, policy #. */
   referenceNumber: string
   /** StatusBadge label. Defaults to "Confirmed". */
@@ -31,7 +32,6 @@ export interface PaymentSuccessProps {
   /** Optional secondary action (e.g. "Email receipt", "View booking"). */
   secondaryLabel?: string
   onSecondary?: () => void
-  className?: string
 }
 
 // ---------------------------------------------------------------------------
@@ -59,6 +59,7 @@ export function PaymentSuccess({
   secondaryLabel,
   onSecondary,
   className,
+  ...props
 }: PaymentSuccessProps) {
   const shouldReduce = useReducedMotion()
 
@@ -74,6 +75,8 @@ export function PaymentSuccess({
 
   return (
     <motion.div
+      // Spread first: the root owns the live-region a11y contract.
+      {...props}
       role="status"
       aria-live="polite"
       initial={{ opacity: 0, y: shouldReduce ? 0 : 10 }}

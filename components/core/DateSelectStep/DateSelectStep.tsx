@@ -5,12 +5,13 @@ import { Button } from '../../ui/button'
 import { AvailabilityDot } from '../../primitives/AvailabilityDot/AvailabilityDot'
 import { cn } from '../../../lib/utils'
 import type { AvailableDate } from '../DeliveryConfirmation/deliveryFlow.types'
+import type { ComponentPropsWithRef } from 'react'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
-export interface DateSelectStepProps {
+export interface DateSelectStepProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   availableDates: AvailableDate[]
   selectedDate?: string
   onDateSelect: (date: string) => void
-  className?: string
 }
 
 function parseDateLocal(isoDate: string): Date {
@@ -72,21 +73,30 @@ const cellVariantsReduced = {
   show: { opacity: 1, transition: { duration: 0.2 } },
 }
 
-interface CellProps {
+interface CellProps extends Omit<MotionDivProps, 'children' | 'onSelect'> {
   date: AvailableDate
   isSelected: boolean
+  /** Overrides the DOM `onSelect` handler — fires with the cell's ISO date. */
   onSelect: (date: string) => void
   shouldReduce: boolean
 }
 
-function Cell({ date, isSelected, onSelect, shouldReduce }: CellProps) {
+function Cell({
+  date,
+  isSelected,
+  onSelect,
+  shouldReduce,
+  className,
+  ...props
+}: CellProps) {
   const { dayLabel, dayNum, isToday } = formatDateParts(date.date)
   const isUnavailable = date.availability === 'unavailable'
 
   return (
     <motion.div
       variants={shouldReduce ? cellVariantsReduced : cellVariants}
-      className="snap-start shrink-0"
+      className={cn('snap-start shrink-0', className)}
+      {...props}
     >
       <Button
         variant="ghost"
@@ -127,11 +137,12 @@ export function DateSelectStep({
   selectedDate,
   onDateSelect,
   className,
+  ...props
 }: DateSelectStepProps) {
   const shouldReduce = useReducedMotion() ?? false
 
   return (
-    <div className={cn('space-y-3', className)}>
+    <div className={cn('space-y-3', className)} {...props}>
       <motion.div
         role="radiogroup"
         aria-label="Select delivery date"

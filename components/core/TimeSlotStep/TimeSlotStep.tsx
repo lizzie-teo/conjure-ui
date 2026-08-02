@@ -8,14 +8,15 @@ import { AvailabilityDot } from '../../primitives/AvailabilityDot/AvailabilityDo
 import { PriceDisplay } from '../../primitives/PriceDisplay/PriceDisplay'
 import { cn } from '../../../lib/utils'
 import type { TimeSlot } from '../DeliveryConfirmation/deliveryFlow.types'
+import type { ComponentPropsWithRef } from 'react'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
 export type TimeOfDay = 'morning' | 'afternoon' | 'evening'
 
-export interface TimeSlotStepProps {
+export interface TimeSlotStepProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   slots: TimeSlot[]
   selectedSlotId?: string
   onSlotSelect: (slotId: string) => void
-  className?: string
 }
 
 const periodMeta: Record<TimeOfDay, { label: string; Icon: React.ElementType }> = {
@@ -68,18 +69,20 @@ const chipVariantsReduced = {
   show: { opacity: 1, transition: { duration: 0.2 } },
 }
 
-interface ChipProps {
+interface ChipProps extends Omit<MotionDivProps, 'children' | 'onSelect' | 'slot'> {
+  /** Overrides the DOM `slot` attribute — the time slot this chip renders. */
   slot: TimeSlot
   isSelected: boolean
+  /** Overrides the DOM `onSelect` handler — fires with the slot id. */
   onSelect: (id: string) => void
   shouldReduce: boolean
 }
 
-function Chip({ slot, isSelected, onSelect, shouldReduce }: ChipProps) {
+function Chip({ slot, isSelected, onSelect, shouldReduce, ...props }: ChipProps) {
   const isUnavailable = slot.availability === 'unavailable'
 
   return (
-    <motion.div variants={shouldReduce ? chipVariantsReduced : chipVariants}>
+    <motion.div variants={shouldReduce ? chipVariantsReduced : chipVariants} {...props}>
       <Button
         variant="ghost"
         role="radio"
@@ -137,7 +140,13 @@ const containerVariants = {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function TimeSlotStep({ slots, selectedSlotId, onSlotSelect, className }: TimeSlotStepProps) {
+export function TimeSlotStep({
+  slots,
+  selectedSlotId,
+  onSlotSelect,
+  className,
+  ...props
+}: TimeSlotStepProps) {
   const shouldReduce = useReducedMotion() ?? false
 
   const periods = (['morning', 'afternoon', 'evening'] as TimeOfDay[]).filter(
@@ -149,7 +158,7 @@ export function TimeSlotStep({ slots, selectedSlotId, onSlotSelect, className }:
   const visibleSlots = slots.filter((s) => getTimeOfDay(s.startTime) === activePeriod)
 
   return (
-    <div className={cn('space-y-3', className)}>
+    <div className={cn('space-y-3', className)} {...props}>
       {/* Period tabs — segmented control */}
       <div
         role="tablist"

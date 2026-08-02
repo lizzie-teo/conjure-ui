@@ -5,6 +5,8 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
+import type { ComponentPropsWithRef } from 'react'
+import type { MotionDivProps, MotionUlProps } from '../../../lib/prop-types'
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -50,14 +52,16 @@ export interface MakeupRecipe {
 
 export type MakeupHeroVariant = 'collage' | 'carousel'
 
-export interface MakeupRecipeCardProps {
+export interface MakeupRecipeCardProps extends Omit<MotionDivProps, 'children'> {
   recipe: MakeupRecipe
   hero?: MakeupHeroVariant
   onProductClick?: (product: MakeupProduct) => void
   onAddToCart?: (products: MakeupProduct[]) => void
   onSave?: (recipe: MakeupRecipe) => void
-  className?: string
 }
+
+/** Hero, Story and Actions all render a plain `<div>` root. */
+type SectionProps = Omit<ComponentPropsWithRef<'div'>, 'children'>
 
 // ── Context ───────────────────────────────────────────────────────────────────
 
@@ -115,10 +119,10 @@ const itemFade = {
 // ── Sub-components ─────────────────────────────────────────────────────────────
 
 // Shared swatch strip — thin colour accent used as fallback when no images are present
-function SwatchStrip({ className }: { className?: string }) {
+function SwatchStrip({ className, ...props }: SectionProps) {
   const { recipe } = useMakeupCtx()
   return (
-    <div className={cn('flex h-2 overflow-hidden', className)}>
+    <div className={cn('flex h-2 overflow-hidden', className)} {...props}>
       {recipe.products.map(p => (
         <div key={p.id} className="flex-1" style={{ backgroundColor: p.swatch.hex }} />
       ))}
@@ -126,7 +130,7 @@ function SwatchStrip({ className }: { className?: string }) {
   )
 }
 
-function CollageHero({ className }: { className?: string }) {
+function CollageHero({ className, ...props }: SectionProps) {
   const { recipe } = useMakeupCtx()
 
   const withImages = [
@@ -134,13 +138,13 @@ function CollageHero({ className }: { className?: string }) {
     ...recipe.products.filter(p => !p.isFocalPoint && p.image),
   ]
 
-  if (withImages.length === 0) return <SwatchStrip className={className} />
+  if (withImages.length === 0) return <SwatchStrip className={className} {...props} />
 
   const [focal, ...rest] = withImages
 
   if (withImages.length === 1) {
     return (
-      <div className={cn('h-40 md:h-44 overflow-hidden', className)}>
+      <div className={cn('h-40 md:h-44 overflow-hidden', className)} {...props}>
         <img src={focal.image} alt={focal.imageAlt ?? focal.shade} className="w-full h-full object-cover" />
       </div>
     )
@@ -148,7 +152,7 @@ function CollageHero({ className }: { className?: string }) {
 
   if (withImages.length === 2) {
     return (
-      <div className={cn('flex h-40 md:h-44 overflow-hidden gap-px bg-border', className)}>
+      <div className={cn('flex h-40 md:h-44 overflow-hidden gap-px bg-border', className)} {...props}>
         <img src={focal.image} alt={focal.imageAlt ?? focal.shade} className="flex-1 h-full object-cover min-w-0" />
         <img src={rest[0].image} alt={rest[0].imageAlt ?? rest[0].shade} className="flex-1 h-full object-cover min-w-0" />
       </div>
@@ -157,7 +161,7 @@ function CollageHero({ className }: { className?: string }) {
 
   // Three+ — focal 2/3, supporting stacked 1/3
   return (
-    <div className={cn('flex h-40 md:h-44 overflow-hidden gap-px bg-border', className)}>
+    <div className={cn('flex h-40 md:h-44 overflow-hidden gap-px bg-border', className)} {...props}>
       <img src={focal.image} alt={focal.imageAlt ?? focal.shade} className="w-2/3 h-full object-cover shrink-0" />
       <div className="flex flex-col flex-1 gap-px min-w-0">
         {rest.slice(0, 2).map(p => (
@@ -168,7 +172,7 @@ function CollageHero({ className }: { className?: string }) {
   )
 }
 
-function CarouselHero({ className }: { className?: string }) {
+function CarouselHero({ className, ...props }: SectionProps) {
   const { recipe } = useMakeupCtx()
   const shouldReduce = useReducedMotion()
   const [index, setIndex] = useState(0)
@@ -179,10 +183,10 @@ function CarouselHero({ className }: { className?: string }) {
     ...recipe.products.filter(p => !p.isFocalPoint && p.image),
   ]
 
-  if (slides.length === 0) return <SwatchStrip className={className} />
+  if (slides.length === 0) return <SwatchStrip className={className} {...props} />
   if (slides.length === 1) {
     return (
-      <div className={cn('h-40 md:h-44 overflow-hidden', className)}>
+      <div className={cn('h-40 md:h-44 overflow-hidden', className)} {...props}>
         <img src={slides[0].image} alt={slides[0].imageAlt ?? slides[0].shade} className="w-full h-full object-cover" />
       </div>
     )
@@ -200,7 +204,7 @@ function CarouselHero({ className }: { className?: string }) {
   }
 
   return (
-    <div className={cn('relative h-40 md:h-44 overflow-hidden bg-muted', className)}>
+    <div className={cn('relative h-40 md:h-44 overflow-hidden bg-muted', className)} {...props}>
       <AnimatePresence initial={false} custom={dir}>
         <motion.img
           key={index}
@@ -245,18 +249,18 @@ function CarouselHero({ className }: { className?: string }) {
   )
 }
 
-function Hero({ className }: { className?: string }) {
+function Hero({ className, ...props }: SectionProps) {
   const { hero } = useMakeupCtx()
   return hero === 'carousel'
-    ? <CarouselHero className={className} />
-    : <CollageHero className={className} />
+    ? <CarouselHero className={className} {...props} />
+    : <CollageHero className={className} {...props} />
 }
 
-function Story({ className }: { className?: string }) {
+function Story({ className, ...props }: SectionProps) {
   const { recipe } = useMakeupCtx()
 
   return (
-    <div className={cn('px-4 md:px-5 pt-4 md:pt-5 pb-3 md:pb-4', className)}>
+    <div className={cn('px-4 md:px-5 pt-4 md:pt-5 pb-3 md:pb-4', className)} {...props}>
       <div className="flex items-center gap-2 mb-3 flex-wrap">
         <StatusBadge label={OCCASION_LABEL[recipe.occasion]} variant={OCCASION_VARIANT[recipe.occasion]} />
         {recipe.format === 'palette' && <StatusBadge label="Palette" variant="default" />}
@@ -274,7 +278,7 @@ function Story({ className }: { className?: string }) {
   )
 }
 
-function ProductList({ className }: { className?: string }) {
+function ProductList({ className, ...props }: Omit<MotionUlProps, 'children'>) {
   const { recipe, onProductClick } = useMakeupCtx()
   const shouldReduce = useReducedMotion()
 
@@ -285,6 +289,7 @@ function ProductList({ className }: { className?: string }) {
       initial="hidden"
       animate="show"
       className={cn('flex flex-col gap-2 md:gap-2.5 list-none p-0 m-0', className)}
+      {...props}
     >
       {recipe.products.map(product => (
         <motion.li key={product.id} variants={shouldReduce ? itemFade : itemFadeUp}>
@@ -344,12 +349,12 @@ function ProductList({ className }: { className?: string }) {
   )
 }
 
-function Actions({ className }: { className?: string }) {
+function Actions({ className, ...props }: SectionProps) {
   const { recipe, onAddToCart, onSave } = useMakeupCtx()
   const count = recipe.products.length
 
   return (
-    <div className={cn('flex flex-col gap-2 md:gap-3', className)}>
+    <div className={cn('flex flex-col gap-2 md:gap-3', className)} {...props}>
       {onAddToCart && (
         <Button
           variant="default"
@@ -381,6 +386,7 @@ export function MakeupRecipeCard({
   onAddToCart,
   onSave,
   className,
+  ...props
 }: MakeupRecipeCardProps) {
   const shouldReduce = useReducedMotion()
 
@@ -394,6 +400,7 @@ export function MakeupRecipeCard({
           'bg-card border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden',
           className
         )}
+        {...props}
       >
         <MakeupRecipeCard.Hero />
         <MakeupRecipeCard.Story />
