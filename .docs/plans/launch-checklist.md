@@ -23,16 +23,18 @@ and configured to build using GitHub Actions
 **Fix:** repo → Settings → Pages → Source: **GitHub Actions**. Then re-run the workflow
 (`gh run rerun <id>`, or push anything).
 
-There is a way to skip this step permanently — `actions/configure-pages@v5` takes an `enablement`
-input that turns Pages on from the workflow itself:
+Or from the CLI, without opening Settings at all:
 
-```yaml
-- uses: actions/configure-pages@v5
-  with:
-    enablement: true
+```bash
+gh api -X POST repos/lizzie-teo/conjure-ui/pages -f build_type=workflow
 ```
 
-Worth adding either way, so a fresh clone or a transferred repo doesn't hit the same wall.
+**`enablement: true` is not a way around this — tried on 2 Aug, reverted.**
+`actions/configure-pages@v5` does take that input, but creating a Pages site needs admin rights that
+`GITHUB_TOKEN` does not have and that workflow `permissions:` cannot grant. It fails with
+`Resource not accessible by integration`, which is a worse error than the plain "verify that the
+repository has Pages enabled" it replaces. Self-enabling would mean storing a PAT for a one-time
+setup step. The step in `pages.yml` now carries a comment saying so.
 
 **Verify:** `gh api repos/lizzie-teo/conjure-ui/pages` returns a JSON body instead of a 404, and the
 Deploy Storybook run goes green.
