@@ -35,12 +35,13 @@ var d = {
 		transition: { duration: .2 }
 	}
 };
-function f({ address: e, onEdit: r }) {
+function f({ address: e, onEdit: r, ...i }) {
 	return /* @__PURE__ */ a(c.div, {
 		variants: d,
 		initial: "hidden",
 		animate: "show",
 		exit: "exit",
+		...i,
 		children: /* @__PURE__ */ o("div", {
 			className: "mt-3 flex items-start justify-between gap-3 rounded-xl border border-border bg-muted/30 px-4 py-3 md:px-5 md:py-4",
 			children: [/* @__PURE__ */ a(n, { ...e }), r && /* @__PURE__ */ a(t, {
@@ -54,10 +55,11 @@ function f({ address: e, onEdit: r }) {
 		})
 	});
 }
-function p({ value: n, defaultValue: u, homeAddress: p, onMethodChange: m, onAddressEdit: h, className: g }) {
-	let _ = l(), v = (n ?? u) === "home-delivery";
+function p({ value: n, defaultValue: u, homeAddress: p, onMethodChange: m, onAddressEdit: h, className: g, ..._ }) {
+	let v = l(), y = (n ?? u) === "home-delivery";
 	return /* @__PURE__ */ o("div", {
 		className: e("space-y-1", g),
+		..._,
 		children: [/* @__PURE__ */ o(i, {
 			type: "radio",
 			value: n,
@@ -82,11 +84,11 @@ function p({ value: n, defaultValue: u, homeAddress: p, onMethodChange: m, onAdd
 			})]
 		}), /* @__PURE__ */ o(s, {
 			initial: !1,
-			children: [v && p && /* @__PURE__ */ a(f, {
+			children: [y && p && /* @__PURE__ */ a(f, {
 				address: p,
 				onEdit: h
-			}, "address-preview"), v && !p && /* @__PURE__ */ a(c.div, {
-				variants: _ ? void 0 : d,
+			}, "address-preview"), y && !p && /* @__PURE__ */ a(c.div, {
+				variants: v ? void 0 : d,
 				initial: "hidden",
 				animate: "show",
 				exit: "exit",

@@ -1,4 +1,5 @@
-export interface ChipToCardProps {
+import type { ComponentPropsWithRef } from 'react';
+export interface ChipToCardProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
     chips: {
         id: string;
         label: string;
@@ -10,6 +11,5 @@ export interface ChipToCardProps {
     onSelectedChange?: (id: string | null) => void;
     /** Initial selected chip when uncontrolled. */
     defaultSelectedId?: string;
-    className?: string;
 }
-export declare function ChipToCard({ chips, selectedId, onSelectedChange, defaultSelectedId, className, }: ChipToCardProps): import("react").JSX.Element;
+export declare function ChipToCard({ chips, selectedId, onSelectedChange, defaultSelectedId, className, ...props }: ChipToCardProps): import("react").JSX.Element;

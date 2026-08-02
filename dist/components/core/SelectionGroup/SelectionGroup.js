@@ -41,15 +41,16 @@ var d = a(t), f = s({
 		transition: { duration: .2 }
 	}
 };
-function g({ value: t, children: s, description: l, icon: p, className: g }) {
-	let { type: _, selected: v, toggle: y } = c(f), b = o(), x = v.includes(t);
+function g({ value: t, children: s, description: l, icon: p, className: g, ..._ }) {
+	let { type: v, selected: y, toggle: b } = c(f), x = o(), S = y.includes(t);
 	return /* @__PURE__ */ r(d, {
-		variants: b ? h : m,
-		onClick: () => y(t),
-		role: _,
-		"aria-checked": x,
+		..._,
+		variants: x ? h : m,
+		onClick: () => b(t),
+		role: v,
+		"aria-checked": S,
 		variant: "ghost",
-		className: e("w-full h-auto flex items-center gap-3 rounded-xl px-4 py-3.5 md:py-4 text-left whitespace-normal", "transition-colors duration-150", x ? "border-2 border-primary bg-primary/5 shadow-[var(--shadow-card)] hover:bg-primary/5" : "border border-border bg-card shadow-[var(--shadow-sm)] hover:border-primary/40 hover:bg-muted/30 hover:shadow-[var(--shadow-card)]", g),
+		className: e("w-full h-auto flex items-center gap-3 rounded-xl px-4 py-3.5 md:py-4 text-left whitespace-normal", "transition-colors duration-150", S ? "border-2 border-primary bg-primary/5 shadow-[var(--shadow-card)] hover:bg-primary/5" : "border border-border bg-card shadow-[var(--shadow-sm)] hover:border-primary/40 hover:bg-muted/30 hover:shadow-[var(--shadow-card)]", g),
 		children: [
 			p && /* @__PURE__ */ n("span", {
 				className: "shrink-0 size-8 md:size-9 rounded-lg bg-muted flex items-center justify-center text-muted-foreground",
@@ -66,13 +67,13 @@ function g({ value: t, children: s, description: l, icon: p, className: g }) {
 				})]
 			}),
 			/* @__PURE__ */ n("div", {
-				className: e("shrink-0 flex items-center justify-center border-2 transition-colors duration-150", _ === "radio" ? "rounded-full size-5" : "rounded-md size-5", x ? "border-primary bg-primary" : "border-muted-foreground/40 bg-transparent"),
+				className: e("shrink-0 flex items-center justify-center border-2 transition-colors duration-150", v === "radio" ? "rounded-full size-5" : "rounded-md size-5", S ? "border-primary bg-primary" : "border-muted-foreground/40 bg-transparent"),
 				children: /* @__PURE__ */ n(i, {
 					initial: !1,
-					children: x && /* @__PURE__ */ n(a.span, {
+					children: S && /* @__PURE__ */ n(a.span, {
 						initial: {
 							opacity: 0,
-							scale: b ? 1 : .5
+							scale: x ? 1 : .5
 						},
 						animate: {
 							opacity: 1,
@@ -80,7 +81,7 @@ function g({ value: t, children: s, description: l, icon: p, className: g }) {
 						},
 						exit: {
 							opacity: 0,
-							scale: b ? 1 : .5
+							scale: x ? 1 : .5
 						},
 						transition: {
 							duration: .15,

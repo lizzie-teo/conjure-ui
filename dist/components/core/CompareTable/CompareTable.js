@@ -23,10 +23,11 @@ function l({ value: e }) {
 		})
 	}) : /* @__PURE__ */ i(r, { label: e });
 }
-function u({ columns: r, attributeLabels: o, onSelect: s, className: u }) {
-	let d = c(r, o);
-	return r.length, /* @__PURE__ */ i("div", {
+function u({ columns: r, attributeLabels: o, onSelect: s, className: u, ...d }) {
+	let f = c(r, o);
+	return /* @__PURE__ */ i("div", {
 		className: e("w-full overflow-x-auto", u),
+		...d,
 		children: /* @__PURE__ */ a("table", {
 			className: "w-full border-collapse text-sm md:text-base",
 			children: [/* @__PURE__ */ i("thead", { children: /* @__PURE__ */ a("tr", { children: [/* @__PURE__ */ i("th", {
@@ -53,7 +54,7 @@ function u({ columns: r, attributeLabels: o, onSelect: s, className: u }) {
 						})
 					]
 				})
-			}, n.id))] }) }), /* @__PURE__ */ a("tbody", { children: [d.map((t, n) => /* @__PURE__ */ a("tr", {
+			}, n.id))] }) }), /* @__PURE__ */ a("tbody", { children: [f.map((t, n) => /* @__PURE__ */ a("tr", {
 				className: e(n % 2 == 0 ? "bg-background" : "bg-muted/30"),
 				children: [/* @__PURE__ */ i("td", {
 					className: e("sticky left-0 z-10 p-3 md:p-4 border-b border-border", "text-xs md:text-sm font-medium text-muted-foreground", n % 2 == 0 ? "bg-background" : "bg-muted/30"),

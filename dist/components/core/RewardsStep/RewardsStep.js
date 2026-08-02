@@ -31,13 +31,14 @@ var l = {
 		transition: { duration: .2 }
 	}
 };
-function d({ rewards: n, redeemPoints: a, onRedeemToggle: o }) {
-	let s = n.currentPoints + n.pointsEarned, l = new Intl.NumberFormat(void 0, {
+function d({ rewards: n, redeemPoints: a, onRedeemToggle: o, className: s, ...l }) {
+	let u = n.currentPoints + n.pointsEarned, d = new Intl.NumberFormat(void 0, {
 		style: "currency",
 		currency: n.currency
 	});
 	return /* @__PURE__ */ i("div", {
-		className: "rounded-xl border border-border bg-card overflow-hidden",
+		className: e("rounded-xl border border-border bg-card overflow-hidden", s),
+		...l,
 		children: [
 			/* @__PURE__ */ i("div", {
 				className: "flex items-center gap-2 px-4 md:px-5 py-3 border-b border-border bg-muted/30",
@@ -77,7 +78,7 @@ function d({ rewards: n, redeemPoints: a, onRedeemToggle: o }) {
 					label: "New balance",
 					value: /* @__PURE__ */ i("span", {
 						className: "font-semibold",
-						children: [s.toLocaleString(), " pts"]
+						children: [u.toLocaleString(), " pts"]
 					})
 				})
 			] }),
@@ -96,7 +97,7 @@ function d({ rewards: n, redeemPoints: a, onRedeemToggle: o }) {
 						className: "text-xs text-muted-foreground",
 						children: [
 							"Save ",
-							l.format(n.pointsValue),
+							d.format(n.pointsValue),
 							" on this order"
 						]
 					})] }), /* @__PURE__ */ r("button", {
@@ -113,25 +114,27 @@ function d({ rewards: n, redeemPoints: a, onRedeemToggle: o }) {
 		]
 	});
 }
-function f({ prompt: e }) {
+function f({ prompt: t, className: n, ...a }) {
 	return /* @__PURE__ */ i("div", {
-		className: "flex items-start gap-2 rounded-xl bg-success/5 border border-success/20 px-4 py-3",
+		className: e("flex items-start gap-2 rounded-xl bg-success/5 border border-success/20 px-4 py-3", n),
+		...a,
 		children: [/* @__PURE__ */ r(s, { className: "size-4 text-success shrink-0 mt-0.5" }), /* @__PURE__ */ r("p", {
 			className: "text-xs md:text-sm text-success font-medium leading-snug",
-			children: e
+			children: t
 		})]
 	});
 }
-function p({ value: e, onChange: t }) {
+function p({ value: t, onChange: a, className: o, ...s }) {
 	return /* @__PURE__ */ i("div", {
-		className: "space-y-2",
+		className: e("space-y-2", o),
+		...s,
 		children: [/* @__PURE__ */ r("p", {
 			className: "text-xs md:text-sm font-medium text-foreground px-1",
 			children: "If an item is out of stock"
 		}), /* @__PURE__ */ i(n, {
 			type: "radio",
-			value: e,
-			onChange: (e) => t(e),
+			value: t,
+			onChange: (e) => a(e),
 			children: [
 				/* @__PURE__ */ r(n.Option, {
 					value: "allow",
@@ -152,13 +155,14 @@ function p({ value: e, onChange: t }) {
 		})]
 	});
 }
-function m({ rewards: t, redeemPoints: n, onRedeemToggle: s, substitution: c, onSubstitutionChange: m, className: h }) {
-	let g = o();
+function m({ rewards: t, redeemPoints: n, onRedeemToggle: s, substitution: c, onSubstitutionChange: m, className: h, ...g }) {
+	let _ = o();
 	return /* @__PURE__ */ i("div", {
 		className: e("space-y-4 md:space-y-5", h),
+		...g,
 		children: [
 			/* @__PURE__ */ r(a.div, {
-				variants: g ? u : l,
+				variants: _ ? u : l,
 				initial: "hidden",
 				animate: "show",
 				children: /* @__PURE__ */ r(d, {
@@ -168,14 +172,14 @@ function m({ rewards: t, redeemPoints: n, onRedeemToggle: s, substitution: c, on
 				})
 			}),
 			t.bonusPrompt && /* @__PURE__ */ r(a.div, {
-				variants: g ? u : l,
+				variants: _ ? u : l,
 				initial: "hidden",
 				animate: "show",
 				transition: { delay: .08 },
 				children: /* @__PURE__ */ r(f, { prompt: t.bonusPrompt })
 			}),
 			/* @__PURE__ */ r(a.div, {
-				variants: g ? u : l,
+				variants: _ ? u : l,
 				initial: "hidden",
 				animate: "show",
 				transition: { delay: .12 },

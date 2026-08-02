@@ -49,13 +49,14 @@ var d = {
 		transition: { duration: .15 }
 	}
 };
-function p({ availableDates: p, timeSlots: m, slotsByDate: h, selectedDate: g, selectedSlotId: _, onDateSelect: v, onSlotSelect: y, className: b }) {
-	let x = c(), S = g && h?.[g] ? h[g] : m;
-	function C(e) {
+function p({ availableDates: p, timeSlots: m, slotsByDate: h, selectedDate: g, selectedSlotId: _, onDateSelect: v, onSlotSelect: y, className: b, ...x }) {
+	let S = c(), C = g && h?.[g] ? h[g] : m;
+	function w(e) {
 		e !== g && y(""), v(e);
 	}
 	return /* @__PURE__ */ a("div", {
 		className: e("space-y-3", b),
+		...x,
 		children: [/* @__PURE__ */ a("div", {
 			className: "rounded-2xl border border-border overflow-hidden",
 			children: [
@@ -71,7 +72,7 @@ function p({ availableDates: p, timeSlots: m, slotsByDate: h, selectedDate: g, s
 					children: /* @__PURE__ */ i(n, {
 						availableDates: p,
 						selectedDate: g,
-						onDateSelect: C
+						onDateSelect: w
 					})
 				}),
 				/* @__PURE__ */ a("div", {
@@ -89,7 +90,7 @@ function p({ availableDates: p, timeSlots: m, slotsByDate: h, selectedDate: g, s
 			mode: "wait",
 			initial: !1,
 			children: g ? /* @__PURE__ */ a(s.div, {
-				variants: x ? f : d,
+				variants: S ? f : d,
 				initial: "hidden",
 				animate: "show",
 				exit: "exit",
@@ -106,13 +107,13 @@ function p({ availableDates: p, timeSlots: m, slotsByDate: h, selectedDate: g, s
 				}), /* @__PURE__ */ i("div", {
 					className: "p-4",
 					children: /* @__PURE__ */ i(r, {
-						slots: S,
+						slots: C,
 						selectedSlotId: _,
 						onSlotSelect: y
 					})
 				})]
 			}, g) : /* @__PURE__ */ i(s.p, {
-				variants: x ? f : d,
+				variants: S ? f : d,
 				initial: "hidden",
 				animate: "show",
 				exit: "exit",

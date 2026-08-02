@@ -4,6 +4,7 @@ import { createContext, useContext, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { Check } from 'lucide-react'
 import { cn } from '../../../lib/utils'
+import type { ComponentProps } from 'react'
 import type { MotionDivProps } from '../../../lib/prop-types'
 import { Button } from '../../ui/button'
 
@@ -32,12 +33,12 @@ export interface SelectionGroupProps
   onChange?: (value: string | string[]) => void
 }
 
-export interface OptionProps {
+export interface OptionProps extends Omit<ComponentProps<typeof MotionButton>, 'value'> {
+  /** Overrides the DOM `value` attribute — identifies this option in the group. */
   value: string
   children: React.ReactNode
   description?: string
   icon?: React.ReactNode
-  className?: string
 }
 
 const containerVariants = {
@@ -57,13 +58,16 @@ const optionVariantsReduced = {
   show: { opacity: 1, transition: { duration: 0.2 } },
 }
 
-function Option({ value, children, description, icon, className }: OptionProps) {
+function Option({ value, children, description, icon, className, ...props }: OptionProps) {
   const { type, selected, toggle } = useContext(SelectionGroupCtx)
   const shouldReduce = useReducedMotion()
   const isSelected = selected.includes(value)
 
   return (
     <MotionButton
+      // Spread first: the option owns its radio/checkbox a11y contract and the
+      // toggle handler, which a consumer prop must not silently break.
+      {...props}
       variants={shouldReduce ? optionVariantsReduced : optionVariants}
       onClick={() => toggle(value)}
       role={type}

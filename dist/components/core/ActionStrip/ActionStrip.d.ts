@@ -1,20 +1,14 @@
-import type { ComponentPropsWithRef } from 'react';
+import { Button } from '../../ui/button';
+import type { ComponentProps, ComponentPropsWithRef } from 'react';
 export type ActionStripProps = ComponentPropsWithRef<'div'>;
-interface PrimaryProps {
-    onClick?: () => void;
-    disabled?: boolean;
-    className?: string;
-    children: React.ReactNode;
-}
-interface SecondaryProps {
-    onClick?: () => void;
-    disabled?: boolean;
-    className?: string;
-    children: React.ReactNode;
-}
+/**
+ * Props land on the inner `<Button>` — that is the element a consumer wants to
+ * reference, label or measure, not the motion wrapper that drives the entrance.
+ */
+type ActionProps = ComponentProps<typeof Button>;
 export declare function ActionStrip({ className, children, ...props }: ActionStripProps): import("react").JSX.Element;
 export declare namespace ActionStrip {
-    var Primary: ({ onClick, disabled, className, children }: PrimaryProps) => import("react").JSX.Element;
-    var Secondary: ({ onClick, disabled, className, children }: SecondaryProps) => import("react").JSX.Element;
+    var Primary: ({ className, children, ...props }: ActionProps) => import("react").JSX.Element;
+    var Secondary: ({ className, children, ...props }: ActionProps) => import("react").JSX.Element;
 }
 export {};

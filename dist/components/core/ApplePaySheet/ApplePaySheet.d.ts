@@ -1,3 +1,4 @@
+import type { MotionDivProps } from '../../../lib/prop-types';
 export interface ApplePayCard {
     name: string;
     lastFour: string;
@@ -13,7 +14,7 @@ export interface ApplePayShipping {
     line2?: string;
     country?: string;
 }
-export interface ApplePaySheetProps {
+export interface ApplePaySheetProps extends Omit<MotionDivProps, 'children'> {
     open: boolean;
     onClose: () => void;
     onConfirm: () => void;
@@ -28,6 +29,5 @@ export interface ApplePaySheetProps {
     onChangeShipping?: () => void;
     cardIcon?: React.ReactNode;
     loading?: boolean;
-    className?: string;
 }
-export declare function ApplePaySheet({ open, onClose, onConfirm, merchantName, total, currency, paymentCard, contact, shippingAddress, onChangeCard, onChangeContact, onChangeShipping, cardIcon, loading, className, }: ApplePaySheetProps): import("react").JSX.Element;
+export declare function ApplePaySheet({ open, onClose, onConfirm, merchantName, total, currency, paymentCard, contact, shippingAddress, onChangeCard, onChangeContact, onChangeShipping, cardIcon, loading, className, ref: forwardedRef, style, ...props }: ApplePaySheetProps): import("react").JSX.Element;

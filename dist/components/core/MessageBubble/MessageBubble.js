@@ -63,11 +63,12 @@ var m = l({
 		distance: 35
 	}
 ];
-function y({ children: t, words: n, className: r }) {
-	let { role: a } = u(m), o = c(), l = a === "user", d = !l && n && n.length > 0;
+function y({ children: t, words: n, className: r, ...a }) {
+	let { role: o } = u(m), l = c(), d = o === "user", f = !d && n && n.length > 0;
 	return /* @__PURE__ */ i("div", {
-		className: e("max-w-[75%] md:max-w-sm rounded-2xl px-4 py-3 md:px-5 md:py-3.5 text-sm md:text-base leading-relaxed", l ? "bg-primary text-primary-foreground" : "bg-muted text-foreground shadow-[var(--shadow-bubble)]", r),
-		children: d ? o ? /* @__PURE__ */ i("span", { children: n.map((e, t) => /* @__PURE__ */ i("span", {
+		className: e("max-w-[75%] md:max-w-sm rounded-2xl px-4 py-3 md:px-5 md:py-3.5 text-sm md:text-base leading-relaxed", d ? "bg-primary text-primary-foreground" : "bg-muted text-foreground shadow-[var(--shadow-bubble)]", r),
+		...a,
+		children: f ? l ? /* @__PURE__ */ i("span", { children: n.map((e, t) => /* @__PURE__ */ i("span", {
 			className: "inline-block mr-[0.25em]",
 			children: e
 		}, t)) }) : /* @__PURE__ */ i(s.span, {
@@ -91,27 +92,28 @@ function b({ size: e = "sm", ...n }) {
 		...n
 	});
 }
-function x({ datetime: t, className: r }) {
+function x({ className: t, ...r }) {
 	return /* @__PURE__ */ i(n, {
-		datetime: t,
-		className: e("text-xs mt-0.5 opacity-60", r)
+		className: e("text-xs mt-0.5 opacity-60", t),
+		...r
 	});
 }
-function S({ onThumbsUp: t, onThumbsDown: n, className: l }) {
-	let [u, m] = d(!1), [h, g] = d(!1), _ = c();
-	function y() {
-		m(!0), t?.(), setTimeout(() => m(!1), 700);
+function S({ onThumbsUp: t, onThumbsDown: n, className: l, "aria-label": u = "Message feedback", ...m }) {
+	let [h, g] = d(!1), [_, y] = d(!1), b = c();
+	function x() {
+		g(!0), t?.(), setTimeout(() => g(!1), 700);
 	}
-	function b() {
-		g(!0), n?.(), setTimeout(() => g(!1), 400);
+	function S() {
+		y(!0), n?.(), setTimeout(() => y(!1), 400);
 	}
 	return /* @__PURE__ */ a("div", {
+		...m,
 		className: e("flex gap-0.5 mt-0.5", l),
 		role: "group",
-		"aria-label": "Message feedback",
+		"aria-label": u,
 		children: [/* @__PURE__ */ a("div", {
 			className: "relative inline-flex",
-			children: [/* @__PURE__ */ i(o, { children: u && !_ && v.map((e, t) => {
+			children: [/* @__PURE__ */ i(o, { children: h && !b && v.map((e, t) => {
 				let n = e.angle * Math.PI / 180;
 				return /* @__PURE__ */ i(s.span, {
 					"aria-hidden": "true",
@@ -145,12 +147,12 @@ function S({ onThumbsUp: t, onThumbsDown: n, className: l }) {
 				variant: "ghost",
 				size: "icon",
 				className: "size-7 text-muted-foreground hover:text-foreground",
-				onClick: y,
+				onClick: x,
 				"aria-label": "Helpful",
 				children: /* @__PURE__ */ i(p, { size: 13 })
 			})]
 		}), /* @__PURE__ */ i(s.div, {
-			animate: !_ && h ? { x: [
+			animate: !b && _ ? { x: [
 				0,
 				-4,
 				4,
@@ -166,7 +168,7 @@ function S({ onThumbsUp: t, onThumbsDown: n, className: l }) {
 				variant: "ghost",
 				size: "icon",
 				className: "size-7 text-muted-foreground hover:text-foreground",
-				onClick: b,
+				onClick: S,
 				"aria-label": "Not helpful",
 				children: /* @__PURE__ */ i(f, { size: 13 })
 			})

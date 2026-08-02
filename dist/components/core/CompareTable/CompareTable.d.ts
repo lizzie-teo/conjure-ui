@@ -1,3 +1,4 @@
+import type { ComponentPropsWithRef } from 'react';
 export interface CompareColumn {
     id: string;
     label: string;
@@ -6,10 +7,10 @@ export interface CompareColumn {
     currency?: string;
     attributes: Record<string, string | boolean>;
 }
-export interface CompareTableProps {
+export interface CompareTableProps extends Omit<ComponentPropsWithRef<'div'>, 'children' | 'onSelect'> {
     columns: CompareColumn[];
     attributeLabels: Record<string, string>;
+    /** Overrides the DOM `onSelect` handler — fires with the chosen column id. */
     onSelect?: (id: string) => void;
-    className?: string;
 }
-export declare function CompareTable({ columns, attributeLabels, onSelect, className, }: CompareTableProps): import("react").JSX.Element;
+export declare function CompareTable({ columns, attributeLabels, onSelect, className, ...props }: CompareTableProps): import("react").JSX.Element;

@@ -1,3 +1,5 @@
+import type { ComponentPropsWithRef } from 'react';
+import type { MotionDivProps, MotionUlProps } from '../../../lib/prop-types';
 type Difficulty = 'easy' | 'medium' | 'hard';
 export interface Ingredient {
     id: string;
@@ -9,7 +11,8 @@ export interface Ingredient {
 export interface ScaledIngredient extends Ingredient {
     scaledQuantity: number;
 }
-export interface RecipeCardProps {
+export interface RecipeCardProps extends Omit<MotionDivProps, 'children' | 'title'> {
+    /** Overrides the DOM `title` attribute — the recipe name. */
     title: string;
     prepTime: string;
     difficulty: Difficulty;
@@ -19,33 +22,29 @@ export interface RecipeCardProps {
     imageAlt?: string;
     onIngredientClick?: (ingredient: Ingredient) => void;
     onAddToCart?: (ingredients: ScaledIngredient[], servings: number) => void;
-    className?: string;
 }
-interface ImageProps {
+interface ImageProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
     src: string;
     alt?: string;
-    className?: string;
 }
-interface HeaderProps {
+interface HeaderProps extends Omit<ComponentPropsWithRef<'div'>, 'children' | 'title'> {
+    /** Overrides the DOM `title` attribute — the recipe name. */
     title: string;
     prepTime: string;
     difficulty: Difficulty;
-    className?: string;
 }
-interface IngredientListProps {
+interface IngredientListProps extends Omit<MotionUlProps, 'children'> {
     ingredients: Ingredient[];
-    className?: string;
 }
-interface ActionsProps {
+interface ActionsProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
     selectedCount: number;
     onAddToCart?: () => void;
-    className?: string;
 }
-export declare function RecipeCard({ title, prepTime, difficulty, defaultServings, ingredients, image, imageAlt, onIngredientClick, onAddToCart, className, }: RecipeCardProps): import("react").JSX.Element;
+export declare function RecipeCard({ title, prepTime, difficulty, defaultServings, ingredients, image, imageAlt, onIngredientClick, onAddToCart, className, ...props }: RecipeCardProps): import("react").JSX.Element;
 export declare namespace RecipeCard {
-    var Image: ({ src, alt, className }: ImageProps) => import("react").JSX.Element;
-    var Header: ({ title, prepTime, difficulty, className }: HeaderProps) => import("react").JSX.Element;
-    var IngredientList: ({ ingredients, className }: IngredientListProps) => import("react").JSX.Element;
-    var Actions: ({ selectedCount, onAddToCart, className }: ActionsProps) => import("react").JSX.Element;
+    var Image: ({ src, alt, className, ...props }: ImageProps) => import("react").JSX.Element;
+    var Header: ({ title, prepTime, difficulty, className, ...props }: HeaderProps) => import("react").JSX.Element;
+    var IngredientList: ({ ingredients, className, ...props }: IngredientListProps) => import("react").JSX.Element;
+    var Actions: ({ selectedCount, onAddToCart, className, ...props }: ActionsProps) => import("react").JSX.Element;
 }
 export {};

@@ -20,62 +20,63 @@ function y(e, t) {
 		y: r.top - n.top + t.scrollTop + r.height / 2
 	};
 }
-function b({ vertical: b = "grocery", mockData: S, onAddToCart: C, onSuggestSubstitution: w, onEscalateToHuman: T, className: E }) {
-	let D = S ?? l[b], O = _(null), k = _(null), A = _(/* @__PURE__ */ new Map()), j = m(), [M, N] = v(null), [P, F] = v(null), [I, L] = v(!1), R = h((e, t) => {
-		t ? A.current.set(e, t) : A.current.delete(e);
+function b({ vertical: b = "grocery", mockData: S, onAddToCart: C, onSuggestSubstitution: w, onEscalateToHuman: T, className: E, ...D }) {
+	let O = S ?? l[b], k = _(null), A = _(null), j = _(/* @__PURE__ */ new Map()), M = m(), [N, P] = v(null), [F, I] = v(null), [L, R] = v(!1), z = h((e, t) => {
+		t ? j.current.set(e, t) : j.current.delete(e);
 	}, []);
 	g(() => {
-		let e = D.messages.find((e) => e.referencedId);
+		let e = O.messages.find((e) => e.referencedId);
 		if (!e?.referencedId || !e.id) return;
 		let t = setTimeout(() => {
 			let t = e.referencedId, n = e.id;
-			if (N(t), !j) {
-				let e = k.current, r = A.current.get(t), i = A.current.get(n);
+			if (P(t), !M) {
+				let e = A.current, r = j.current.get(t), i = j.current.get(n);
 				if (e && r && i) {
 					let t = y(r, e), n = y(i, e);
-					F({
+					I({
 						fromX: t.x,
 						fromY: t.y,
 						toX: n.x,
 						toY: n.y,
 						height: e.scrollHeight
-					}), L(!0);
+					}), R(!0);
 				}
 			}
 			setTimeout(() => {
-				N(null), L(!1), setTimeout(() => F(null), 350);
+				P(null), R(!1), setTimeout(() => I(null), 350);
 			}, 1400);
 		}, 800);
 		return () => clearTimeout(t);
 	}, []), g(() => {
-		O.current?.scrollIntoView({ behavior: "instant" });
+		k.current?.scrollIntoView({ behavior: "instant" });
 	}, []);
-	let z = D.messages.length;
+	let B = O.messages.length;
 	return /* @__PURE__ */ d("div", {
 		className: e("flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-[var(--shadow-card)]", E),
+		...D,
 		children: [
 			/* @__PURE__ */ d("div", {
 				className: "flex items-center gap-3 px-4 md:px-5 py-3 md:py-4 border-b border-border bg-card shrink-0",
 				children: [/* @__PURE__ */ u(r, {
-					fallback: D.botName ?? "Assistant",
-					src: D.avatar,
+					fallback: O.botName ?? "Assistant",
+					src: O.avatar,
 					size: "sm"
 				}), /* @__PURE__ */ u("span", {
 					className: "text-sm md:text-base font-medium text-foreground",
-					children: D.botName ?? "Assistant"
+					children: O.botName ?? "Assistant"
 				})]
 			}),
 			/* @__PURE__ */ d("div", {
-				ref: k,
+				ref: A,
 				className: "relative flex-1 overflow-y-auto min-h-0 px-4 md:px-5 py-4 md:py-5 flex flex-col gap-3 md:gap-4",
 				children: [
-					/* @__PURE__ */ u(f, { children: P && /* @__PURE__ */ u("svg", {
+					/* @__PURE__ */ u(f, { children: F && /* @__PURE__ */ u("svg", {
 						"aria-hidden": "true",
 						className: "absolute inset-0 w-full pointer-events-none",
-						style: { height: P.height },
+						style: { height: F.height },
 						overflow: "visible",
 						children: /* @__PURE__ */ u(p.path, {
-							d: x(P),
+							d: x(F),
 							stroke: "var(--primary)",
 							strokeWidth: 1.5,
 							strokeOpacity: .35,
@@ -85,7 +86,7 @@ function b({ vertical: b = "grocery", mockData: S, onAddToCart: C, onSuggestSubs
 								pathLength: 0,
 								opacity: 0
 							},
-							animate: I ? {
+							animate: L ? {
 								pathLength: 1,
 								opacity: 1
 							} : {
@@ -108,18 +109,18 @@ function b({ vertical: b = "grocery", mockData: S, onAddToCart: C, onSuggestSubs
 								},
 								opacity: { duration: .15 }
 							}
-						}, `${P.fromX}-${P.toX}`)
+						}, `${F.fromX}-${F.toX}`)
 					}) }),
-					D.messages.map((e, r) => {
-						let a = z - 1 - r, l = a === 0, f = e.role === "bot" && !l ? Math.max(.6, 1 - a * .04) : 1;
+					O.messages.map((e, r) => {
+						let a = B - 1 - r, l = a === 0, f = e.role === "bot" && !l ? Math.max(.6, 1 - a * .04) : 1;
 						return /* @__PURE__ */ d("div", {
-							ref: e.id ? (t) => R(e.id, t) : void 0,
+							ref: e.id ? (t) => z(e.id, t) : void 0,
 							className: "flex flex-col gap-2 transition-opacity duration-200 hover:opacity-100",
 							style: { opacity: f },
 							children: [
 								/* @__PURE__ */ u(i, {
 									role: e.role === "bot" ? "assistant" : "user",
-									isReferenced: !!e.id && e.id === M,
+									isReferenced: !!e.id && e.id === N,
 									children: e.text && /* @__PURE__ */ u(i.Content, { children: e.text })
 								}),
 								e.richContent && /* @__PURE__ */ u("div", {
@@ -162,13 +163,13 @@ function b({ vertical: b = "grocery", mockData: S, onAddToCart: C, onSuggestSubs
 								e.quickReplies && e.role === "bot" && /* @__PURE__ */ u("div", { children: /* @__PURE__ */ u(o, {
 									options: e.quickReplies,
 									onSelect: (e) => {
-										/pharmacist/i.test(e) && T?.({ messages: D.messages });
+										/pharmacist/i.test(e) && T?.({ messages: O.messages });
 									}
 								}) })
 							]
 						}, r);
 					}),
-					/* @__PURE__ */ u("div", { ref: O })
+					/* @__PURE__ */ u("div", { ref: k })
 				]
 			}),
 			/* @__PURE__ */ u("div", {

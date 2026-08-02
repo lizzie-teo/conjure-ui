@@ -2,44 +2,21 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
+import type { ComponentPropsWithRef } from 'react'
 import type { MotionDivProps } from '../../../lib/prop-types'
 
 export type MediaCardProps = MotionDivProps
 
-interface MediaProps {
+interface MediaProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   src: string
   alt: string
-  className?: string
 }
 
-interface TitleProps {
-  children: React.ReactNode
-  className?: string
-}
+type DivSlotProps = ComponentPropsWithRef<'div'>
 
-interface SubtitleProps {
-  children: React.ReactNode
-  className?: string
-}
-
-interface BadgeProps {
-  children: React.ReactNode
-  className?: string
-}
-
-interface MetaProps {
-  children: React.ReactNode
-  className?: string
-}
-
-interface BodyProps {
-  children: React.ReactNode
-  className?: string
-}
-
-function Media({ src, alt, className }: MediaProps) {
+function Media({ src, alt, className, ...props }: MediaProps) {
   return (
-    <div className={cn('overflow-hidden rounded-t-xl', className)}>
+    <div className={cn('overflow-hidden rounded-t-xl', className)} {...props}>
       <img
         src={src}
         alt={alt}
@@ -49,37 +26,40 @@ function Media({ src, alt, className }: MediaProps) {
   )
 }
 
-function Body({ children, className }: BodyProps) {
+function Body({ children, className, ...props }: DivSlotProps) {
   return (
-    <div className={cn('p-4 md:p-5 flex flex-col gap-2', className)}>
+    <div className={cn('p-4 md:p-5 flex flex-col gap-2', className)} {...props}>
       {children}
     </div>
   )
 }
 
-function Title({ children, className }: TitleProps) {
+function Title({ children, className, ...props }: ComponentPropsWithRef<'h3'>) {
   return (
-    <h3 className={cn('font-semibold text-sm md:text-base text-foreground leading-snug', className)}>
+    <h3
+      className={cn('font-semibold text-sm md:text-base text-foreground leading-snug', className)}
+      {...props}
+    >
       {children}
     </h3>
   )
 }
 
-function Subtitle({ children, className }: SubtitleProps) {
+function Subtitle({ children, className, ...props }: ComponentPropsWithRef<'p'>) {
   return (
-    <p className={cn('text-xs md:text-sm text-muted-foreground', className)}>
+    <p className={cn('text-xs md:text-sm text-muted-foreground', className)} {...props}>
       {children}
     </p>
   )
 }
 
-function Badge({ children, className }: BadgeProps) {
-  return <div className={cn('flex', className)}>{children}</div>
+function Badge({ children, className, ...props }: DivSlotProps) {
+  return <div className={cn('flex', className)} {...props}>{children}</div>
 }
 
-function Meta({ children, className }: MetaProps) {
+function Meta({ children, className, ...props }: DivSlotProps) {
   return (
-    <div className={cn('flex items-center gap-1.5 text-xs md:text-sm', className)}>
+    <div className={cn('flex items-center gap-1.5 text-xs md:text-sm', className)} {...props}>
       {children}
     </div>
   )

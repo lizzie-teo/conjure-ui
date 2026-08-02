@@ -98,12 +98,12 @@ function y({ networks: e }) {
 		}, e.src))
 	});
 }
-function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, summaryRows: b, acceptedNetworks: x, onConfirm: S, onChangeMethod: C, loading: w = !1, className: T }) {
-	let E = d(), D = _.type === "apple-pay", O = _.type === "google-pay", k = m(a, p);
+function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, summaryRows: b, acceptedNetworks: x, onConfirm: S, onChangeMethod: C, loading: w = !1, className: T, ...E }) {
+	let D = d(), O = _.type === "apple-pay", k = _.type === "google-pay", A = m(a, p);
 	return /* @__PURE__ */ c(u.div, {
 		initial: {
 			opacity: 0,
-			y: E ? 0 : 10
+			y: D ? 0 : 10
 		},
 		animate: {
 			opacity: 1,
@@ -119,14 +119,15 @@ function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, su
 			]
 		},
 		className: e("flex flex-col overflow-hidden rounded-[inherit]", T),
+		...E,
 		children: [
 			/* @__PURE__ */ s(h, {}),
 			/* @__PURE__ */ c("div", {
 				className: "flex flex-col items-center gap-1 px-4 md:px-5 py-6 md:py-7",
 				children: [/* @__PURE__ */ s("p", {
-					"aria-label": `Total: ${k}`,
+					"aria-label": `Total: ${A}`,
 					className: "text-3xl md:text-4xl font-semibold tracking-tight text-foreground tabular-nums",
-					children: k
+					children: A
 				}), v && /* @__PURE__ */ s("p", {
 					className: "text-xs md:text-sm text-muted-foreground text-center mt-0.5",
 					children: v
@@ -161,10 +162,10 @@ function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, su
 				className: "flex flex-col gap-3 px-4 md:px-5 py-4 md:py-5",
 				children: [/* @__PURE__ */ s(l, {
 					mode: "wait",
-					children: D && w ? /* @__PURE__ */ s(u.div, {
+					children: O && w ? /* @__PURE__ */ s(u.div, {
 						initial: {
 							opacity: 0,
-							y: E ? 0 : 8
+							y: D ? 0 : 8
 						},
 						animate: {
 							opacity: 1,
@@ -172,7 +173,7 @@ function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, su
 						},
 						exit: {
 							opacity: 0,
-							y: E ? 0 : -8
+							y: D ? 0 : -8
 						},
 						transition: {
 							duration: .2,
@@ -184,10 +185,10 @@ function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, su
 							]
 						},
 						children: /* @__PURE__ */ s(g, {})
-					}, "apple-pay-waiting") : D ? /* @__PURE__ */ s(u.div, {
+					}, "apple-pay-waiting") : O ? /* @__PURE__ */ s(u.div, {
 						initial: {
 							opacity: 0,
-							y: E ? 0 : 8
+							y: D ? 0 : 8
 						},
 						animate: {
 							opacity: 1,
@@ -195,7 +196,7 @@ function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, su
 						},
 						exit: {
 							opacity: 0,
-							y: E ? 0 : -8
+							y: D ? 0 : -8
 						},
 						transition: {
 							duration: .2,
@@ -211,10 +212,10 @@ function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, su
 							disabled: w,
 							className: "rounded-[calc(var(--radius)+2px)]"
 						})
-					}, "apple-pay-btn") : O ? /* @__PURE__ */ s(u.div, {
+					}, "apple-pay-btn") : k ? /* @__PURE__ */ s(u.div, {
 						initial: {
 							opacity: 0,
-							y: E ? 0 : 8
+							y: D ? 0 : 8
 						},
 						animate: {
 							opacity: 1,
@@ -222,7 +223,7 @@ function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, su
 						},
 						exit: {
 							opacity: 0,
-							y: E ? 0 : -8
+							y: D ? 0 : -8
 						},
 						transition: {
 							duration: .2,
@@ -252,7 +253,7 @@ function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, su
 					}, "google-pay-btn") : /* @__PURE__ */ s(u.div, {
 						initial: {
 							opacity: 0,
-							y: E ? 0 : 8
+							y: D ? 0 : 8
 						},
 						animate: {
 							opacity: 1,
@@ -260,7 +261,7 @@ function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, su
 						},
 						exit: {
 							opacity: 0,
-							y: E ? 0 : -8
+							y: D ? 0 : -8
 						},
 						transition: {
 							duration: .2,
@@ -278,7 +279,7 @@ function b({ total: a, currency: p = "USD", paymentMethod: _, description: v, su
 							children: w ? /* @__PURE__ */ c(o, { children: [/* @__PURE__ */ s(f, {
 								className: "size-4 animate-spin",
 								"aria-hidden": !0
-							}), "Processing…"] }) : `Pay ${k}`
+							}), "Processing…"] }) : `Pay ${A}`
 						})
 					}, "standard-btn")
 				}), x && x.length > 0 && /* @__PURE__ */ s(y, { networks: x })]

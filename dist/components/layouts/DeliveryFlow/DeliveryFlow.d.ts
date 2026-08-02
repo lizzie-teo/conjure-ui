@@ -1,6 +1,8 @@
 import type { AddressTileProps } from '../../primitives/AddressTile/AddressTile';
 import type { DeliveryStep, Branch, AvailableDate, TimeSlot, RewardsSummary, SubstitutionPreference, CarBootDetails, CompletedBooking } from '../../core/DeliveryConfirmation/deliveryFlow.types';
-export interface DeliveryFlowProps {
+import type { ComponentPropsWithRef } from 'react';
+import type { MotionDivProps } from '../../../lib/prop-types';
+export interface DeliveryFlowProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
     availableDates: AvailableDate[];
     timeSlots: TimeSlot[];
     branches?: Branch[];
@@ -12,7 +14,10 @@ export interface DeliveryFlowProps {
     initialData?: Partial<DeliveryFlowState>;
     onComplete: (booking: CompletedBooking) => void;
     onCancel?: () => void;
-    className?: string;
+}
+export interface StepRailProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
+    steps: DeliveryStep[];
+    currentStep: DeliveryStep;
 }
 interface DeliveryFlowState {
     method?: 'home-delivery' | 'click-collect';
@@ -23,18 +28,14 @@ interface DeliveryFlowState {
     redeemPoints: boolean;
     substitution: SubstitutionPreference;
 }
-interface StepBodyProps {
+interface StepBodyProps extends MotionDivProps {
     stepKey: string;
     direction: 1 | -1;
     shouldReduce: boolean;
-    children: React.ReactNode;
 }
-export declare function DeliveryFlow({ availableDates, timeSlots, branches, rewards, homeAddress, onAddressEdit, editableUntil, initialStep, initialData, onComplete, onCancel, className, }: DeliveryFlowProps): import("react").JSX.Element;
+export declare function DeliveryFlow({ availableDates, timeSlots, branches, rewards, homeAddress, onAddressEdit, editableUntil, initialStep, initialData, onComplete, onCancel, className, ...props }: DeliveryFlowProps): import("react").JSX.Element;
 export declare namespace DeliveryFlow {
-    var StepRail: ({ steps, currentStep, }: {
-        steps: DeliveryStep[];
-        currentStep: DeliveryStep;
-    }) => import("react").JSX.Element;
-    var StepBody: ({ stepKey, direction, shouldReduce, children }: StepBodyProps) => import("react").JSX.Element;
+    var StepRail: ({ steps, currentStep, className, "aria-label": ariaLabel, ...props }: StepRailProps) => import("react").JSX.Element;
+    var StepBody: ({ stepKey, direction, shouldReduce, children, className, ...props }: StepBodyProps) => import("react").JSX.Element;
 }
 export {};

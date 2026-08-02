@@ -106,20 +106,21 @@ function m({ shouldReduce: e }) {
 		})]
 	});
 }
-function h({ onActivate: n, className: u }) {
-	let d = s(), [f, h] = l("idle");
-	function g() {
-		h("scanning");
+function h({ onActivate: n, className: u, ...d }) {
+	let f = s(), [h, g] = l("idle");
+	function _() {
+		g("scanning");
 	}
 	return c(() => {
-		if (f !== "scanning") return;
+		if (h !== "scanning") return;
 		let e = setTimeout(() => n?.(), p);
 		return () => clearTimeout(e);
-	}, [f, n]), /* @__PURE__ */ r(a, {
+	}, [h, n]), /* @__PURE__ */ r(a, {
 		mode: "wait",
-		children: f === "idle" ? /* @__PURE__ */ i(o.button, {
+		children: h === "idle" ? /* @__PURE__ */ i(o.button, {
+			...d,
 			type: "button",
-			onClick: g,
+			onClick: _,
 			"aria-label": "Double click side button to pay",
 			initial: { opacity: 0 },
 			animate: { opacity: 1 },
@@ -152,13 +153,14 @@ function h({ onActivate: n, className: u }) {
 					/* @__PURE__ */ r("br", {}),
 					"to Pay"
 				]
-			}), /* @__PURE__ */ r(m, { shouldReduce: d })]
+			}), /* @__PURE__ */ r(m, { shouldReduce: f })]
 		}, "double-click-idle") : /* @__PURE__ */ r(o.div, {
+			...d,
 			role: "status",
 			"aria-label": "Scanning with Face ID",
 			initial: {
 				opacity: 0,
-				scale: d ? 1 : .75
+				scale: f ? 1 : .75
 			},
 			animate: {
 				opacity: 1,

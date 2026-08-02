@@ -6,9 +6,10 @@ import { TimestampLabel as r } from "../../primitives/TimestampLabel/TimestampLa
 import { DetailList as i } from "../DetailList/DetailList.js";
 import { jsx as a, jsxs as o } from "react/jsx-runtime";
 //#region components/core/ReceiptSummary/ReceiptSummary.tsx
-function s({ orderId: s, items: c, subtotal: l, shipping: u, total: d, currency: f = "USD", paidAt: p, className: m }) {
+function s({ orderId: s, items: c, subtotal: l, shipping: u, total: d, currency: f = "USD", paidAt: p, className: m, ...h }) {
 	return /* @__PURE__ */ o("div", {
 		className: e("bg-card border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden", "flex flex-col", m),
+		...h,
 		children: [
 			/* @__PURE__ */ o("div", {
 				className: "flex items-start justify-between gap-3 px-4 md:px-5 py-4 md:py-5 border-b border-border",

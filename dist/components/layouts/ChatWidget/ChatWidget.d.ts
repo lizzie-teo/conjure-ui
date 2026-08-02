@@ -1,6 +1,7 @@
 import { type MockData, type MockProduct, type MockMessage } from './mockData';
+import type { ComponentPropsWithRef } from 'react';
 export type { MockData, MockProduct, MockMessage };
-export interface ChatWidgetProps {
+export interface ChatWidgetProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
     vertical?: 'grocery' | 'pharmacy';
     mockData?: MockData;
     onAddToCart?: (product: MockProduct) => void;
@@ -8,6 +9,5 @@ export interface ChatWidgetProps {
     onEscalateToHuman?: (context: {
         messages: MockMessage[];
     }) => void;
-    className?: string;
 }
-export declare function ChatWidget({ vertical, mockData, onAddToCart, onSuggestSubstitution, onEscalateToHuman, className, }: ChatWidgetProps): import("react").JSX.Element;
+export declare function ChatWidget({ vertical, mockData, onAddToCart, onSuggestSubstitution, onEscalateToHuman, className, ...props }: ChatWidgetProps): import("react").JSX.Element;

@@ -15,13 +15,13 @@ var l = [
 	stiffness: 280,
 	damping: 28
 };
-function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?", plans: m, caveats: h, scenarios: g, currency: _ = "$", onViewDetails: v, className: y }) {
-	let b = s(), [x, S] = c((h.find((e) => e.default) ?? h[0])?.id ?? ""), [C, w] = c(!1), [T, E] = c(null), D = h.find((e) => e.id === x) ?? h[0], O = m.map((e) => D.planCosts[e.id] ?? 0), k = Math.max(...O), A = Math.min(...O), j = m[O.indexOf(A)]?.id ?? m[0]?.id, M = m.find((e) => e.id === j), N = k - A, P = g?.find((e) => e.id === T);
-	function F(e) {
+function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?", plans: m, caveats: h, scenarios: g, currency: _ = "$", onViewDetails: v, className: y, ...b }) {
+	let x = s(), [S, C] = c((h.find((e) => e.default) ?? h[0])?.id ?? ""), [w, T] = c(!1), [E, D] = c(null), O = h.find((e) => e.id === S) ?? h[0], k = m.map((e) => O.planCosts[e.id] ?? 0), A = Math.max(...k), j = Math.min(...k), M = m[k.indexOf(j)]?.id ?? m[0]?.id, N = m.find((e) => e.id === M), P = A - j, F = g?.find((e) => e.id === E);
+	function I(e) {
 		return `${_}${e.toLocaleString()}`;
 	}
 	return /* @__PURE__ */ r(o.div, {
-		initial: b ? { opacity: 0 } : {
+		initial: x ? { opacity: 0 } : {
 			opacity: 0,
 			y: 10,
 			scale: .98
@@ -36,6 +36,7 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 			ease: l
 		},
 		className: e("rounded-[var(--radius)] border border-border bg-card shadow-[var(--shadow-card)]", "p-4 md:p-5 flex flex-col gap-4", y),
+		...b,
 		children: [
 			/* @__PURE__ */ r("div", { children: [/* @__PURE__ */ n("p", {
 				className: "text-sm md:text-base font-semibold text-foreground",
@@ -47,7 +48,7 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 			/* @__PURE__ */ n(a, { children: /* @__PURE__ */ n("div", {
 				className: "grid grid-cols-2 gap-2 md:gap-3",
 				children: m.map((t) => {
-					let a = D.planCosts[t.id] ?? 0, s = k > 0 ? a / k * 100 : 0, c = t.id === j;
+					let a = O.planCosts[t.id] ?? 0, s = A > 0 ? a / A * 100 : 0, c = t.id === M;
 					return /* @__PURE__ */ r("div", {
 						className: e("flex flex-col rounded-xl p-3 md:p-4 border-2 transition-colors duration-200", c ? "border-primary bg-primary/5" : "border-border bg-muted/20"),
 						children: [
@@ -74,7 +75,7 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 								children: /* @__PURE__ */ r(o.div, {
 									initial: {
 										opacity: 0,
-										y: b ? 0 : -5
+										y: x ? 0 : -5
 									},
 									animate: {
 										opacity: 1,
@@ -82,7 +83,7 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 									},
 									exit: {
 										opacity: 0,
-										y: b ? 0 : 5
+										y: x ? 0 : 5
 									},
 									transition: {
 										duration: .18,
@@ -91,7 +92,7 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 									className: "flex items-baseline gap-0.5",
 									children: [/* @__PURE__ */ n("span", {
 										className: e("text-xl md:text-2xl font-bold tabular-nums leading-none", c ? "text-foreground" : "text-muted-foreground"),
-										children: F(a)
+										children: I(a)
 									}), /* @__PURE__ */ n("span", {
 										className: "text-[10px] md:text-xs text-muted-foreground font-normal",
 										children: "/yr"
@@ -105,7 +106,7 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 									children: /* @__PURE__ */ n(o.div, {
 										className: e("h-full rounded-full", c ? "bg-primary" : "bg-muted-foreground/25"),
 										animate: { width: `${s}%` },
-										transition: b ? { duration: 0 } : u
+										transition: x ? { duration: 0 } : u
 									})
 								})
 							})
@@ -119,7 +120,7 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 				children: /* @__PURE__ */ r(o.div, {
 					initial: {
 						opacity: 0,
-						y: b ? 0 : 4
+						y: x ? 0 : 4
 					},
 					animate: {
 						opacity: 1,
@@ -127,7 +128,7 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 					},
 					exit: {
 						opacity: 0,
-						y: b ? 0 : -4
+						y: x ? 0 : -4
 					},
 					transition: {
 						duration: .2,
@@ -137,8 +138,8 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 					children: [/* @__PURE__ */ n("span", {
 						"aria-hidden": "true",
 						children: "✓"
-					}), /* @__PURE__ */ n("span", { children: M ? `${M.label} saves ~${F(N)}/year` : `Save ~${F(N)}/year` })]
-				}, j)
+					}), /* @__PURE__ */ n("span", { children: N ? `${N.label} saves ~${I(P)}/year` : `Save ~${I(P)}/year` })]
+				}, M)
 			}),
 			/* @__PURE__ */ n("div", { className: "h-px bg-border -mx-4 md:-mx-5" }),
 			h.length > 1 && /* @__PURE__ */ r("div", {
@@ -151,9 +152,9 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 					role: "group",
 					"aria-label": p,
 					children: h.map((r) => {
-						let i = r.id === x;
+						let i = r.id === S;
 						return /* @__PURE__ */ n(t, {
-							onClick: () => S(r.id),
+							onClick: () => C(r.id),
 							"aria-pressed": i,
 							variant: "ghost",
 							className: e("shrink-0 h-auto rounded-full px-3.5 py-1.5 text-xs md:text-sm font-medium whitespace-nowrap", "transition-colors duration-100", i ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"),
@@ -165,10 +166,10 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 			g && g.length > 0 && /* @__PURE__ */ n(i, {
 				initial: !1,
 				mode: "wait",
-				children: C ? /* @__PURE__ */ r(o.div, {
+				children: w ? /* @__PURE__ */ r(o.div, {
 					initial: {
 						opacity: 0,
-						y: b ? 0 : 6
+						y: x ? 0 : 6
 					},
 					animate: {
 						opacity: 1,
@@ -184,9 +185,9 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 						role: "group",
 						"aria-label": "Scenario options",
 						children: g.map((r) => {
-							let i = r.id === T;
+							let i = r.id === E;
 							return /* @__PURE__ */ n(t, {
-								onClick: () => E(i ? null : r.id),
+								onClick: () => D(i ? null : r.id),
 								"aria-pressed": i,
 								variant: "outline",
 								className: e("h-auto rounded-full px-3.5 py-1.5 text-xs md:text-sm font-medium whitespace-nowrap", "transition-colors duration-100", i ? "bg-primary text-primary-foreground border-primary hover:bg-primary/90 hover:text-primary-foreground" : "bg-card text-foreground border-border hover:border-primary/40 hover:bg-muted/30"),
@@ -195,10 +196,10 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 						})
 					}), /* @__PURE__ */ n(i, {
 						initial: !1,
-						children: P && /* @__PURE__ */ n(o.p, {
+						children: F && /* @__PURE__ */ n(o.p, {
 							initial: {
 								opacity: 0,
-								y: b ? 0 : 4
+								y: x ? 0 : 4
 							},
 							animate: {
 								opacity: 1,
@@ -210,8 +211,8 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 								ease: l
 							},
 							className: "text-xs md:text-sm text-foreground leading-relaxed",
-							children: P.insight
-						}, P.id)
+							children: F.insight
+						}, F.id)
 					})]
 				}, "what-if-expanded") : /* @__PURE__ */ n(o.div, {
 					initial: { opacity: 0 },
@@ -221,7 +222,7 @@ function d({ title: d, subtitle: f, caveatQuestion: p = "Does this apply to you?
 					className: "self-start",
 					children: /* @__PURE__ */ n(t, {
 						variant: "ghost",
-						onClick: () => w(!0),
+						onClick: () => T(!0),
 						className: "h-auto p-0 text-xs md:text-sm text-muted-foreground hover:text-foreground hover:bg-transparent transition-colors duration-100",
 						children: "What if something unexpected happened? →"
 					})

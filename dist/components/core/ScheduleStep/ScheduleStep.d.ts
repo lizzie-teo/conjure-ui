@@ -1,5 +1,6 @@
 import type { AvailableDate, TimeSlot } from '../DeliveryConfirmation/deliveryFlow.types';
-export interface ScheduleStepProps {
+import type { ComponentPropsWithRef } from 'react';
+export interface ScheduleStepProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
     availableDates: AvailableDate[];
     timeSlots: TimeSlot[];
     slotsByDate?: Record<string, TimeSlot[]>;
@@ -7,6 +8,5 @@ export interface ScheduleStepProps {
     selectedSlotId?: string;
     onDateSelect: (date: string) => void;
     onSlotSelect: (slotId: string) => void;
-    className?: string;
 }
-export declare function ScheduleStep({ availableDates, timeSlots, slotsByDate, selectedDate, selectedSlotId, onDateSelect, onSlotSelect, className, }: ScheduleStepProps): import("react").JSX.Element;
+export declare function ScheduleStep({ availableDates, timeSlots, slotsByDate, selectedDate, selectedSlotId, onDateSelect, onSlotSelect, className, ...props }: ScheduleStepProps): import("react").JSX.Element;

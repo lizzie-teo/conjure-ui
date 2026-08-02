@@ -34,11 +34,12 @@ var a = {
 		transition: { duration: .2 }
 	}
 };
-function c({ label: a, value: c, className: l }) {
-	let u = i();
+function c({ label: a, value: c, className: l, ...u }) {
+	let d = i();
 	return /* @__PURE__ */ n(r.div, {
-		variants: u ? s : o,
+		variants: d ? s : o,
 		className: e("flex items-center justify-between gap-4 py-2 md:py-2.5", "border-b border-border last:border-0", l),
+		...u,
 		children: [/* @__PURE__ */ t("span", {
 			className: "text-xs md:text-sm text-muted-foreground shrink-0",
 			children: a

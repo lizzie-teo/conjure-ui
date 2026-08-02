@@ -24,21 +24,18 @@ export interface SummaryPanelProps extends ComponentPropsWithRef<'div'> {
   collapsible?: boolean
 }
 
-interface HeaderProps {
-  children: React.ReactNode
-  className?: string
-}
+type HeaderProps = ComponentPropsWithRef<'div'>
 
-interface BodyProps {
-  children: React.ReactNode
-  className?: string
-}
+type BodyProps = ComponentPropsWithRef<'div'>
 
-function Header({ children, className }: HeaderProps) {
+function Header({ children, className, ...props }: HeaderProps) {
   const { isOpen, toggle, collapsible } = useContext(SummaryPanelCtx)
 
   return (
     <div
+      // Spread first: when collapsible, the header owns a button a11y contract
+      // and the toggle handler, which a consumer prop must not silently break.
+      {...props}
       className={cn(
         'flex items-center justify-between gap-2 px-4 md:px-5 py-3 md:py-4',
         collapsible && 'cursor-pointer select-none',
@@ -63,13 +60,13 @@ function Header({ children, className }: HeaderProps) {
   )
 }
 
-function Body({ children, className }: BodyProps) {
+function Body({ children, className, ...props }: BodyProps) {
   const { isOpen, collapsible } = useContext(SummaryPanelCtx)
   const shouldReduce = useReducedMotion()
 
   if (!collapsible) {
     return (
-      <div className={cn('px-4 md:px-5 pb-4 md:pb-5', className)}>
+      <div className={cn('px-4 md:px-5 pb-4 md:pb-5', className)} {...props}>
         {children}
       </div>
     )
@@ -86,7 +83,7 @@ function Body({ children, className }: BodyProps) {
           transition={{ duration: shouldReduce ? 0.01 : 0.25, ease: [0, 0, 0.2, 1] }}
           className="overflow-hidden"
         >
-          <div className={cn('px-4 md:px-5 pb-4 md:pb-5', className)}>
+          <div className={cn('px-4 md:px-5 pb-4 md:pb-5', className)} {...props}>
             {children}
           </div>
         </motion.div>

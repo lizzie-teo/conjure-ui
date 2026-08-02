@@ -52,8 +52,9 @@ var u = e("w-full h-12 md:h-10 rounded-md border border-border bg-background", "
 		}
 	})
 };
-function p({ branches: e, selectedBranchId: a, onBranchSelect: o }) {
+function p({ branches: e, selectedBranchId: a, onBranchSelect: o, ...s }) {
 	return /* @__PURE__ */ r(n, {
+		...s,
 		type: "radio",
 		value: a,
 		onChange: (e) => o(e),
@@ -74,13 +75,14 @@ function p({ branches: e, selectedBranchId: a, onBranchSelect: o }) {
 		}, e.id))
 	});
 }
-function m({ details: t, onChange: n, shouldReduce: a }) {
+function m({ details: t, onChange: n, shouldReduce: a, className: s, ...l }) {
 	return /* @__PURE__ */ r(o.div, {
 		variants: d,
 		initial: "hidden",
 		animate: "show",
 		exit: "exit",
-		className: "mt-3",
+		className: e("mt-3", s),
+		...l,
 		children: /* @__PURE__ */ i("div", {
 			className: "rounded-xl border border-border bg-muted/30 p-4 md:p-5 space-y-3 md:space-y-4",
 			children: [
@@ -158,8 +160,8 @@ function m({ details: t, onChange: n, shouldReduce: a }) {
 		})
 	});
 }
-function h({ branches: t, selectedBranchId: n, carBootDetails: o, onBranchSelect: c, onCarBootChange: l, className: u }) {
-	let d = s() ?? !1, f = o ?? {
+function h({ branches: t, selectedBranchId: n, carBootDetails: o, onBranchSelect: c, onCarBootChange: l, className: u, ...d }) {
+	let f = s() ?? !1, h = o ?? {
 		vehicleColour: "",
 		vehicleMake: "",
 		registrationPlate: "",
@@ -167,18 +169,19 @@ function h({ branches: t, selectedBranchId: n, carBootDetails: o, onBranchSelect
 	};
 	return /* @__PURE__ */ i("div", {
 		className: e("space-y-1", u),
+		...d,
 		children: [/* @__PURE__ */ r(p, {
 			branches: t,
 			selectedBranchId: n,
 			onBranchSelect: (e) => {
-				c(e), o || l(f);
+				c(e), o || l(h);
 			}
 		}), /* @__PURE__ */ r(a, {
 			initial: !1,
 			children: n && /* @__PURE__ */ r(m, {
-				details: o ?? f,
+				details: o ?? h,
 				onChange: l,
-				shouldReduce: d
+				shouldReduce: f
 			}, "car-boot-form")
 		})]
 	});

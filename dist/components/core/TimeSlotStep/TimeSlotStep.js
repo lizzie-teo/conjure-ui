@@ -70,18 +70,19 @@ var v = {
 		transition: { duration: .2 }
 	}
 };
-function b({ slot: o, isSelected: c, onSelect: l, shouldReduce: u }) {
-	let d = o.availability === "unavailable";
+function b({ slot: o, isSelected: c, onSelect: l, shouldReduce: u, ...d }) {
+	let f = o.availability === "unavailable";
 	return /* @__PURE__ */ i(s.div, {
 		variants: u ? y : v,
+		...d,
 		children: /* @__PURE__ */ a(n, {
 			variant: "ghost",
 			role: "radio",
 			"aria-checked": c,
 			"aria-label": g(o),
-			disabled: d,
+			disabled: f,
 			onClick: () => l(o.id),
-			className: e("h-auto flex items-center gap-2 px-3 py-2.5 rounded-xl border text-left", "transition-colors duration-150 w-full", c ? "border-2 border-primary bg-primary/5 hover:bg-primary/5" : "border-border hover:border-primary/40 hover:bg-muted/30", d && "opacity-40"),
+			className: e("h-auto flex items-center gap-2 px-3 py-2.5 rounded-xl border text-left", "transition-colors duration-150 w-full", c ? "border-2 border-primary bg-primary/5 hover:bg-primary/5" : "border-border hover:border-primary/40 hover:bg-muted/30", f && "opacity-40"),
 			children: [/* @__PURE__ */ a("div", {
 				className: "flex-1 min-w-0",
 				children: [/* @__PURE__ */ a("p", {
@@ -148,26 +149,27 @@ var x = {
 		delayChildren: .04
 	} }
 };
-function w({ slots: t, selectedSlotId: r, onSlotSelect: u, className: d }) {
-	let f = c() ?? !1, m = [
+function w({ slots: t, selectedSlotId: r, onSlotSelect: u, className: d, ...f }) {
+	let m = c() ?? !1, g = [
 		"morning",
 		"afternoon",
 		"evening"
-	].filter((e) => t.some((t) => h(t.startTime) === e)), [g, v] = l(() => _(t)), y = t.filter((e) => h(e.startTime) === g);
+	].filter((e) => t.some((t) => h(t.startTime) === e)), [v, y] = l(() => _(t)), w = t.filter((e) => h(e.startTime) === v);
 	return /* @__PURE__ */ a("div", {
 		className: e("space-y-3", d),
+		...f,
 		children: [/* @__PURE__ */ i("div", {
 			role: "tablist",
 			"aria-label": "Delivery time of day",
 			className: "flex gap-1 bg-muted/50 rounded-full p-1",
-			children: m.map((t) => {
-				let { label: r, Icon: o } = p[t], s = g === t;
+			children: g.map((t) => {
+				let { label: r, Icon: o } = p[t], s = v === t;
 				return /* @__PURE__ */ a(n, {
 					role: "tab",
 					"aria-selected": s,
 					variant: "ghost",
 					size: "sm",
-					onClick: () => v(t),
+					onClick: () => y(t),
 					className: e("flex items-center gap-1.5 h-8 px-3 rounded-full flex-1 transition-all duration-200", s ? "bg-background text-foreground shadow-sm hover:bg-background" : "text-muted-foreground hover:text-foreground hover:bg-transparent"),
 					children: [/* @__PURE__ */ i(o, {
 						"aria-hidden": "true",
@@ -183,8 +185,8 @@ function w({ slots: t, selectedSlotId: r, onSlotSelect: u, className: d }) {
 			initial: !1,
 			children: /* @__PURE__ */ i(s.div, {
 				role: "tabpanel",
-				"aria-label": `${p[g].label} delivery slots`,
-				variants: f ? S : x,
+				"aria-label": `${p[v].label} delivery slots`,
+				variants: m ? S : x,
 				initial: "hidden",
 				animate: "show",
 				exit: "exit",
@@ -193,14 +195,14 @@ function w({ slots: t, selectedSlotId: r, onSlotSelect: u, className: d }) {
 					initial: "hidden",
 					animate: "show",
 					className: "grid grid-cols-2 md:grid-cols-3 gap-2",
-					children: y.map((e) => /* @__PURE__ */ i(b, {
+					children: w.map((e) => /* @__PURE__ */ i(b, {
 						slot: e,
 						isSelected: r === e.id,
 						onSelect: u,
-						shouldReduce: f
+						shouldReduce: m
 					}, e.id))
 				})
-			}, g)
+			}, v)
 		})]
 	});
 }

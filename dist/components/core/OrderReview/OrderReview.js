@@ -7,18 +7,19 @@ import { DetailList as i } from "../DetailList/DetailList.js";
 import { CartItem as a } from "../CartItem/CartItem.js";
 import { jsx as o, jsxs as s } from "react/jsx-runtime";
 //#region components/core/OrderReview/OrderReview.tsx
-function c({ title: t, children: n, className: r }) {
+function c({ title: t, children: n, className: r, ...i }) {
 	return /* @__PURE__ */ s("div", {
 		className: e("space-y-2 md:space-y-3", r),
+		...i,
 		children: [/* @__PURE__ */ o("h3", {
 			className: "text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wide px-4 md:px-5",
 			children: t
 		}), n]
 	});
 }
-function l({ subtotal: e, shipping: n, total: r, currency: a, className: c }) {
+function l({ subtotal: e, shipping: n, total: r, currency: a, ...c }) {
 	return /* @__PURE__ */ s(i, {
-		className: c,
+		...c,
 		children: [
 			/* @__PURE__ */ o(i.Row, {
 				label: "Subtotal",
@@ -48,9 +49,10 @@ function l({ subtotal: e, shipping: n, total: r, currency: a, className: c }) {
 		]
 	});
 }
-function u({ items: t, shippingAddress: i, subtotal: l, shipping: d, total: f, currency: p = "USD", onConfirm: m, className: h }) {
+function u({ items: t, shippingAddress: i, subtotal: l, shipping: d, total: f, currency: p = "USD", onConfirm: m, className: h, ...g }) {
 	return /* @__PURE__ */ s("div", {
 		className: e("bg-card border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden", "flex flex-col gap-5 md:gap-6 py-5 md:py-6", h),
+		...g,
 		children: [
 			/* @__PURE__ */ o(c, {
 				title: "Items",

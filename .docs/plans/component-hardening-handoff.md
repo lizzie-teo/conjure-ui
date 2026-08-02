@@ -1,20 +1,19 @@
 # Component hardening — handoff
 
-Status as of 2026-08-02. Work is **uncommitted on `main`** (base commit `a1f0983`).
-Nothing here is committed yet — review and commit before continuing, or continue and commit as one batch.
+Status as of 2026-08-02. Base commit `a1f0983`; the work is now committed on `main`.
 
 ---
 
 ## Where we are
 
-A four-part effort. Parts 1–3 are **done and verified**. Part 4 is **~⅓ done**.
+A four-part effort. **All four parts are done and verified.**
 
 | Part | Scope | Status |
 |------|-------|--------|
 | 1. Packaging | npm package correctness | ✅ Done |
 | 2. Correctness bugs | React Compiler violations | ✅ Done |
 | 3. Story failures | Phantom CSF exports | ✅ Done |
-| 4. Component API sweep | `ref` + rest-props on every component | 🟡 22/24 primitives, 11/36 core, 0/4 layouts |
+| 4. Component API sweep | `ref` + rest-props on every component | ✅ Done — 22/24 primitives, 36/36 core, 4/4 layouts, plus every public sub-component |
 
 ### Verification baseline — all green right now
 
@@ -29,12 +28,13 @@ Keep these numbers as the regression baseline. `345` and `0` must not get worse.
 
 ---
 
-## Part 4: the remaining sweep
+## Part 4: the sweep (complete)
 
 **Goal:** every public component accepts a `ref` and forwards unrecognised props to its root
 element, so consumers can focus/measure/scroll-to it and pass `id`, `data-*`, `aria-*`, `title`.
 
-Before: 1/66 components took a `ref`, 3/66 spread rest props.
+Before: 1/66 components took a `ref`, 3/66 spread rest props. Now every exported component and
+every compound sub-component (`Component.SubComponent`) does.
 
 ### The pattern
 
@@ -97,6 +97,30 @@ element **will not typecheck**; this type is why.
    (`DeliveryMethodIcon`).
 8. **React 19: no `forwardRef`.** `ref` is a plain prop. `Tag` was the one component still using
    `forwardRef` and has been converted.
+9. **Internal root ref → `mergeRefs`.** `lib/merge-refs.ts` (new) combines a component's own ref
+   with a consumer's into one callback ref, with React 19 cleanup semantics. Needed by
+   `ChatInput.Field` (autosize), `ApplePaySheet` and `ModalSheet` (focus traps).
+10. **Roots that swap element type across branches.** `DoubleClickToPay` renders a `<button>`
+    while idle and a `<div>` while scanning. Props are declared against the `<div>`, `ref` is
+    typed as the common `HTMLElement`, and each branch spreads through one documented cast.
+    A single `Ref<A | B>` will not typecheck against either branch's ref slot.
+11. **More DOM collisions found in this pass**, all `Omit`-ed with a doc comment on the
+    replacement: `onSelect` (`CompareTable`, `DateSelectStep.Cell`, `TimeSlotStep.Chip`),
+    `onChange` (`RewardsStep.SubstitutionSelector`, `BranchSelectStep.CarBootForm`),
+    `defaultValue` (`DeliveryMethodStep`), `title` (`ComparisonCard`, `RecipeCard`,
+    `RecipeCard.Header`, `ModalSheet`), `value` (`SelectionGroup.Option`),
+    and **`slot`** (`TimeSlotStep.Chip`) — `slot` is a global HTML attribute and is easy to miss.
+12. **Component-typed roots take `ComponentProps<typeof X>`, not intrinsic props.** Where a
+    sub-component's root is another library component rather than a DOM node
+    (`ActionStrip.Primary/.Secondary` → `Button`, `OrderReview.Totals` → `DetailList`,
+    `DeliveryTracker.Steps` → `OrderStatusCard`, `BranchSelectStep.BranchList` →
+    `SelectionGroup`), forward to that component's own props. `ActionStrip.Primary/.Secondary`
+    consequently widen `onClick` from `() => void` to a full `MouseEventHandler` — a superset,
+    so existing call sites are unaffected.
+13. **Defaulted a11y attributes stay overridable.** Where a root sets an `aria-label` that a
+    consumer might reasonably want to change, destructure it with a default
+    (`'aria-label': ariaLabel = '…'`) rather than hard-coding it after the spread — see
+    `ChatInput.Field/.Send`, `MessageBubble.FeedbackRow`, `DeliveryFlow.StepRail`.
 
 ### Verify after each batch
 
@@ -107,26 +131,28 @@ npx tsc --noEmit -p tsconfig.json 2>&1 | grep "error TS" | grep -v "^\.next/"
 Run the story suite at the end of a batch — it smoke-renders all 345 stories in ~10s and is the
 real regression net.
 
-### Still to do — 25 core
+### Sub-components caught in a second pass
 
-`ApplePaySheet` · `BranchSelectStep` · `CardStack` · `CartItem` · `CartSummary` · `ChatInput` ·
-`ChipToCard` · `CompareTable` · `ComparisonCard` · `DateSelectStep` · `DeliveryBookingSuccess` ·
-`DeliveryConfirmation` · `DeliveryMethodStep` · `DoubleClickToPay` · `IngredientShopList` ·
-`MakeupRecipeCard` · `OrderReview` · `OrderStatusCard` · `PaymentConfirmSheet` · `PaymentSuccess` ·
-`ReceiptSummary` · `RecipeCard` · `RewardsStep` · `ScheduleStep` · `TimeSlotStep`
-
-These are harder than the primitives were: several are compound components with sub-components
-(which should get the same treatment, since they're part of the public API via
-`Component.SubComponent`) and several have multiple return branches.
-
-### Still to do — 4 layouts
-
-`ChatWidget` · `DeliveryFlow` · `DeliveryTracker` · `ModalSheet`
+The first 11 core components were swept before the rule "sub-components are public API too" was
+settled, so their `Component.SubComponent` props were left untouched. They have since been done:
+`ActionStrip.Primary/.Secondary`, `CardStrip.Item`, `DetailList.Row`,
+`MediaCard.Media/.Body/.Title/.Subtitle/.Badge/.Meta`,
+`MessageBubble.Content/.Timestamp/.FeedbackRow`, `SelectionGroup.Option`,
+`SummaryPanel.Header/.Body`. Also dropped a redundant `className?: string` left on
+`AddressTileProps`.
 
 ### Deliberately skipped
 
-`components/primitives/Apple-objects/*` (`ConfirmIcon`, `CreditCardIcons`) — internal decorative
-SVGs, not exported from `primitives/index.ts`, so not public API.
+Internal, non-exported helpers — not reachable as `Component.SubComponent` and not in any
+`index.ts`, so not public API:
+
+- `components/primitives/Apple-objects/*` (`ConfirmIcon`, `CreditCardIcons`)
+- Decorative SVG helpers inside components: `ApplePaySheet`'s `AccountIcon` / `AddressIcon` /
+  `AppleMark` / `InfoRow` / `SideButtonConfirm`, `ApplePayButton`'s `AppleMark`,
+  `AvailabilityDot`'s status icons, `PaymentConfirmSheet`'s `SecureHeader` /
+  `ApplePayWaitingPrompt` / `AcceptedNetworksStrip`, `CompareTable`'s `AttributeValue`,
+  `MakeupRecipeCard`'s `SwatchStrip` / `CollageHero` / `CarouselHero` (these three *do* forward
+  props, because the public `MakeupRecipeCard.Hero` delegates to them)
 
 ---
 
@@ -205,6 +231,10 @@ module-local.
 - **1 typecheck error** in `.next/types/validator.ts` — stale artifact referencing
   `app/figma-make/page.js`; the page moved to `app/(site)/figma-make/`. `.next/` is gitignored and
   regenerates.
+
+## What's left
+
+Part 4 is closed. The two items below were flagged earlier and are still open.
 
 ## Open questions for the user
 

@@ -1,4 +1,5 @@
 import { type PaymentMethodTileProps } from '../../primitives/PaymentMethodTile/PaymentMethodTile';
+import type { MotionDivProps } from '../../../lib/prop-types';
 export interface AcceptedNetwork {
     src: string;
     alt: string;
@@ -7,7 +8,7 @@ export interface SummaryRow {
     label: string;
     value: React.ReactNode;
 }
-export interface PaymentConfirmSheetProps {
+export interface PaymentConfirmSheetProps extends Omit<MotionDivProps, 'children'> {
     total: number;
     currency?: string;
     /** The active payment method shown in the confirmation row. */
@@ -26,6 +27,5 @@ export interface PaymentConfirmSheetProps {
     onConfirm: () => void;
     onChangeMethod?: () => void;
     loading?: boolean;
-    className?: string;
 }
-export declare function PaymentConfirmSheet({ total, currency, paymentMethod, description, summaryRows, acceptedNetworks, onConfirm, onChangeMethod, loading, className, }: PaymentConfirmSheetProps): import("react").JSX.Element;
+export declare function PaymentConfirmSheet({ total, currency, paymentMethod, description, summaryRows, acceptedNetworks, onConfirm, onChangeMethod, loading, className, ...props }: PaymentConfirmSheetProps): import("react").JSX.Element;

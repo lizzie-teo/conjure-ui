@@ -6,9 +6,10 @@ import { Tag as r } from "../../primitives/Tag/Tag.js";
 import { jsx as i, jsxs as a } from "react/jsx-runtime";
 import { useState as o } from "react";
 //#region components/core/CartSummary/CartSummary.tsx
-function s({ name: n, quantity: r, price: o, currency: s, className: c }) {
+function s({ name: n, quantity: r, price: o, currency: s, className: c, ...l }) {
 	return /* @__PURE__ */ a("div", {
 		className: e("flex items-center justify-between gap-3 py-2.5 md:py-3", "border-b border-border last:border-0", c),
+		...l,
 		children: [/* @__PURE__ */ a("span", {
 			className: "text-xs md:text-sm text-foreground truncate min-w-0",
 			children: [n, r > 1 && /* @__PURE__ */ a("span", {
@@ -22,9 +23,10 @@ function s({ name: n, quantity: r, price: o, currency: s, className: c }) {
 		})]
 	});
 }
-function c({ subtotal: n, discount: r, total: o, currency: s, className: c }) {
+function c({ subtotal: n, discount: r, total: o, currency: s, className: c, ...l }) {
 	return /* @__PURE__ */ a("div", {
 		className: e("border-t border-border px-4 md:px-5 py-3 md:py-4 space-y-2", c),
+		...l,
 		children: [
 			/* @__PURE__ */ a("div", {
 				className: "flex items-center justify-between",
@@ -63,10 +65,11 @@ function c({ subtotal: n, discount: r, total: o, currency: s, className: c }) {
 		]
 	});
 }
-function l({ onApply: t, appliedCode: s, className: c }) {
-	let [l, u] = o("");
+function l({ onApply: t, appliedCode: s, className: c, ...l }) {
+	let [u, d] = o("");
 	return /* @__PURE__ */ a("div", {
 		className: e("space-y-2", c),
+		...l,
 		children: [s && /* @__PURE__ */ a("div", {
 			className: "flex items-center gap-2",
 			children: [/* @__PURE__ */ i(r, { label: s }), /* @__PURE__ */ i("span", {
@@ -77,10 +80,10 @@ function l({ onApply: t, appliedCode: s, className: c }) {
 			className: "flex gap-2",
 			children: [/* @__PURE__ */ i("input", {
 				type: "text",
-				value: l,
-				onChange: (e) => u(e.target.value),
+				value: u,
+				onChange: (e) => d(e.target.value),
 				onKeyDown: (e) => {
-					e.key === "Enter" && l.trim() && (t(l.trim()), u(""));
+					e.key === "Enter" && u.trim() && (t(u.trim()), d(""));
 				},
 				placeholder: "Promo code",
 				"aria-label": "Promo code",
@@ -88,19 +91,20 @@ function l({ onApply: t, appliedCode: s, className: c }) {
 			}), /* @__PURE__ */ i(n, {
 				variant: "outline",
 				onClick: () => {
-					l.trim() && (t(l.trim()), u(""));
+					u.trim() && (t(u.trim()), d(""));
 				},
-				disabled: !l.trim(),
+				disabled: !u.trim(),
 				className: "h-12 md:h-10 px-4 shrink-0",
 				children: "Apply"
 			})]
 		})]
 	});
 }
-function u({ items: t, currency: r = "USD", promoCode: o, discount: c, onPromoApply: l, onCheckout: d, className: f }) {
-	let p = t.reduce((e, t) => e + t.price * t.quantity, 0), m = p - (c ?? 0);
+function u({ items: t, currency: r = "USD", promoCode: o, discount: c, onPromoApply: l, onCheckout: d, className: f, ...p }) {
+	let m = t.reduce((e, t) => e + t.price * t.quantity, 0), h = m - (c ?? 0);
 	return /* @__PURE__ */ a("div", {
 		className: e("bg-card border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden", f),
+		...p,
 		children: [
 			t.length > 0 ? /* @__PURE__ */ i("div", {
 				className: "px-4 md:px-5 pt-3 md:pt-4",
@@ -115,9 +119,9 @@ function u({ items: t, currency: r = "USD", promoCode: o, discount: c, onPromoAp
 				children: "Your cart is empty"
 			}),
 			/* @__PURE__ */ i(u.Total, {
-				subtotal: p,
+				subtotal: m,
 				discount: c,
-				total: m,
+				total: h,
 				currency: r
 			}),
 			l && /* @__PURE__ */ i("div", {

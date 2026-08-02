@@ -5,25 +5,26 @@ import { jsx as n, jsxs as r } from "react/jsx-runtime";
 import { AnimatePresence as i, LayoutGroup as a, motion as o, useReducedMotion as s } from "motion/react";
 import { useId as c, useState as l } from "react";
 //#region components/core/ChipToCard/ChipToCard.tsx
-function u({ chips: u, selectedId: d, onSelectedChange: f, defaultSelectedId: p, className: m }) {
-	let h = d !== void 0, [g, _] = l(p ?? null), v = h ? d : g, y = s(), b = c(), x = u.find((e) => e.id === v), S = (e) => {
-		h || _(e), f?.(e);
+function u({ chips: u, selectedId: d, onSelectedChange: f, defaultSelectedId: p, className: m, ...h }) {
+	let g = d !== void 0, [_, v] = l(p ?? null), y = g ? d : _, b = s(), x = c(), S = u.find((e) => e.id === y), C = (e) => {
+		g || v(e), f?.(e);
 	};
 	return /* @__PURE__ */ n(a, {
-		id: b,
+		id: x,
 		children: /* @__PURE__ */ n("div", {
 			className: e("relative", m),
+			...h,
 			children: /* @__PURE__ */ n(i, {
 				mode: "popLayout",
 				initial: !1,
-				children: v && x ? /* @__PURE__ */ r(o.div, {
-					layoutId: `${b}-${v}`,
+				children: y && S ? /* @__PURE__ */ r(o.div, {
+					layoutId: `${x}-${y}`,
 					className: "rounded-xl border border-border bg-card overflow-hidden shadow-[var(--shadow-card)]",
-					initial: { opacity: +!!y },
+					initial: { opacity: +!!b },
 					animate: { opacity: 1 },
 					exit: {
 						opacity: 0,
-						scale: y ? 1 : .95,
+						scale: b ? 1 : .95,
 						transition: {
 							duration: .2,
 							ease: [
@@ -43,31 +44,31 @@ function u({ chips: u, selectedId: d, onSelectedChange: f, defaultSelectedId: p,
 							1
 						]
 					},
-					children: [x.card, /* @__PURE__ */ n("div", {
+					children: [S.card, /* @__PURE__ */ n("div", {
 						className: "px-4 pb-4 pt-2 border-t border-border",
 						children: /* @__PURE__ */ n(t, {
 							variant: "ghost",
 							size: "sm",
-							onClick: () => S(null),
+							onClick: () => C(null),
 							className: "text-muted-foreground",
 							children: "← Back to options"
 						})
 					})]
-				}, v) : /* @__PURE__ */ n(o.div, {
+				}, y) : /* @__PURE__ */ n(o.div, {
 					className: "flex flex-wrap gap-2",
 					exit: {
 						opacity: 0,
 						transition: { duration: .1 }
 					},
 					children: u.map((e) => /* @__PURE__ */ n(o.div, {
-						layoutId: `${b}-${e.id}`,
+						layoutId: `${x}-${e.id}`,
 						className: "shrink-0",
-						whileTap: y ? void 0 : { scale: .97 },
+						whileTap: b ? void 0 : { scale: .97 },
 						children: /* @__PURE__ */ n(t, {
 							variant: "outline",
 							size: "sm",
 							className: "rounded-full",
-							onClick: () => S(e.id),
+							onClick: () => C(e.id),
 							children: e.label
 						})
 					}, e.id))

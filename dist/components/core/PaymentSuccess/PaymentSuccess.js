@@ -14,8 +14,8 @@ var u = {
 		delayChildren: .22
 	} }
 };
-function d({ referenceNumber: d, badgeLabel: f = "Confirmed", subtitle: p, rows: m, ctaLabel: h = "Done", onCta: g, secondaryLabel: _, onSecondary: v, className: y }) {
-	let b = c(), x = b ? {
+function d({ referenceNumber: d, badgeLabel: f = "Confirmed", subtitle: p, rows: m, ctaLabel: h = "Done", onCta: g, secondaryLabel: _, onSecondary: v, className: y, ...b }) {
+	let x = c(), S = x ? {
 		hidden: { opacity: 0 },
 		show: {
 			opacity: 1,
@@ -49,11 +49,12 @@ function d({ referenceNumber: d, badgeLabel: f = "Confirmed", subtitle: p, rows:
 		}
 	};
 	return /* @__PURE__ */ o(s.div, {
+		...b,
 		role: "status",
 		"aria-live": "polite",
 		initial: {
 			opacity: 0,
-			y: b ? 0 : 10
+			y: x ? 0 : 10
 		},
 		animate: {
 			opacity: 1,
@@ -75,7 +76,7 @@ function d({ referenceNumber: d, badgeLabel: f = "Confirmed", subtitle: p, rows:
 				children: [/* @__PURE__ */ a(s.div, {
 					initial: {
 						opacity: 0,
-						scale: b ? 1 : .6
+						scale: x ? 1 : .6
 					},
 					animate: {
 						opacity: 1,
@@ -95,7 +96,7 @@ function d({ referenceNumber: d, badgeLabel: f = "Confirmed", subtitle: p, rows:
 					children: /* @__PURE__ */ a(s.div, {
 						initial: {
 							opacity: 0,
-							scale: b ? 1 : .4
+							scale: x ? 1 : .4
 						},
 						animate: {
 							opacity: 1,
@@ -125,19 +126,19 @@ function d({ referenceNumber: d, badgeLabel: f = "Confirmed", subtitle: p, rows:
 					className: "flex flex-col items-center gap-2",
 					children: [
 						/* @__PURE__ */ a(s.div, {
-							variants: x,
+							variants: S,
 							children: /* @__PURE__ */ a(t, {
 								label: f,
 								variant: "success"
 							})
 						}),
 						/* @__PURE__ */ a(s.p, {
-							variants: x,
+							variants: S,
 							className: "text-xl md:text-2xl font-semibold text-foreground tracking-tight",
 							children: d
 						}),
 						p && /* @__PURE__ */ a(s.p, {
-							variants: x,
+							variants: S,
 							className: "text-xs md:text-sm text-muted-foreground max-w-[240px] leading-relaxed",
 							children: p
 						})

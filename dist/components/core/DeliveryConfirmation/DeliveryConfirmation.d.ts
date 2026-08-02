@@ -1,6 +1,7 @@
 import type { AddressTileProps } from '../../primitives/AddressTile/AddressTile';
 import type { DeliveryStep, TimeSlot, Branch, RewardsSummary, SubstitutionPreference } from './deliveryFlow.types';
-export interface DeliveryConfirmationProps {
+import type { ComponentPropsWithRef } from 'react';
+export interface DeliveryConfirmationProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
     method: 'home-delivery' | 'click-collect';
     deliveryAddress?: AddressTileProps;
     branch?: Pick<Branch, 'name' | 'address'>;
@@ -13,16 +14,15 @@ export interface DeliveryConfirmationProps {
     onConfirm: () => void;
     onEdit: (step: DeliveryStep) => void;
     onSetupRecurring?: () => void;
-    className?: string;
 }
-interface EditRowProps {
+interface EditRowProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
     label: string;
     value: React.ReactNode;
     step: DeliveryStep;
     onEdit: (step: DeliveryStep) => void;
 }
-export declare function DeliveryConfirmation({ method, deliveryAddress, branch, selectedDate, selectedSlot, rewards, redeemPoints, substitution, editableUntil, onConfirm, onEdit, onSetupRecurring, className, }: DeliveryConfirmationProps): import("react").JSX.Element;
+export declare function DeliveryConfirmation({ method, deliveryAddress, branch, selectedDate, selectedSlot, rewards, redeemPoints, substitution, editableUntil, onConfirm, onEdit, onSetupRecurring, className, ...props }: DeliveryConfirmationProps): import("react").JSX.Element;
 export declare namespace DeliveryConfirmation {
-    var EditRow: ({ label, value, step, onEdit }: EditRowProps) => import("react").JSX.Element;
+    var EditRow: ({ label, value, step, onEdit, className, ...props }: EditRowProps) => import("react").JSX.Element;
 }
 export {};

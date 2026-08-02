@@ -9,7 +9,6 @@ export interface AddressTileProps extends Omit<ComponentPropsWithRef<'address'>,
   state?: string
   postcode: string
   country: string
-  className?: string
 }
 
 export function AddressTile({

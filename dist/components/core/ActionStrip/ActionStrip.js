@@ -4,12 +4,12 @@ import { Button as t } from "../../ui/button.js";
 import { jsx as n } from "react/jsx-runtime";
 import { motion as r, useReducedMotion as i } from "motion/react";
 //#region components/core/ActionStrip/ActionStrip.tsx
-function a({ onClick: a, disabled: o, className: s, children: c }) {
-	let l = i();
+function a({ className: a, children: o, ...s }) {
+	let c = i();
 	return /* @__PURE__ */ n(r.div, {
 		initial: {
 			opacity: 0,
-			y: l ? 0 : 6
+			y: c ? 0 : 6
 		},
 		animate: {
 			opacity: 1,
@@ -28,19 +28,18 @@ function a({ onClick: a, disabled: o, className: s, children: c }) {
 		children: /* @__PURE__ */ n(t, {
 			variant: "default",
 			size: "default",
-			onClick: a,
-			disabled: o,
-			className: e("w-full", s),
-			children: c
+			className: e("w-full", a),
+			...s,
+			children: o
 		})
 	});
 }
-function o({ onClick: a, disabled: o, className: s, children: c }) {
-	let l = i();
+function o({ className: a, children: o, ...s }) {
+	let c = i();
 	return /* @__PURE__ */ n(r.div, {
 		initial: {
 			opacity: 0,
-			y: l ? 0 : 6
+			y: c ? 0 : 6
 		},
 		animate: {
 			opacity: 1,
@@ -60,10 +59,9 @@ function o({ onClick: a, disabled: o, className: s, children: c }) {
 		children: /* @__PURE__ */ n(t, {
 			variant: "outline",
 			size: "default",
-			onClick: a,
-			disabled: o,
-			className: e("w-full", s),
-			children: c
+			className: e("w-full", a),
+			...s,
+			children: o
 		})
 	});
 }

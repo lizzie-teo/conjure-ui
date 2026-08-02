@@ -13,15 +13,16 @@ import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { PriceDisplay } from '../../primitives/PriceDisplay/PriceDisplay'
 import { type MockData, type MockProduct, type MockMessage, VERTICAL_MOCK } from './mockData'
 
+import type { ComponentPropsWithRef } from 'react'
+
 export type { MockData, MockProduct, MockMessage }
 
-export interface ChatWidgetProps {
+export interface ChatWidgetProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   vertical?: 'grocery' | 'pharmacy'
   mockData?: MockData
   onAddToCart?: (product: MockProduct) => void
   onSuggestSubstitution?: (product: MockProduct) => void
   onEscalateToHuman?: (context: { messages: MockMessage[] }) => void
-  className?: string
 }
 
 interface LineCoords {
@@ -50,6 +51,7 @@ export function ChatWidget({
   onSuggestSubstitution,
   onEscalateToHuman,
   className,
+  ...props
 }: ChatWidgetProps) {
   const data = mockData ?? VERTICAL_MOCK[vertical]
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -117,7 +119,13 @@ export function ChatWidget({
   const totalMessages = data.messages.length
 
   return (
-    <div className={cn('flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-[var(--shadow-card)]', className)}>
+    <div
+      className={cn(
+        'flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-[var(--shadow-card)]',
+        className
+      )}
+      {...props}
+    >
       <div className="flex items-center gap-3 px-4 md:px-5 py-3 md:py-4 border-b border-border bg-card shrink-0">
         <EntityAvatar fallback={data.botName ?? 'Assistant'} src={data.avatar} size="sm" />
         <span className="text-sm md:text-base font-medium text-foreground">

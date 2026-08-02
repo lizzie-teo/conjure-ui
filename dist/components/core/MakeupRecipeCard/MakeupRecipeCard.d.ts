@@ -1,3 +1,5 @@
+import type { ComponentPropsWithRef } from 'react';
+import type { MotionDivProps, MotionUlProps } from '../../../lib/prop-types';
 export type MakeupOccasion = 'day' | 'night';
 export type MakeupUndertone = 'warm' | 'cool' | 'neutral' | 'olive-warm';
 export type MakeupDepth = 'fair' | 'light' | 'medium' | 'deep';
@@ -34,26 +36,20 @@ export interface MakeupRecipe {
     depth?: MakeupDepth;
 }
 export type MakeupHeroVariant = 'collage' | 'carousel';
-export interface MakeupRecipeCardProps {
+export interface MakeupRecipeCardProps extends Omit<MotionDivProps, 'children'> {
     recipe: MakeupRecipe;
     hero?: MakeupHeroVariant;
     onProductClick?: (product: MakeupProduct) => void;
     onAddToCart?: (products: MakeupProduct[]) => void;
     onSave?: (recipe: MakeupRecipe) => void;
-    className?: string;
 }
-export declare function MakeupRecipeCard({ recipe, hero, onProductClick, onAddToCart, onSave, className, }: MakeupRecipeCardProps): import("react").JSX.Element;
+/** Hero, Story and Actions all render a plain `<div>` root. */
+type SectionProps = Omit<ComponentPropsWithRef<'div'>, 'children'>;
+export declare function MakeupRecipeCard({ recipe, hero, onProductClick, onAddToCart, onSave, className, ...props }: MakeupRecipeCardProps): import("react").JSX.Element;
 export declare namespace MakeupRecipeCard {
-    var Hero: ({ className }: {
-        className?: string;
-    }) => import("react").JSX.Element;
-    var Story: ({ className }: {
-        className?: string;
-    }) => import("react").JSX.Element;
-    var ProductList: ({ className }: {
-        className?: string;
-    }) => import("react").JSX.Element;
-    var Actions: ({ className }: {
-        className?: string;
-    }) => import("react").JSX.Element;
+    var Hero: ({ className, ...props }: SectionProps) => import("react").JSX.Element;
+    var Story: ({ className, ...props }: SectionProps) => import("react").JSX.Element;
+    var ProductList: ({ className, ...props }: Omit<MotionUlProps, "children">) => import("react").JSX.Element;
+    var Actions: ({ className, ...props }: SectionProps) => import("react").JSX.Element;
 }
+export {};

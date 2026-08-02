@@ -5,9 +5,10 @@ import { TimestampLabel as n } from "../../primitives/TimestampLabel/TimestampLa
 import { ProgressStep as r } from "../../primitives/ProgressStep/ProgressStep.js";
 import { jsx as i, jsxs as a } from "react/jsx-runtime";
 //#region components/core/OrderStatusCard/OrderStatusCard.tsx
-function o({ orderId: o, steps: s, eta: c, className: l }) {
+function o({ orderId: o, steps: s, eta: c, className: l, ...u }) {
 	return /* @__PURE__ */ a("div", {
 		className: e("bg-card border border-border rounded-xl shadow-[var(--shadow-card)]", "flex flex-col gap-4 md:gap-5 p-4 md:p-5", l),
+		...u,
 		children: [
 			c && /* @__PURE__ */ a("div", {
 				className: "flex flex-col gap-0.5",

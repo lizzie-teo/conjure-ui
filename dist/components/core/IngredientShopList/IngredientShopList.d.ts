@@ -1,3 +1,5 @@
+import type { ComponentPropsWithRef } from 'react';
+import type { MotionDivProps } from '../../../lib/prop-types';
 export interface ProductOption {
     id: string;
     name: string;
@@ -17,24 +19,21 @@ export interface IngredientProduct {
 export interface ResolvedItem extends IngredientProduct {
     selectedProduct: ProductOption;
 }
-export interface IngredientShopListProps {
+export interface IngredientShopListProps extends Omit<MotionDivProps, 'children'> {
     items: IngredientProduct[];
     onAddToCart?: (resolved: ResolvedItem[]) => void;
-    className?: string;
 }
-interface RowProps {
+interface RowProps extends Omit<MotionDivProps, 'children'> {
     item: IngredientProduct;
     isLast?: boolean;
-    className?: string;
 }
-interface ActionsProps {
+interface ActionsProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
     items: IngredientProduct[];
     onAddToCart?: () => void;
-    className?: string;
 }
-export declare function IngredientShopList({ items, onAddToCart, className, }: IngredientShopListProps): import("react").JSX.Element;
+export declare function IngredientShopList({ items, onAddToCart, className, ...props }: IngredientShopListProps): import("react").JSX.Element;
 export declare namespace IngredientShopList {
-    var Row: ({ item, isLast, className }: RowProps) => import("react").JSX.Element;
-    var Actions: ({ items, onAddToCart, className }: ActionsProps) => import("react").JSX.Element;
+    var Row: ({ item, isLast, className, ...props }: RowProps) => import("react").JSX.Element;
+    var Actions: ({ items, onAddToCart, className, ...props }: ActionsProps) => import("react").JSX.Element;
 }
 export {};

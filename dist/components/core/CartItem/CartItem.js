@@ -6,9 +6,10 @@ import { QuantityStepper as r } from "../../primitives/QuantityStepper/QuantityS
 import { jsx as i, jsxs as a } from "react/jsx-runtime";
 import { X as o } from "lucide-react";
 //#region components/core/CartItem/CartItem.tsx
-function s({ image: s, name: c, variant: l, price: u, currency: d = "USD", quantity: f, onQuantityChange: p, onRemove: m, className: h }) {
+function s({ image: s, name: c, variant: l, price: u, currency: d = "USD", quantity: f, onQuantityChange: p, onRemove: m, className: h, ...g }) {
 	return /* @__PURE__ */ a("div", {
 		className: e("flex items-start gap-3 p-4 md:p-5", "bg-card border border-border rounded-xl shadow-[var(--shadow-card)]", h),
+		...g,
 		children: [/* @__PURE__ */ i("img", {
 			src: s,
 			alt: c,

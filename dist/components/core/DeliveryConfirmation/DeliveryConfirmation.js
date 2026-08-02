@@ -48,38 +48,40 @@ var h = {
 		transition: { duration: .2 }
 	}
 };
-function _({ label: e, value: t, step: r, onEdit: i }) {
+function _({ label: t, value: r, step: i, onEdit: a, className: o, ...s }) {
 	return /* @__PURE__ */ l("div", {
-		className: "flex items-center justify-between gap-4 py-2 md:py-2.5 border-b border-border last:border-0",
+		className: e("flex items-center justify-between gap-4 py-2 md:py-2.5 border-b border-border last:border-0", o),
+		...s,
 		children: [/* @__PURE__ */ c("span", {
 			className: "text-xs md:text-sm text-muted-foreground shrink-0",
-			children: e
+			children: t
 		}), /* @__PURE__ */ l("div", {
 			className: "flex items-center gap-2 min-w-0",
 			children: [/* @__PURE__ */ c("span", {
 				className: "text-xs md:text-sm text-foreground font-medium text-right truncate",
-				children: t
+				children: r
 			}), /* @__PURE__ */ c(n, {
 				variant: "ghost",
 				size: "icon-xs",
-				onClick: () => i(r),
-				"aria-label": `Edit ${e}`,
+				onClick: () => a(i),
+				"aria-label": `Edit ${t}`,
 				className: "shrink-0 size-6 text-muted-foreground hover:text-foreground",
 				children: /* @__PURE__ */ c(f, { className: "size-3" })
 			})]
 		})]
 	});
 }
-function v({ method: v, deliveryAddress: y, branch: b, selectedDate: x, selectedSlot: S, rewards: C, redeemPoints: w, substitution: T, editableUntil: E, onConfirm: D, onEdit: O, onSetupRecurring: k, className: A }) {
-	let j = d(), M = C ? new Intl.NumberFormat(void 0, {
+function v({ method: v, deliveryAddress: y, branch: b, selectedDate: x, selectedSlot: S, rewards: C, redeemPoints: w, substitution: T, editableUntil: E, onConfirm: D, onEdit: O, onSetupRecurring: k, className: A, ...j }) {
+	let M = d(), N = C ? new Intl.NumberFormat(void 0, {
 		style: "currency",
 		currency: S.currency
 	}) : null;
 	return /* @__PURE__ */ l("div", {
 		className: e("space-y-4 md:space-y-5", A),
+		...j,
 		children: [
 			/* @__PURE__ */ l(u.div, {
-				variants: j ? g : h,
+				variants: M ? g : h,
 				initial: "hidden",
 				animate: "show",
 				children: [/* @__PURE__ */ l("div", {
@@ -131,9 +133,9 @@ function v({ method: v, deliveryAddress: y, branch: b, selectedDate: x, selected
 								step: "rewards",
 								onEdit: O
 							}),
-							C && w && M && /* @__PURE__ */ c(_, {
+							C && w && N && /* @__PURE__ */ c(_, {
 								label: "Points redeemed",
-								value: `−${M.format(C.pointsValue)}`,
+								value: `−${N.format(C.pointsValue)}`,
 								step: "rewards",
 								onEdit: O
 							}),
@@ -148,7 +150,7 @@ function v({ method: v, deliveryAddress: y, branch: b, selectedDate: x, selected
 				})]
 			}),
 			(y || b) && /* @__PURE__ */ c(u.div, {
-				variants: j ? g : h,
+				variants: M ? g : h,
 				initial: "hidden",
 				animate: "show",
 				transition: { delay: .06 },
@@ -169,7 +171,7 @@ function v({ method: v, deliveryAddress: y, branch: b, selectedDate: x, selected
 				})] }) : null
 			}),
 			/* @__PURE__ */ l(u.div, {
-				variants: j ? g : h,
+				variants: M ? g : h,
 				initial: "hidden",
 				animate: "show",
 				transition: { delay: .1 },

@@ -3,30 +3,24 @@
 import { cn } from '../../../lib/utils'
 import { OrderStatusCard } from '../../core/OrderStatusCard/OrderStatusCard'
 import type { OrderStatusStep } from '../../core/OrderStatusCard/OrderStatusCard'
+import type { ComponentProps, ComponentPropsWithRef } from 'react'
 
 // ── Sub-component interfaces ──────────────────────────────────────────────────
 
-interface MapSlotProps {
-  children?: React.ReactNode
-  className?: string
-}
+type MapSlotProps = ComponentPropsWithRef<'div'>
 
-interface StepsSlotProps {
-  orderId: string
-  steps: OrderStatusStep[]
-  eta?: string
-  className?: string
-}
+type StepsSlotProps = ComponentProps<typeof OrderStatusCard>
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function MapSlot({ children, className }: MapSlotProps) {
+function MapSlot({ children, className, ...props }: MapSlotProps) {
   return (
     <div
       className={cn(
         'h-40 md:h-56 w-full overflow-hidden rounded-t-xl',
         className
       )}
+      {...props}
     >
       {children ?? (
         <div className="h-full w-full bg-muted flex items-center justify-center">
@@ -39,25 +33,22 @@ function MapSlot({ children, className }: MapSlotProps) {
   )
 }
 
-function StepsSlot({ orderId, steps, eta, className }: StepsSlotProps) {
+function StepsSlot({ className, ...props }: StepsSlotProps) {
   return (
     <OrderStatusCard
-      orderId={orderId}
-      steps={steps}
-      eta={eta}
       className={cn('rounded-t-none border-t-0', className)}
+      {...props}
     />
   )
 }
 
 // ── Main component ─────────────────────────────────────────────────────────────
 
-export interface DeliveryTrackerProps {
+export interface DeliveryTrackerProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   orderId: string
   steps: OrderStatusStep[]
   eta?: string
   mapSlot?: React.ReactNode
-  className?: string
 }
 
 export function DeliveryTracker({
@@ -66,6 +57,7 @@ export function DeliveryTracker({
   eta,
   mapSlot,
   className,
+  ...props
 }: DeliveryTrackerProps) {
   return (
     <div
@@ -73,6 +65,7 @@ export function DeliveryTracker({
         'border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden',
         className
       )}
+      {...props}
     >
       <DeliveryTracker.Map>{mapSlot}</DeliveryTracker.Map>
       <DeliveryTracker.Steps orderId={orderId} steps={steps} eta={eta} />

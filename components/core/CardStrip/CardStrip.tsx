@@ -2,18 +2,16 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
+import type { ComponentPropsWithRef } from 'react'
 import type { MotionDivProps } from '../../../lib/prop-types'
 
 export type CardStripProps = MotionDivProps
 
-interface ItemProps {
-  children: React.ReactNode
-  className?: string
-}
+type ItemProps = ComponentPropsWithRef<'div'>
 
-function Item({ children, className }: ItemProps) {
+function Item({ children, className, ...props }: ItemProps) {
   return (
-    <div className={cn('snap-start shrink-0 w-[280px] md:w-[300px]', className)}>
+    <div className={cn('snap-start shrink-0 w-[280px] md:w-[300px]', className)} {...props}>
       {children}
     </div>
   )

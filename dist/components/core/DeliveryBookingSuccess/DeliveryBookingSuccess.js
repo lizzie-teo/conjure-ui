@@ -73,16 +73,17 @@ var f = {
 		}
 	})
 };
-function _({ bookingRef: _, method: v, scheduledDate: y, scheduledSlot: b, pointsEarned: x, pointsRedeemed: S, currency: C, ctaLabel: w = "View order", onCta: T, onAddCalendar: E, className: D }) {
-	let O = c(), k = new Intl.NumberFormat(void 0, {
+function _({ bookingRef: _, method: v, scheduledDate: y, scheduledSlot: b, pointsEarned: x, pointsRedeemed: S, currency: C, ctaLabel: w = "View order", onCta: T, onAddCalendar: E, className: D, ...O }) {
+	let k = c(), A = new Intl.NumberFormat(void 0, {
 		style: "currency",
 		currency: C
 	});
 	return /* @__PURE__ */ o("div", {
 		className: e("space-y-4 md:space-y-5", D),
+		...O,
 		children: [
 			/* @__PURE__ */ o(s.div, {
-				variants: O ? m : p,
+				variants: k ? m : p,
 				initial: "hidden",
 				animate: "show",
 				className: "flex flex-col items-center gap-3 py-4 md:py-5",
@@ -109,7 +110,7 @@ function _({ bookingRef: _, method: v, scheduledDate: y, scheduledSlot: b, point
 			}),
 			/* @__PURE__ */ o(s.div, {
 				custom: .1,
-				variants: O ? g : h,
+				variants: k ? g : h,
 				initial: "hidden",
 				animate: "show",
 				className: "rounded-xl border border-border bg-card overflow-hidden",
@@ -140,7 +141,7 @@ function _({ bookingRef: _, method: v, scheduledDate: y, scheduledSlot: b, point
 			}),
 			x !== void 0 && x > 0 && /* @__PURE__ */ a(s.div, {
 				custom: .16,
-				variants: O ? g : h,
+				variants: k ? g : h,
 				initial: "hidden",
 				animate: "show",
 				className: "flex items-center gap-2 rounded-xl bg-success/5 border border-success/20 px-4 py-3",
@@ -155,18 +156,18 @@ function _({ bookingRef: _, method: v, scheduledDate: y, scheduledSlot: b, point
 			}),
 			S !== void 0 && S > 0 && /* @__PURE__ */ a(s.div, {
 				custom: .2,
-				variants: O ? g : h,
+				variants: k ? g : h,
 				initial: "hidden",
 				animate: "show",
 				className: "flex items-center gap-2 rounded-xl bg-muted/50 border border-border px-4 py-3",
 				children: /* @__PURE__ */ o("span", {
 					className: "text-xs md:text-sm text-muted-foreground",
-					children: [k.format(S), " discount applied from points"]
+					children: [A.format(S), " discount applied from points"]
 				})
 			}),
 			/* @__PURE__ */ a(s.div, {
 				custom: .24,
-				variants: O ? g : h,
+				variants: k ? g : h,
 				initial: "hidden",
 				animate: "show",
 				children: /* @__PURE__ */ o(i, { children: [E && /* @__PURE__ */ o(i.Secondary, {

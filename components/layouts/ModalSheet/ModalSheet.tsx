@@ -5,6 +5,9 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { X } from 'lucide-react'
 import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
+import { mergeRefs } from '../../../lib/merge-refs'
+import type { ComponentPropsWithRef } from 'react'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
 // ── Focusable selector ────────────────────────────────────────────────────────
 
@@ -50,44 +53,44 @@ function useIsDesktop(): boolean {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-interface SubProps {
-  children: React.ReactNode
-  className?: string
-}
+type SubProps = ComponentPropsWithRef<'div'>
 
-function Header({ children, className }: SubProps) {
+function Header({ children, className, ...props }: SubProps) {
   return (
     <div
       className={cn(
         'shrink-0 px-4 md:px-6 pt-4 md:pt-5 pb-3 md:pb-4 border-b border-border',
         className,
       )}
+      {...props}
     >
       {children}
     </div>
   )
 }
 
-function Body({ children, className }: SubProps) {
+function Body({ children, className, ...props }: SubProps) {
   return (
     <div
       className={cn(
         'flex-1 min-h-0 overflow-y-auto px-4 md:px-6 py-4 md:py-5',
         className,
       )}
+      {...props}
     >
       {children}
     </div>
   )
 }
 
-function Footer({ children, className }: SubProps) {
+function Footer({ children, className, ...props }: SubProps) {
   return (
     <div
       className={cn(
         'shrink-0 px-4 md:px-6 py-4 md:py-5 border-t border-border',
         className,
       )}
+      {...props}
     >
       {children}
     </div>
@@ -96,14 +99,14 @@ function Footer({ children, className }: SubProps) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export interface ModalSheetProps {
+export interface ModalSheetProps extends Omit<MotionDivProps, 'title'> {
   open: boolean
   onClose: () => void
+  /** Overrides the DOM `title` attribute — rendered as the dialog heading. */
   title?: string
   description?: string
   size?: 'sm' | 'md' | 'lg'
   children: React.ReactNode
-  className?: string
 }
 
 export function ModalSheet({
@@ -114,6 +117,8 @@ export function ModalSheet({
   size = 'md',
   children,
   className,
+  ref: forwardedRef,
+  ...props
 }: ModalSheetProps) {
   const shouldReduce = useReducedMotion()
   const dialogRef = useRef<HTMLDivElement>(null)
@@ -221,7 +226,10 @@ export function ModalSheet({
           {/* Dialog panel */}
           <motion.div
             key="modal-panel"
-            ref={dialogRef}
+            // Spread first: the panel owns the dialog a11y contract and its
+            // focus trap, which a consumer prop must not silently break.
+            {...props}
+            ref={mergeRefs(dialogRef, forwardedRef)}
             role="dialog"
             aria-modal="true"
             aria-labelledby={title ? titleId : undefined}

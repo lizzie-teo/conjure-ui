@@ -6,10 +6,9 @@ import type { MotionDivProps } from '../../../lib/prop-types'
 
 export type DetailListProps = MotionDivProps
 
-export interface RowProps {
+export interface RowProps extends Omit<MotionDivProps, 'children'> {
   label: string
   value: React.ReactNode
-  className?: string
 }
 
 const containerVariants = {
@@ -29,7 +28,7 @@ const rowVariantsReduced = {
   show: { opacity: 1, transition: { duration: 0.2 } },
 }
 
-function Row({ label, value, className }: RowProps) {
+function Row({ label, value, className, ...props }: RowProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -40,6 +39,7 @@ function Row({ label, value, className }: RowProps) {
         'border-b border-border last:border-0',
         className
       )}
+      {...props}
     >
       <span className="text-xs md:text-sm text-muted-foreground shrink-0">{label}</span>
       <span className="text-xs md:text-sm text-foreground font-medium text-right">{value}</span>

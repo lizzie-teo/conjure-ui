@@ -22,8 +22,10 @@ import type {
   CarBootDetails,
   CompletedBooking,
 } from '../../core/DeliveryConfirmation/deliveryFlow.types'
+import type { ComponentPropsWithRef } from 'react'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
-export interface DeliveryFlowProps {
+export interface DeliveryFlowProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   availableDates: AvailableDate[]
   timeSlots: TimeSlot[]
   branches?: Branch[]
@@ -35,7 +37,11 @@ export interface DeliveryFlowProps {
   initialData?: Partial<DeliveryFlowState>
   onComplete: (booking: CompletedBooking) => void
   onCancel?: () => void
-  className?: string
+}
+
+export interface StepRailProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
+  steps: DeliveryStep[]
+  currentStep: DeliveryStep
 }
 
 interface DeliveryFlowState {
@@ -63,14 +69,18 @@ const stepLabels: Record<DeliveryStep, string> = {
 function StepRail({
   steps,
   currentStep,
-}: {
-  steps: DeliveryStep[]
-  currentStep: DeliveryStep
-}) {
+  className,
+  'aria-label': ariaLabel = 'Progress',
+  ...props
+}: StepRailProps) {
   const currentIdx = steps.indexOf(currentStep)
 
   return (
-    <div className="flex items-center px-4 md:px-5 pt-4 pb-3" aria-label="Progress">
+    <div
+      className={cn('flex items-center px-4 md:px-5 pt-4 pb-3', className)}
+      aria-label={ariaLabel}
+      {...props}
+    >
       {steps.map((step, i) => {
         const status =
           i < currentIdx ? 'complete' : i === currentIdx ? 'active' : 'pending'
@@ -94,14 +104,20 @@ function StepRail({
 
 // ── Step body transitions ─────────────────────────────────────────────────────
 
-interface StepBodyProps {
+interface StepBodyProps extends MotionDivProps {
   stepKey: string
   direction: 1 | -1
   shouldReduce: boolean
-  children: React.ReactNode
 }
 
-function StepBody({ stepKey, direction, shouldReduce, children }: StepBodyProps) {
+function StepBody({
+  stepKey,
+  direction,
+  shouldReduce,
+  children,
+  className,
+  ...props
+}: StepBodyProps) {
   const x = shouldReduce ? 0 : direction * 20
 
   return (
@@ -112,7 +128,8 @@ function StepBody({ stepKey, direction, shouldReduce, children }: StepBodyProps)
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -x }}
         transition={{ duration: 0.22, ease: [0, 0, 0.2, 1] as [number, number, number, number] }}
-        className="px-4 md:px-5 pb-2"
+        className={cn('px-4 md:px-5 pb-2', className)}
+        {...props}
       >
         {children}
       </motion.div>
@@ -135,6 +152,7 @@ export function DeliveryFlow({
   onComplete,
   onCancel,
   className,
+  ...props
 }: DeliveryFlowProps) {
   const shouldReduce = useReducedMotion()
 
@@ -230,6 +248,7 @@ export function DeliveryFlow({
           'bg-card border border-border rounded-2xl shadow-[var(--shadow-card)] overflow-hidden',
           className
         )}
+        {...props}
       >
         <div className="px-4 md:px-5 py-4 md:py-5">
           <DeliveryBookingSuccess
@@ -260,6 +279,7 @@ export function DeliveryFlow({
         'bg-card border border-border rounded-2xl shadow-[var(--shadow-card)] overflow-hidden',
         className
       )}
+      {...props}
     >
       <StepRail steps={steps} currentStep={currentStep} />
 

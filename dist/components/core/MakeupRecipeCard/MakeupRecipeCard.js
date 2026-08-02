@@ -55,47 +55,54 @@ var p = {
 		transition: { duration: .2 }
 	}
 };
-function y({ className: t }) {
-	let { recipe: n } = f();
+function y({ className: t, ...n }) {
+	let { recipe: i } = f();
 	return /* @__PURE__ */ r("div", {
 		className: e("flex h-2 overflow-hidden", t),
-		children: n.products.map((e) => /* @__PURE__ */ r("div", {
+		...n,
+		children: i.products.map((e) => /* @__PURE__ */ r("div", {
 			className: "flex-1",
 			style: { backgroundColor: e.swatch.hex }
 		}, e.id))
 	});
 }
-function b({ className: t }) {
-	let { recipe: n } = f(), a = [...n.products.filter((e) => e.isFocalPoint && e.image), ...n.products.filter((e) => !e.isFocalPoint && e.image)];
-	if (a.length === 0) return /* @__PURE__ */ r(y, { className: t });
-	let [o, ...s] = a;
-	return a.length === 1 ? /* @__PURE__ */ r("div", {
+function b({ className: t, ...n }) {
+	let { recipe: a } = f(), o = [...a.products.filter((e) => e.isFocalPoint && e.image), ...a.products.filter((e) => !e.isFocalPoint && e.image)];
+	if (o.length === 0) return /* @__PURE__ */ r(y, {
+		className: t,
+		...n
+	});
+	let [s, ...c] = o;
+	return o.length === 1 ? /* @__PURE__ */ r("div", {
 		className: e("h-40 md:h-44 overflow-hidden", t),
+		...n,
 		children: /* @__PURE__ */ r("img", {
-			src: o.image,
-			alt: o.imageAlt ?? o.shade,
+			src: s.image,
+			alt: s.imageAlt ?? s.shade,
 			className: "w-full h-full object-cover"
 		})
-	}) : a.length === 2 ? /* @__PURE__ */ i("div", {
+	}) : o.length === 2 ? /* @__PURE__ */ i("div", {
 		className: e("flex h-40 md:h-44 overflow-hidden gap-px bg-border", t),
+		...n,
 		children: [/* @__PURE__ */ r("img", {
-			src: o.image,
-			alt: o.imageAlt ?? o.shade,
+			src: s.image,
+			alt: s.imageAlt ?? s.shade,
 			className: "flex-1 h-full object-cover min-w-0"
 		}), /* @__PURE__ */ r("img", {
-			src: s[0].image,
-			alt: s[0].imageAlt ?? s[0].shade,
+			src: c[0].image,
+			alt: c[0].imageAlt ?? c[0].shade,
 			className: "flex-1 h-full object-cover min-w-0"
 		})]
 	}) : /* @__PURE__ */ i("div", {
 		className: e("flex h-40 md:h-44 overflow-hidden gap-px bg-border", t),
+		...n,
 		children: [/* @__PURE__ */ r("img", {
-			src: o.image,
-			alt: o.imageAlt ?? o.shade,
+			src: s.image,
+			alt: s.imageAlt ?? s.shade,
 			className: "w-2/3 h-full object-cover shrink-0"
 		}), /* @__PURE__ */ r("div", {
 			className: "flex flex-col flex-1 gap-px min-w-0",
-			children: s.slice(0, 2).map((e) => /* @__PURE__ */ r("img", {
+			children: c.slice(0, 2).map((e) => /* @__PURE__ */ r("img", {
 				src: e.image,
 				alt: e.imageAlt ?? e.shade,
 				className: "flex-1 w-full object-cover"
@@ -103,38 +110,43 @@ function b({ className: t }) {
 		})]
 	});
 }
-function x({ className: t }) {
-	let { recipe: c } = f(), l = s(), [d, p] = u(0), [m, h] = u(0), g = [...c.products.filter((e) => e.isFocalPoint && e.image), ...c.products.filter((e) => !e.isFocalPoint && e.image)];
-	if (g.length === 0) return /* @__PURE__ */ r(y, { className: t });
-	if (g.length === 1) return /* @__PURE__ */ r("div", {
+function x({ className: t, ...c }) {
+	let { recipe: l } = f(), d = s(), [p, m] = u(0), [h, g] = u(0), _ = [...l.products.filter((e) => e.isFocalPoint && e.image), ...l.products.filter((e) => !e.isFocalPoint && e.image)];
+	if (_.length === 0) return /* @__PURE__ */ r(y, {
+		className: t,
+		...c
+	});
+	if (_.length === 1) return /* @__PURE__ */ r("div", {
 		className: e("h-40 md:h-44 overflow-hidden", t),
+		...c,
 		children: /* @__PURE__ */ r("img", {
-			src: g[0].image,
-			alt: g[0].imageAlt ?? g[0].shade,
+			src: _[0].image,
+			alt: _[0].imageAlt ?? _[0].shade,
 			className: "w-full h-full object-cover"
 		})
 	});
-	let _ = (e) => {
-		h(e), p((t) => (t + e + g.length) % g.length);
+	let v = (e) => {
+		g(e), m((t) => (t + e + _.length) % _.length);
+	}, b = {
+		enter: (e) => ({ x: e > 0 ? "100%" : "-100%" }),
+		center: { x: 0 },
+		exit: (e) => ({ x: e > 0 ? "-100%" : "100%" })
 	};
 	return /* @__PURE__ */ i("div", {
 		className: e("relative h-40 md:h-44 overflow-hidden bg-muted", t),
+		...c,
 		children: [
 			/* @__PURE__ */ r(a, {
 				initial: !1,
-				custom: m,
+				custom: h,
 				children: /* @__PURE__ */ r(o.img, {
-					custom: m,
-					variants: {
-						enter: (e) => ({ x: e > 0 ? "100%" : "-100%" }),
-						center: { x: 0 },
-						exit: (e) => ({ x: e > 0 ? "-100%" : "100%" })
-					},
+					custom: h,
+					variants: b,
 					initial: "enter",
 					animate: "center",
 					exit: "exit",
 					transition: {
-						duration: l ? .01 : .3,
+						duration: d ? .01 : .3,
 						ease: [
 							0,
 							0,
@@ -142,8 +154,8 @@ function x({ className: t }) {
 							1
 						]
 					},
-					src: g[d].image,
-					alt: g[d].imageAlt ?? g[d].shade,
+					src: _[p].image,
+					alt: _[p].imageAlt ?? _[p].shade,
 					className: "absolute inset-0 w-full h-full object-cover",
 					drag: "x",
 					dragConstraints: {
@@ -152,73 +164,78 @@ function x({ className: t }) {
 					},
 					dragElastic: .15,
 					onDragEnd: (e, t) => {
-						t.offset.x < -40 ? _(1) : t.offset.x > 40 && _(-1);
+						t.offset.x < -40 ? v(1) : t.offset.x > 40 && v(-1);
 					}
-				}, d)
+				}, p)
 			}),
 			/* @__PURE__ */ r("div", { className: "absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" }),
 			/* @__PURE__ */ r("div", {
 				className: "absolute inset-x-0 bottom-2.5 flex items-center justify-center gap-1.5",
-				children: g.map((t, i) => /* @__PURE__ */ r(n, {
+				children: _.map((t, i) => /* @__PURE__ */ r(n, {
 					variant: "ghost",
-					"aria-label": `View ${g[i].label}`,
+					"aria-label": `View ${_[i].label}`,
 					onClick: () => {
-						h(i > d ? 1 : -1), p(i);
+						g(i > p ? 1 : -1), m(i);
 					},
-					className: e("p-0 min-w-0 h-auto rounded-full transition-all duration-200 hover:bg-transparent", i === d ? "size-2 bg-white" : "size-1.5 bg-white/50 hover:bg-white/70")
+					className: e("p-0 min-w-0 h-auto rounded-full transition-all duration-200 hover:bg-transparent", i === p ? "size-2 bg-white" : "size-1.5 bg-white/50 hover:bg-white/70")
 				}, i))
 			})
 		]
 	});
 }
-function S({ className: e }) {
-	let { hero: t } = f();
-	return r(t === "carousel" ? x : b, { className: e });
+function S({ className: e, ...t }) {
+	let { hero: n } = f();
+	return r(n === "carousel" ? x : b, {
+		className: e,
+		...t
+	});
 }
-function C({ className: n }) {
-	let { recipe: a } = f();
+function C({ className: n, ...a }) {
+	let { recipe: o } = f();
 	return /* @__PURE__ */ i("div", {
 		className: e("px-4 md:px-5 pt-4 md:pt-5 pb-3 md:pb-4", n),
+		...a,
 		children: [
 			/* @__PURE__ */ i("div", {
 				className: "flex items-center gap-2 mb-3 flex-wrap",
 				children: [/* @__PURE__ */ r(t, {
-					label: m[a.occasion],
-					variant: p[a.occasion]
-				}), a.format === "palette" && /* @__PURE__ */ r(t, {
+					label: m[o.occasion],
+					variant: p[o.occasion]
+				}), o.format === "palette" && /* @__PURE__ */ r(t, {
 					label: "Palette",
 					variant: "default"
 				})]
 			}),
 			/* @__PURE__ */ r("h3", {
 				className: "text-base md:text-lg font-semibold text-foreground leading-snug mb-2",
-				children: a.lookName
+				children: o.lookName
 			}),
 			/* @__PURE__ */ r("p", {
 				className: "text-sm md:text-base text-foreground leading-relaxed",
-				children: a.story.harmony
+				children: o.story.harmony
 			}),
 			/* @__PURE__ */ r("p", {
 				className: "text-sm md:text-base text-muted-foreground leading-relaxed mt-1",
-				children: a.story.skinTone
+				children: o.story.skinTone
 			})
 		]
 	});
 }
-function w({ className: a }) {
-	let { recipe: c, onProductClick: l } = f(), u = s();
+function w({ className: a, ...c }) {
+	let { recipe: l, onProductClick: u } = f(), d = s();
 	return /* @__PURE__ */ r(o.ul, {
 		role: "list",
 		variants: g,
 		initial: "hidden",
 		animate: "show",
 		className: e("flex flex-col gap-2 md:gap-2.5 list-none p-0 m-0", a),
-		children: c.products.map((a) => /* @__PURE__ */ r(o.li, {
-			variants: u ? v : _,
+		...c,
+		children: l.products.map((a) => /* @__PURE__ */ r(o.li, {
+			variants: d ? v : _,
 			children: /* @__PURE__ */ i(n, {
 				variant: "ghost",
 				"aria-label": `${a.label}, ${a.shade}${a.isFocalPoint ? ", featured colour" : ""}`,
-				onClick: () => l?.(a),
+				onClick: () => u?.(a),
 				className: e("w-full h-auto flex items-start gap-3 px-3 py-2.5 md:py-3 rounded-xl border justify-start whitespace-normal", "transition-all duration-150", a.isFocalPoint ? "bg-primary/5 border-primary/20 hover:bg-primary/[0.08]" : "bg-transparent border-border hover:bg-muted/60"),
 				children: [
 					a.image ? /* @__PURE__ */ r("img", {
@@ -259,31 +276,32 @@ function w({ className: a }) {
 		}, a.id))
 	});
 }
-function T({ className: t }) {
-	let { recipe: a, onAddToCart: o, onSave: s } = f(), c = a.products.length;
+function T({ className: t, ...a }) {
+	let { recipe: o, onAddToCart: s, onSave: c } = f(), l = o.products.length;
 	return /* @__PURE__ */ i("div", {
 		className: e("flex flex-col gap-2 md:gap-3", t),
-		children: [o && /* @__PURE__ */ i(n, {
+		...a,
+		children: [s && /* @__PURE__ */ i(n, {
 			variant: "default",
 			className: "w-full h-12 md:h-10",
-			onClick: () => o(a.products),
+			onClick: () => s(o.products),
 			children: [
 				"Add ",
-				c,
+				l,
 				" product",
-				c === 1 ? "" : "s",
+				l === 1 ? "" : "s",
 				" to cart"
 			]
-		}), s && /* @__PURE__ */ r(n, {
+		}), c && /* @__PURE__ */ r(n, {
 			variant: "ghost",
 			className: "w-full h-12 md:h-10 text-muted-foreground",
-			onClick: () => s(a),
+			onClick: () => c(o),
 			children: "Save this look"
 		})]
 	});
 }
-function E({ recipe: t, hero: n = "collage", onProductClick: a, onAddToCart: c, onSave: l, className: u }) {
-	let f = s();
+function E({ recipe: t, hero: n = "collage", onProductClick: a, onAddToCart: c, onSave: l, className: u, ...f }) {
+	let p = s();
 	return /* @__PURE__ */ r(d.Provider, {
 		value: {
 			recipe: t,
@@ -293,7 +311,7 @@ function E({ recipe: t, hero: n = "collage", onProductClick: a, onAddToCart: c, 
 			onSave: l
 		},
 		children: /* @__PURE__ */ i(o.div, {
-			initial: f ? { opacity: 0 } : {
+			initial: p ? { opacity: 0 } : {
 				opacity: 0,
 				y: 10
 			},
@@ -311,6 +329,7 @@ function E({ recipe: t, hero: n = "collage", onProductClick: a, onAddToCart: c, 
 				]
 			},
 			className: e("bg-card border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden", u),
+			...f,
 			children: [
 				/* @__PURE__ */ r(E.Hero, {}),
 				/* @__PURE__ */ r(E.Story, {}),

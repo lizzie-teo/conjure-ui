@@ -57,9 +57,10 @@ function v(e, t) {
 		"l"
 	].includes(i) ? `${n}${r}` : `${n} ${r}`;
 }
-function y({ src: t, alt: n = "", className: r }) {
+function y({ src: t, alt: n = "", className: r, ...a }) {
 	return /* @__PURE__ */ i("div", {
 		className: e("overflow-hidden rounded-t-xl", r),
+		...a,
 		children: /* @__PURE__ */ i("img", {
 			src: t,
 			alt: n,
@@ -67,9 +68,10 @@ function y({ src: t, alt: n = "", className: r }) {
 		})
 	});
 }
-function b({ title: n, prepTime: r, difficulty: o, className: s }) {
+function b({ title: n, prepTime: r, difficulty: o, className: s, ...c }) {
 	return /* @__PURE__ */ a("div", {
 		className: e("px-4 md:px-5 pt-4 md:pt-5 pb-3", s),
+		...c,
 		children: [/* @__PURE__ */ i("h3", {
 			className: "text-base md:text-lg font-semibold text-foreground leading-snug",
 			children: n
@@ -85,24 +87,25 @@ function b({ title: n, prepTime: r, difficulty: o, className: s }) {
 		})]
 	});
 }
-function x({ ingredients: t, className: r }) {
-	let { servings: l, ingredientState: u, toggleIngredient: d, onIngredientClick: f } = p(), m = c();
+function x({ ingredients: t, className: r, ...l }) {
+	let { servings: u, ingredientState: d, toggleIngredient: f, onIngredientClick: m } = p(), y = c();
 	return /* @__PURE__ */ i(s.ul, {
 		role: "list",
 		variants: h,
 		initial: "hidden",
 		animate: "show",
 		className: e("flex flex-col gap-1.5 md:gap-2 list-none p-0 m-0", r),
+		...l,
 		children: t.map((t) => {
-			let r = u[t.id] ?? !0, c = v(t.quantity * l, t.unit);
+			let r = d[t.id] ?? !0, c = v(t.quantity * u, t.unit);
 			return /* @__PURE__ */ i(s.li, {
-				variants: m ? _ : g,
+				variants: y ? _ : g,
 				children: /* @__PURE__ */ a(n, {
 					variant: "ghost",
 					"aria-pressed": r,
 					"aria-label": `${t.name}, ${c}, ${r ? "included" : "excluded"}`,
 					onClick: () => {
-						d(t.id), f?.({ ...t });
+						f(t.id), m?.({ ...t });
 					},
 					className: e("w-full h-auto flex items-center gap-3 px-3 py-2.5 md:py-2 rounded-lg border justify-start", "transition-all duration-150 active:scale-[0.97]", r ? "bg-primary/5 border-primary/20" : "bg-transparent border-border opacity-50"),
 					children: [
@@ -112,7 +115,7 @@ function x({ ingredients: t, className: r }) {
 							children: /* @__PURE__ */ i(o, { children: r && /* @__PURE__ */ i(s.svg, {
 								viewBox: "0 0 10 8",
 								fill: "none",
-								initial: m ? !1 : {
+								initial: y ? !1 : {
 									opacity: 0,
 									scale: .4
 								},
@@ -120,7 +123,7 @@ function x({ ingredients: t, className: r }) {
 									opacity: 1,
 									scale: 1
 								},
-								exit: m ? { opacity: 0 } : {
+								exit: y ? { opacity: 0 } : {
 									opacity: 0,
 									scale: .4
 								},
@@ -157,20 +160,21 @@ function x({ ingredients: t, className: r }) {
 		})
 	});
 }
-function S({ selectedCount: t, onAddToCart: o, className: s }) {
-	let { servings: c, setServings: l } = p();
+function S({ selectedCount: t, onAddToCart: o, className: s, ...c }) {
+	let { servings: l, setServings: u } = p();
 	return /* @__PURE__ */ a("div", {
 		className: e("flex flex-col gap-3 md:gap-4", s),
+		...c,
 		children: [/* @__PURE__ */ a("div", {
 			className: "flex items-center justify-between gap-3",
 			children: [/* @__PURE__ */ i("span", {
 				className: "text-xs md:text-sm font-medium text-muted-foreground",
 				children: "Servings"
 			}), /* @__PURE__ */ i(r, {
-				value: c,
+				value: l,
 				min: 1,
 				max: 20,
-				onChange: l
+				onChange: u
 			})]
 		}), /* @__PURE__ */ i(n, {
 			variant: "default",
@@ -181,21 +185,27 @@ function S({ selectedCount: t, onAddToCart: o, className: s }) {
 		})]
 	});
 }
-function C({ title: t, prepTime: n, difficulty: r, defaultServings: o = 2, ingredients: l, image: u, imageAlt: p, onIngredientClick: m, onAddToCart: h, className: g }) {
-	let _ = c(), [v, y] = d(o), [b, x] = d(() => Object.fromEntries(l.map((e) => [e.id, e.selected ?? !0]))), S = (e) => x((t) => ({
+function C({ title: t, prepTime: n, difficulty: r, defaultServings: o = 2, ingredients: l, image: u, imageAlt: p, onIngredientClick: m, onAddToCart: h, className: g, ..._ }) {
+	let v = c(), [y, b] = d(o), [x, S] = d(() => Object.fromEntries(l.map((e) => [e.id, e.selected ?? !0]))), w = (e) => S((t) => ({
 		...t,
 		[e]: !t[e]
-	})), w = Object.values(b).filter(Boolean).length;
+	})), T = Object.values(x).filter(Boolean).length, E = () => {
+		let e = l.filter((e) => x[e.id]).map((e) => ({
+			...e,
+			scaledQuantity: e.quantity * y
+		}));
+		h?.(e, y);
+	};
 	return /* @__PURE__ */ i(f.Provider, {
 		value: {
-			servings: v,
-			setServings: y,
-			ingredientState: b,
-			toggleIngredient: S,
+			servings: y,
+			setServings: b,
+			ingredientState: x,
+			toggleIngredient: w,
 			onIngredientClick: m
 		},
 		children: /* @__PURE__ */ a(s.div, {
-			initial: _ ? { opacity: 0 } : {
+			initial: v ? { opacity: 0 } : {
 				opacity: 0,
 				y: 10
 			},
@@ -213,6 +223,7 @@ function C({ title: t, prepTime: n, difficulty: r, defaultServings: o = 2, ingre
 				]
 			},
 			className: e("bg-card border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden", g),
+			..._,
 			children: [
 				u && /* @__PURE__ */ i(C.Image, {
 					src: u,
@@ -230,14 +241,8 @@ function C({ title: t, prepTime: n, difficulty: r, defaultServings: o = 2, ingre
 				/* @__PURE__ */ i("div", {
 					className: "px-4 md:px-5 py-3 md:py-4 border-t border-border",
 					children: /* @__PURE__ */ i(C.Actions, {
-						selectedCount: w,
-						onAddToCart: () => {
-							let e = l.filter((e) => b[e.id]).map((e) => ({
-								...e,
-								scaledQuantity: e.quantity * v
-							}));
-							h?.(e, v);
-						}
+						selectedCount: T,
+						onAddToCart: E
 					})
 				})
 			]

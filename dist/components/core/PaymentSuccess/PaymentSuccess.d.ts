@@ -1,8 +1,9 @@
+import type { MotionDivProps } from '../../../lib/prop-types';
 export interface PaymentSuccessRow {
     label: string;
     value: React.ReactNode;
 }
-export interface PaymentSuccessProps {
+export interface PaymentSuccessProps extends Omit<MotionDivProps, 'children'> {
     /** Confirmation reference shown prominently — order #, booking ref, policy #. */
     referenceNumber: string;
     /** StatusBadge label. Defaults to "Confirmed". */
@@ -17,6 +18,5 @@ export interface PaymentSuccessProps {
     /** Optional secondary action (e.g. "Email receipt", "View booking"). */
     secondaryLabel?: string;
     onSecondary?: () => void;
-    className?: string;
 }
-export declare function PaymentSuccess({ referenceNumber, badgeLabel, subtitle, rows, ctaLabel, onCta, secondaryLabel, onSecondary, className, }: PaymentSuccessProps): import("react").JSX.Element;
+export declare function PaymentSuccess({ referenceNumber, badgeLabel, subtitle, rows, ctaLabel, onCta, secondaryLabel, onSecondary, className, ...props }: PaymentSuccessProps): import("react").JSX.Element;

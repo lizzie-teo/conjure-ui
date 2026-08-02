@@ -2,26 +2,18 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 import { Button } from '../../ui/button'
-import type { ComponentPropsWithRef } from 'react'
+import type { ComponentProps, ComponentPropsWithRef } from 'react'
 import { cn } from '../../../lib/utils'
 
 export type ActionStripProps = ComponentPropsWithRef<'div'>
 
-interface PrimaryProps {
-  onClick?: () => void
-  disabled?: boolean
-  className?: string
-  children: React.ReactNode
-}
+/**
+ * Props land on the inner `<Button>` — that is the element a consumer wants to
+ * reference, label or measure, not the motion wrapper that drives the entrance.
+ */
+type ActionProps = ComponentProps<typeof Button>
 
-interface SecondaryProps {
-  onClick?: () => void
-  disabled?: boolean
-  className?: string
-  children: React.ReactNode
-}
-
-function Primary({ onClick, disabled, className, children }: PrimaryProps) {
+function Primary({ className, children, ...props }: ActionProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -34,9 +26,8 @@ function Primary({ onClick, disabled, className, children }: PrimaryProps) {
       <Button
         variant="default"
         size="default"
-        onClick={onClick}
-        disabled={disabled}
         className={cn('w-full', className)}
+        {...props}
       >
         {children}
       </Button>
@@ -44,7 +35,7 @@ function Primary({ onClick, disabled, className, children }: PrimaryProps) {
   )
 }
 
-function Secondary({ onClick, disabled, className, children }: SecondaryProps) {
+function Secondary({ className, children, ...props }: ActionProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -57,9 +48,8 @@ function Secondary({ onClick, disabled, className, children }: SecondaryProps) {
       <Button
         variant="outline"
         size="default"
-        onClick={onClick}
-        disabled={disabled}
         className={cn('w-full', className)}
+        {...props}
       >
         {children}
       </Button>

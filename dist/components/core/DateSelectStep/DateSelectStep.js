@@ -67,29 +67,30 @@ var f = {
 		transition: { duration: .2 }
 	}
 };
-function h({ date: o, isSelected: s, onSelect: l, shouldReduce: u }) {
-	let { dayLabel: f, dayNum: h, isToday: g } = c(o.date), _ = o.availability === "unavailable";
+function h({ date: o, isSelected: s, onSelect: l, shouldReduce: u, className: f, ...h }) {
+	let { dayLabel: g, dayNum: _, isToday: v } = c(o.date), y = o.availability === "unavailable";
 	return /* @__PURE__ */ r(a.div, {
 		variants: u ? m : p,
-		className: "snap-start shrink-0",
+		className: e("snap-start shrink-0", f),
+		...h,
 		children: /* @__PURE__ */ i(t, {
 			variant: "ghost",
 			role: "radio",
 			"aria-checked": s,
 			"aria-label": d(o),
-			disabled: _,
+			disabled: y,
 			onClick: () => l(o.date),
-			className: e("flex flex-col items-center gap-1 h-auto w-[64px] md:w-[72px] py-3 px-2 rounded-xl", "border transition-colors duration-150", s ? "border-2 border-primary bg-primary/5 hover:bg-primary/5" : "border-border hover:border-primary/40 hover:bg-muted/30", _ && "opacity-40"),
+			className: e("flex flex-col items-center gap-1 h-auto w-[64px] md:w-[72px] py-3 px-2 rounded-xl", "border transition-colors duration-150", s ? "border-2 border-primary bg-primary/5 hover:bg-primary/5" : "border-border hover:border-primary/40 hover:bg-muted/30", y && "opacity-40"),
 			children: [
 				/* @__PURE__ */ r("span", {
 					"aria-hidden": "true",
-					className: e("text-xs font-medium uppercase tracking-wide", g ? "text-primary" : "text-muted-foreground"),
-					children: f
+					className: e("text-xs font-medium uppercase tracking-wide", v ? "text-primary" : "text-muted-foreground"),
+					children: g
 				}),
 				/* @__PURE__ */ r("span", {
 					"aria-hidden": "true",
 					className: "text-base md:text-lg font-semibold text-foreground leading-none",
-					children: h
+					children: _
 				}),
 				/* @__PURE__ */ r(n, {
 					level: o.availability,
@@ -99,10 +100,11 @@ function h({ date: o, isSelected: s, onSelect: l, shouldReduce: u }) {
 		})
 	});
 }
-function g({ availableDates: t, selectedDate: n, onDateSelect: i, className: s }) {
-	let c = o() ?? !1;
+function g({ availableDates: t, selectedDate: n, onDateSelect: i, className: s, ...c }) {
+	let l = o() ?? !1;
 	return /* @__PURE__ */ r("div", {
 		className: e("space-y-3", s),
+		...c,
 		children: /* @__PURE__ */ r(a.div, {
 			role: "radiogroup",
 			"aria-label": "Select delivery date",
@@ -118,7 +120,7 @@ function g({ availableDates: t, selectedDate: n, onDateSelect: i, className: s }
 				date: e,
 				isSelected: n === e.date,
 				onSelect: i,
-				shouldReduce: c
+				shouldReduce: l
 			}, e.date))
 		})
 	});

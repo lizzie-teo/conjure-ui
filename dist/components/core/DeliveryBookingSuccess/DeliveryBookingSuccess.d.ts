@@ -1,5 +1,6 @@
 import type { TimeSlot } from '../DeliveryConfirmation/deliveryFlow.types';
-export interface DeliveryBookingSuccessProps {
+import type { ComponentPropsWithRef } from 'react';
+export interface DeliveryBookingSuccessProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
     bookingRef: string;
     method: 'home-delivery' | 'click-collect';
     scheduledDate: string;
@@ -10,6 +11,5 @@ export interface DeliveryBookingSuccessProps {
     ctaLabel?: string;
     onCta: () => void;
     onAddCalendar?: () => void;
-    className?: string;
 }
-export declare function DeliveryBookingSuccess({ bookingRef, method, scheduledDate, scheduledSlot, pointsEarned, pointsRedeemed, currency, ctaLabel, onCta, onAddCalendar, className, }: DeliveryBookingSuccessProps): import("react").JSX.Element;
+export declare function DeliveryBookingSuccess({ bookingRef, method, scheduledDate, scheduledSlot, pointsEarned, pointsRedeemed, currency, ctaLabel, onCta, onAddCalendar, className, ...props }: DeliveryBookingSuccessProps): import("react").JSX.Element;

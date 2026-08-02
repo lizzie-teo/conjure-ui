@@ -11,18 +11,19 @@ var d = s({
 	toggle: () => {},
 	collapsible: !1
 });
-function f({ children: i, className: o }) {
-	let { isOpen: s, toggle: l, collapsible: f } = c(d);
+function f({ children: i, className: o, ...s }) {
+	let { isOpen: l, toggle: f, collapsible: p } = c(d);
 	return /* @__PURE__ */ r("div", {
-		className: e("flex items-center justify-between gap-2 px-4 md:px-5 py-3 md:py-4", f && "cursor-pointer select-none", o),
-		onClick: f ? l : void 0,
-		role: f ? "button" : void 0,
-		"aria-expanded": f ? s : void 0,
+		...s,
+		className: e("flex items-center justify-between gap-2 px-4 md:px-5 py-3 md:py-4", p && "cursor-pointer select-none", o),
+		onClick: p ? f : void 0,
+		role: p ? "button" : void 0,
+		"aria-expanded": p ? l : void 0,
 		children: [/* @__PURE__ */ n("div", {
 			className: "font-semibold text-sm md:text-base text-foreground",
 			children: i
-		}), f && /* @__PURE__ */ n(a.div, {
-			animate: { rotate: s ? 0 : -90 },
+		}), p && /* @__PURE__ */ n(a.div, {
+			animate: { rotate: l ? 0 : -90 },
 			transition: {
 				duration: .2,
 				ease: [
@@ -42,11 +43,11 @@ function f({ children: i, className: o }) {
 		})]
 	});
 }
-function p({ children: t, className: r }) {
-	let { isOpen: s, collapsible: l } = c(d), u = o();
-	return l ? /* @__PURE__ */ n(i, {
+function p({ children: t, className: r, ...s }) {
+	let { isOpen: l, collapsible: u } = c(d), f = o();
+	return u ? /* @__PURE__ */ n(i, {
 		initial: !1,
-		children: s && /* @__PURE__ */ n(a.div, {
+		children: l && /* @__PURE__ */ n(a.div, {
 			initial: {
 				opacity: 0,
 				height: 0
@@ -60,7 +61,7 @@ function p({ children: t, className: r }) {
 				height: 0
 			},
 			transition: {
-				duration: u ? .01 : .25,
+				duration: f ? .01 : .25,
 				ease: [
 					0,
 					0,
@@ -71,11 +72,13 @@ function p({ children: t, className: r }) {
 			className: "overflow-hidden",
 			children: /* @__PURE__ */ n("div", {
 				className: e("px-4 md:px-5 pb-4 md:pb-5", r),
+				...s,
 				children: t
 			})
 		}, "body")
 	}) : /* @__PURE__ */ n("div", {
 		className: e("px-4 md:px-5 pb-4 md:pb-5", r),
+		...s,
 		children: t
 	});
 }

@@ -6,6 +6,7 @@ import { ThumbsUp, ThumbsDown } from 'lucide-react'
 import { cn } from '../../../lib/utils'
 import { Button } from '../../ui/button'
 import { EntityAvatar, type EntityAvatarProps, TimestampLabel } from '../../primitives'
+import type { ComponentProps, ComponentPropsWithRef } from 'react'
 import type { MotionDivProps } from '../../../lib/prop-types'
 
 type Role = 'user' | 'assistant'
@@ -26,26 +27,20 @@ export interface MessageBubbleProps extends MotionDivProps {
   isReferenced?: boolean
 }
 
-interface ContentProps {
-  children?: React.ReactNode
+interface ContentProps extends ComponentPropsWithRef<'div'> {
   /**
    * AI messages only: pass an array of word tokens to enable word-by-word
    * materialization. Each word fades in with a tiny upward drift as it arrives.
    * When omitted, children renders normally.
    */
   words?: string[]
-  className?: string
 }
 
-interface TimestampSubProps {
-  datetime: string
-  className?: string
-}
+type TimestampSubProps = ComponentProps<typeof TimestampLabel>
 
-interface FeedbackRowProps {
+interface FeedbackRowProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   onThumbsUp?: () => void
   onThumbsDown?: () => void
-  className?: string
 }
 
 const EASE_OUT = [0, 0, 0.2, 1] as const
@@ -72,7 +67,7 @@ const BURST_PARTICLES = [
   { angle: 260, distance: 35 },
 ]
 
-function Content({ children, words, className }: ContentProps) {
+function Content({ children, words, className, ...props }: ContentProps) {
   const { role } = useContext(BubbleContext)
   const shouldReduce = useReducedMotion()
   const isUser = role === 'user'
@@ -87,6 +82,7 @@ function Content({ children, words, className }: ContentProps) {
           : 'bg-muted text-foreground shadow-[var(--shadow-bubble)]',
         className
       )}
+      {...props}
     >
       {useWordReveal ? (
         shouldReduce ? (
@@ -123,16 +119,22 @@ function Avatar({ size = 'sm', ...props }: EntityAvatarProps) {
   return <EntityAvatar size={size} isGenerating={isGenerating} {...props} />
 }
 
-function Timestamp({ datetime, className }: TimestampSubProps) {
+function Timestamp({ className, ...props }: TimestampSubProps) {
   return (
     <TimestampLabel
-      datetime={datetime}
       className={cn('text-xs mt-0.5 opacity-60', className)}
+      {...props}
     />
   )
 }
 
-function FeedbackRow({ onThumbsUp, onThumbsDown, className }: FeedbackRowProps) {
+function FeedbackRow({
+  onThumbsUp,
+  onThumbsDown,
+  className,
+  'aria-label': ariaLabel = 'Message feedback',
+  ...props
+}: FeedbackRowProps) {
   const [burst, setBurst] = useState(false)
   const [shaking, setShaking] = useState(false)
   const shouldReduce = useReducedMotion()
@@ -150,7 +152,13 @@ function FeedbackRow({ onThumbsUp, onThumbsDown, className }: FeedbackRowProps) 
   }
 
   return (
-    <div className={cn('flex gap-0.5 mt-0.5', className)} role="group" aria-label="Message feedback">
+    <div
+      // Spread first: the row owns its `role="group"` a11y contract.
+      {...props}
+      className={cn('flex gap-0.5 mt-0.5', className)}
+      role="group"
+      aria-label={ariaLabel}
+    >
       <div className="relative inline-flex">
         <AnimatePresence>
           {burst && !shouldReduce && BURST_PARTICLES.map((p, i) => {
