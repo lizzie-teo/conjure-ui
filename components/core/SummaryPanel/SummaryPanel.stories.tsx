@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { PriceDisplay } from '@/components/primitives'
 import { DetailList } from '../DetailList/DetailList'
 import { SummaryPanel } from './SummaryPanel'

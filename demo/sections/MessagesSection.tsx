@@ -37,7 +37,7 @@ export function MessagesSection() {
 
         <MessageBubble role="user">
           <div className="flex flex-col gap-1 items-end">
-            <MessageBubble.Content>What's the cheapest option?</MessageBubble.Content>
+            <MessageBubble.Content>What’s the cheapest option?</MessageBubble.Content>
             <MessageBubble.Timestamp datetime={PAST(60_000)} />
           </div>
         </MessageBubble>

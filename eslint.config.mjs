@@ -19,7 +19,33 @@ const eslintConfig = defineConfig([
     "dist/**",
     "storybook-static/**",
   ]),
-  ...storybook.configs["flat/recommended"]
+  ...storybook.configs["flat/recommended"],
+  {
+    // `_`-prefixed names are the conventional "intentionally unused" marker, and
+    // `{ image: _img, ...rest }` is how we strip keys from an object — both are
+    // deliberate, not dead code.
+    files: ["**/*.{ts,tsx}"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": ["warn", {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+        ignoreRestSiblings: true,
+      }],
+    },
+  },
+  {
+    // Node CLI tooling — CommonJS is correct here, and the repo is not "type": "module".
+    files: ["scripts/**/*.js"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
+  {
+    // This is a published library, not a Next app. `next/image` is unavailable to
+    // consumers — `next` is a devDependency — so plain <img> is the correct element
+    // and this rule does not apply to shipped components or the Vite demo harness.
+    files: ["components/**/*.tsx", "demo/**/*.tsx"],
+    rules: { "@next/next/no-img-element": "off" },
+  },
 ]);
 
 export default eslintConfig;

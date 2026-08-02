@@ -1,6 +1,6 @@
 'use client'
 
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { MessageBubble } from '@/components/core/MessageBubble/MessageBubble'
 import { MediaCard } from '@/components/core/MediaCard/MediaCard'
 import { ActionStrip } from '@/components/core/ActionStrip/ActionStrip'
@@ -129,7 +129,7 @@ export const CardStackWhenToUse: Story = {
 
       <ChatShell botName="Insurance Assistant">
         <User>Compare health cover for a family of 4</User>
-        <Bot>Based on your answers I'd recommend the Gold plan — tap the stack to compare all three:</Bot>
+        <Bot>Based on your answers I’d recommend the Gold plan — tap the stack to compare all three:</Bot>
         <CardStack>
           {[
             {

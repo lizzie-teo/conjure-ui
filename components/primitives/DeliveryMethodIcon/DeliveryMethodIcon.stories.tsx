@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { DeliveryMethodIcon } from './DeliveryMethodIcon'
 
 const meta = {

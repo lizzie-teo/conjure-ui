@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { AnimatePresence } from 'motion/react'
 import { Button } from '@/components/ui/button'
 import { TypingIndicator } from './TypingIndicator'

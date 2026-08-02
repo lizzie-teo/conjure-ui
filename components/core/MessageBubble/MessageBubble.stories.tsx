@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { AnimatePresence, motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
 import { MessageBubble } from './MessageBubble'
@@ -193,7 +193,7 @@ export const Conversation: Story = {
 
         <MessageBubble role="user">
           <div className="flex flex-col gap-1 items-end">
-            <MessageBubble.Content>What's the cheapest option?</MessageBubble.Content>
+            <MessageBubble.Content>What’s the cheapest option?</MessageBubble.Content>
             <MessageBubble.Timestamp datetime={new Date(Date.now() - 60000).toISOString()} />
           </div>
         </MessageBubble>
@@ -277,7 +277,7 @@ export const ReferencedGlow: Story = {
           <MessageBubble.Avatar fallback="AI" />
           <div className="flex flex-col gap-1">
             <MessageBubble.Content>
-              Here's what I'd add to your cart for pasta carbonara.
+              Here’s what I’d add to your cart for pasta carbonara.
             </MessageBubble.Content>
             <MessageBubble.Timestamp datetime={new Date(Date.now() - 120000).toISOString()} />
           </div>

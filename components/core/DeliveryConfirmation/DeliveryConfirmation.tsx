@@ -1,8 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'motion/react'
-import { Pencil, CheckCircle2 } from 'lucide-react'
-import { DetailList } from '../DetailList/DetailList'
+import { Pencil } from 'lucide-react'
 import { ActionStrip } from '../ActionStrip/ActionStrip'
 import { DeliveryMethodIcon } from '../../primitives/DeliveryMethodIcon/DeliveryMethodIcon'
 import { AddressTile } from '../../primitives/AddressTile/AddressTile'

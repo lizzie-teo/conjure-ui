@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { OrderStatusCard } from './OrderStatusCard'
 import type { OrderStatusStep } from './OrderStatusCard'
 

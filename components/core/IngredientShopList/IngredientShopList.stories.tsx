@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { IngredientShopList, type ResolvedItem } from './IngredientShopList'
 
 const ITEMS_WITH_SALES = [

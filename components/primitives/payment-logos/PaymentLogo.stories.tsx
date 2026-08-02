@@ -1,6 +1,6 @@
 'use client'
 
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { PaymentLogo } from './PaymentLogo'
 import type { PaymentLogoProps } from './PaymentLogo'
 import { PAYMENT_LOGOS } from './logos'
@@ -48,7 +48,6 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {}
 
 export const Sizes: Story = {
-  name: 'Sizes',
   render: () => (
     <div className="flex items-center gap-6">
       {(['sm', 'md', 'lg'] as const).map((size) => (
@@ -64,6 +63,5 @@ export const Sizes: Story = {
 }
 
 export const AllLogos: Story = {
-  name: 'All Logos',
   render: () => <LogoGrid />,
 }

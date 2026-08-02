@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { BankLogo } from './BankLogo'
 import { BANK_LOGOS } from '../bank-logos/logos'
 
@@ -181,7 +181,6 @@ export const Sizes: Story = {
 }
 
 export const AllLogos: Story = {
-  name: 'All Logos',
   parameters: { layout: 'fullscreen' },
   render: () => <RegionBrowser />,
 }

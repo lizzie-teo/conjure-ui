@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
 import { PaymentMethodTile } from './PaymentMethodTile'
 import { PAYMENT_LOGOS } from '../payment-logos/logos'
@@ -24,12 +24,10 @@ export const Card: Story = {
 }
 
 export const ApplePay: Story = {
-  name: 'Apple Pay',
   args: { type: 'apple-pay', label: 'Apple Pay' },
 }
 
 export const GooglePay: Story = {
-  name: 'Google Pay',
   args: { type: 'google-pay', label: 'Google Pay' },
 }
 

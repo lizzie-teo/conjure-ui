@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ChatWidget } from './ChatWidget'
 import { THREAD_REF_MOCK } from './mockData'
 import { ComparisonCard } from '../../core/ComparisonCard/ComparisonCard'

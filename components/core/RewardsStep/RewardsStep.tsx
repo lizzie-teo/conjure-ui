@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from 'motion/react'
 import { Star, Sparkles } from 'lucide-react'
 import { DetailList } from '../DetailList/DetailList'
 import { SelectionGroup } from '../SelectionGroup/SelectionGroup'
-import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { cn } from '../../../lib/utils'
 import type { RewardsSummary, SubstitutionPreference } from '../DeliveryConfirmation/deliveryFlow.types'
 import type { ComponentPropsWithRef } from 'react'
@@ -176,7 +175,7 @@ function SubstitutionSelector({
           Notify me first
         </SelectionGroup.Option>
         <SelectionGroup.Option value="deny" description="Remove the item instead">
-          Don't substitute
+          Don’t substitute
         </SelectionGroup.Option>
       </SelectionGroup>
     </div>

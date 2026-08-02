@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
 import { PaymentConfirmSheet } from './PaymentConfirmSheet'
 
@@ -99,7 +99,6 @@ export const ApplePayWaiting: Story = {
 // ---------------------------------------------------------------------------
 
 export const GooglePay: Story = {
-  name: 'Google Pay',
   args: {
     paymentMethod: { type: 'google-pay', label: 'Google Pay' },
     description: 'Order #28401',

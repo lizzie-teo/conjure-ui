@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ApplePayButton } from './ApplePayButton'
 
 const wrapper = (Story: React.ComponentType) => (
@@ -42,7 +42,6 @@ export const MarkOnly: Story = {
 }
 
 export const Disabled: Story = {
-  name: 'Disabled',
   args: { label: 'Pay with', disabled: true },
 }
 

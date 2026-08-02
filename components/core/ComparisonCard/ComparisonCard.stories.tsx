@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ComparisonCard } from './ComparisonCard'
 
 const meta = {
@@ -113,7 +113,7 @@ export const Interactive: Story = {
     return (
       <div className="flex flex-col gap-3">
         <p className="text-xs text-muted-foreground px-1">
-          Select a claims history pill to see bars update. Expand "What if?" for scenario modelling.
+          Select a claims history pill to see bars update. Expand “What if?” for scenario modelling.
         </p>
         <ComparisonCard
           title="Why Comprehensive?"

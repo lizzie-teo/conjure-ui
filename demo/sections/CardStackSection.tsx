@@ -57,7 +57,7 @@ export function CardStackSection() {
 
       <div className="max-w-sm">
         <p className="text-xs md:text-sm text-muted-foreground mb-4">
-          Tap the stack to expand. Tap "Details" to open the sheet.
+          Tap the stack to expand. Tap “Details” to open the sheet.
         </p>
         <CardStack>
           {FLIGHTS.map((flight) => (

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { RecipeCard, type ScaledIngredient } from './RecipeCard'
 
 const CARBONARA_INGREDIENTS = [

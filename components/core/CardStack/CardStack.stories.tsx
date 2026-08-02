@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { StatusBadge } from '@/components/primitives'
 import { PriceDisplay } from '@/components/primitives'
 import { ActionStrip } from '../ActionStrip/ActionStrip'
@@ -243,7 +243,7 @@ export const CollapseAfterSelect: Story = {
 
     return (
       <div className="max-w-sm p-4 flex flex-col gap-3">
-        <p className="text-xs text-muted-foreground">Clicking "Select plan" collapses the stack via controlled state.</p>
+        <p className="text-xs text-muted-foreground">Clicking “Select plan” collapses the stack via controlled state.</p>
         <CardStack expanded={open} onExpandChange={setOpen}>
           {plans.map((plan) => (
             <CardStack.Item key={plan.name}>
@@ -310,7 +310,7 @@ export const WithDetailsSheet: Story = {
 
     return (
       <div className="max-w-sm p-4">
-        <p className="text-xs text-muted-foreground mb-4">Click the stack to expand, then tap "View details"</p>
+        <p className="text-xs text-muted-foreground mb-4">Click the stack to expand, then tap “View details”</p>
         <CardStack>
           {flights.map((f) => (
             <CardStack.Item key={f.flight}>
