@@ -1,85 +1,145 @@
 # Launch checklist
 
-What is left to make Conjure UI publicly reachable — the Storybook at `ui.lizzieteo.com`, the
-package on npm, and the case study on the portfolio. State verified 2026-08-02.
+What is left to make Conjure UI publicly reachable — the package on npm, the Storybook on GitHub
+Pages, and the case study on the portfolio. State verified 2026-08-02.
 
-Everything in the repo is done: the site is retired, Figma Make is gone, the Pages workflow and the
-release pipeline are written and committed. What remains is almost entirely **settings and DNS**,
-which is why none of it could be done from the repo.
+**The repo itself is finished.** The site is retired, Figma Make is gone, the package is fixed and
+verified against a real consumer install, and the Pages and release workflows are written, committed
+and pushed. Everything below is either a credential, a settings toggle, or work in a different repo
+— which is why none of it can be done from here.
+
+| # | What | Blocked on | Blocks |
+| --- | --- | --- | --- |
+| 1 | Publish 0.2.0 to npm | `NPM_TOKEN` secret | README install instructions being true |
+| 2 | Enable GitHub Pages | one API call or a Settings toggle | the Storybook being reachable at all |
+| 3 | Chromatic token | `CHROMATIC_PROJECT_TOKEN` secret | nothing — it gates no other workflow |
+| 4 | Custom domain | the Squarespace → Namecheap transfer | nothing; `github.io` works meanwhile |
+| 5 | Case study | nothing — it is just unwritten | the portfolio link in the README |
+
+1 and 2 are independent of each other and of everything else. Do them in either order.
 
 ---
 
-## 1. Blocking — two workflows are failing right now
+## 1. Publish 0.2.0 to npm
 
-### Enable GitHub Pages
+`npm view @lizzie-teo/conjure-ui` currently 404s. The package has never been published, so the
+install instructions and the npm link in `README.md` describe something that does not exist yet.
 
-`.github/workflows/pages.yml` runs on every push to `main` and fails at the `configure-pages` step:
+`.github/workflows/release.yml` does the whole job on a version tag; it only needs the token.
+
+```bash
+gh secret set NPM_TOKEN                              # npm automation token, publish rights
+npm version 0.2.0 --allow-same-version -m "Release v%s"
+git push --follow-tags                               # pushing the tag is what ships
+```
+
+**Use `0.2.0`, not `npm version patch`.** `package.json` is already at 0.2.0 and `CHANGELOG.md`
+documents that version. A `patch` bump would produce 0.2.1, which has no changelog heading — the
+release would still publish, but its GitHub Release body would read "No CHANGELOG entry for 0.2.1".
+Version, tag and changelog heading have to agree. `--allow-same-version` is what lets `npm version`
+tag the version already in the file rather than bumping past it.
+
+Let `npm version` create the tag rather than tagging by hand — the workflow refuses to run if the
+tag disagrees with `package.json`.
+
+What the tag sets off, in order: version check → `npm ci` → typecheck → lint → story suite in
+Chromium → clean rebuild → entry-point check → **consumer smoke test** → publish → GitHub Release.
+The smoke test is the last gate and the only one that judges the artifact rather than the repo; it
+packs the tarball, installs it in a throwaway project outside the checkout, and imports it as a
+stranger would.
+
+`publishConfig` is `{"access":"public","provenance":true}`. Public because a scoped package
+otherwise defaults to restricted and 402s on first publish; provenance because it links the tarball
+back to the commit that built it. **Provenance also means a local `npm publish` will fail** — it
+needs the `id-token: write` permission only CI has. That is deliberate. If you ever need to publish
+from your laptop, drop that one line first.
+
+**Verify:**
+
+```bash
+npm view @lizzie-teo/conjure-ui version              # returns 0.2.0
+gh release view v0.2.0                               # body is the CHANGELOG section
+```
+
+---
+
+## 2. Enable GitHub Pages
+
+`.github/workflows/pages.yml` runs on every push to `main` and has been failing at `configure-pages`
+since it was added:
 
 ```
 Get Pages site failed. Please verify that the repository has Pages enabled
 and configured to build using GitHub Actions
 ```
 
-**Fix:** repo → Settings → Pages → Source: **GitHub Actions**. Then re-run the workflow
-(`gh run rerun <id>`, or push anything).
-
-Or from the CLI, without opening Settings at all:
+**Fix, from the CLI:**
 
 ```bash
 gh api -X POST repos/lizzie-teo/conjure-ui/pages -f build_type=workflow
+gh workflow run pages.yml          # or just push anything
 ```
+
+Or repo → Settings → Pages → Source: **GitHub Actions**.
 
 **`enablement: true` is not a way around this — tried on 2 Aug, reverted.**
 `actions/configure-pages@v5` does take that input, but creating a Pages site needs admin rights that
 `GITHUB_TOKEN` does not have and that workflow `permissions:` cannot grant. It fails with
 `Resource not accessible by integration`, which is a worse error than the plain "verify that the
-repository has Pages enabled" it replaces. Self-enabling would mean storing a PAT for a one-time
-setup step. The step in `pages.yml` now carries a comment saying so.
+repository has Pages enabled" it replaces, because it hides what to actually do. Self-enabling would
+mean storing a PAT for a step that runs once in the repo's life. `pages.yml` carries a comment
+saying so.
 
-**Verify:** `gh api repos/lizzie-teo/conjure-ui/pages` returns a JSON body instead of a 404, and the
-Deploy Storybook run goes green.
+**Verify:** `gh api repos/lizzie-teo/conjure-ui/pages` returns JSON instead of a 404, the Deploy
+Storybook run goes green, and <https://lizzie-teo.github.io/conjure-ui/> loads with a deep link
+(`?path=/story/...`) surviving a hard refresh.
 
-### Set the Chromatic project token
+---
+
+## 3. Chromatic project token
 
 Unrelated to any of this work — Chromatic has been failing since 26 July with `✖ Missing project
 token`. `gh secret list` shows no secrets on the repo at all.
 
-**Fix:** get the token from the Chromatic project's Manage screen, then:
-
 ```bash
-gh secret set CHROMATIC_PROJECT_TOKEN
+gh secret set CHROMATIC_PROJECT_TOKEN   # from the Chromatic project's Manage screen
 ```
+
+Lowest stakes on the list. Chromatic gates nothing: CI, Pages and Release all run independently of
+it, and a visual diff does not block a deploy.
 
 ---
 
-## 2. The custom domain — deferred, and that is fine
+## 4. The custom domain — parked
 
-**Status: parked on 2 Aug.** `lizzieteo.com` was bought through Squarespace and is going to be moved
-off it, so no DNS record is being added there in the meantime.
+**Status: parked on 2 Aug.** `lizzieteo.com` was bought through Squarespace and is being transferred
+to Namecheap. No DNS record is going into Squarespace in the meantime, so `ui.lizzieteo.com` waits
+for the transfer to complete.
 
-Nothing else waits on this. Pages serves at `lizzie-teo.github.io/conjure-ui/`, and Storybook works
+Nothing else waits on it. Pages serves at `lizzie-teo.github.io/conjure-ui/`, and Storybook works
 there unchanged — `build-storybook` emits relative asset paths (`./assets/…`), so a project subpath
 needs no `base` config. The earlier note claiming the domain root was *why* no base path was needed
 had the causation backwards.
 
-What changed to park it:
+What was changed to park it:
 
-- `public/CNAME` is deleted, and with it the `public/` folder. **This is the load-bearing part.**
+- **`public/CNAME` is deleted, and with it the `public/` folder. This is the load-bearing part.**
   Publishing that file before the DNS record exists makes Pages claim `ui.lizzieteo.com` and 301 the
   working `github.io` URL to a domain that does not resolve — the site goes down rather than moving.
   Removing the `../public` entry from `staticDirs` was **not** enough on its own: Vite's default
   `publicDir` copies `public/` regardless, so the file kept shipping. That staticDirs entry was
-  redundant all along and is now gone too.
+  redundant all along and is gone too.
 - `README.md`, `CHANGELOG.md`, `package.json` `homepage`, `CLAUDE.md` and the designer guide all
   point at the `github.io` URL.
 
 **Those links do not need changing back.** GitHub 301s the `github.io` URL to the custom domain once
 one is set, so everything written now keeps working. That matters for `README.md` especially, which
-is the npm landing page and is frozen at publish time for every released version.
+is the npm landing page and is frozen at publish time for every released version — 0.2.0's README
+can never be edited after the fact.
 
-### When the domain has moved
+### When the transfer has completed
 
-1. At the new DNS host, add: `CNAME` · host `ui` · value `lizzie-teo.github.io`.
+1. At Namecheap, add: `CNAME` · host `ui` · value `lizzie-teo.github.io`.
 2. Recreate `public/CNAME` containing exactly `ui.lizzieteo.com`, and push. No config change —
    Vite's `publicDir` picks it up.
 3. Repo → Settings → Pages → Custom domain → `ui.lizzieteo.com`. Tick **Enforce HTTPS** once the
@@ -93,31 +153,13 @@ curl -sI https://lizzie-teo.github.io/conjure-ui/ | head -3   # should now 301
 
 Then open a deep link (`?path=/story/...`) and hard-refresh it.
 
----
-
-## 3. Publish to npm
-
-`npm view @lizzie-teo/conjure-ui` currently 404s — the package has never been published, so the
-install instructions and the npm badge in `README.md` describe something that does not exist yet.
-
-`.github/workflows/release.yml` does the whole job on a version tag; it just needs the token.
-
-```bash
-gh secret set NPM_TOKEN          # an npm automation token with publish rights
-npm version patch                # writes package.json + creates the tag
-git push --follow-tags           # pushing the tag is what ships
-```
-
-`publishConfig` is already `{"access":"public","provenance":true}`, so a scoped package publishes
-publicly and the tarball is linked back to the commit. The workflow refuses to publish if the tag
-disagrees with `package.json`, so let `npm version` create the tag rather than tagging by hand.
-
-**Verify:** `npm view @lizzie-teo/conjure-ui version` returns the version, and a GitHub Release
-appears with the CHANGELOG section as its body.
+Optional afterwards: switch the docs back to `ui.lizzieteo.com` for the nicer URL. Purely cosmetic —
+the redirect means nothing breaks either way, and the published 0.2.0 README will keep pointing at
+`github.io` regardless.
 
 ---
 
-## 4. The case study, in the portfolio repo
+## 5. The case study, in the portfolio repo
 
 Do this in a session rooted at `~/Development/portfolio`, so that repo's `CLAUDE.md`,
 `.docs/style-rules.md`, `.docs/token-playbook.md`, and its `fd` / `design-crit` / `writer` agents
@@ -173,16 +215,22 @@ that fails on a single lint warning.
 The earlier draft of that chapter was built on Figma Make compatibility. That is gone; the shadcn
 naming convention survives on its own terms.
 
+Link the Storybook as `lizzie-teo.github.io/conjure-ui` unless the domain has landed by then.
+
 ---
 
-## 5. Loose ends and open decisions
+## 6. Decided — do not reopen without a reason
 
-**`app/api/chat/route.ts`** — the last thing under `app/` that isn't shipped CSS. Nothing in
-`demo/` or Storybook calls it, and it is the only reason `npm run next` and `build:next` still
-exist. Deleting it would also orphan `@anthropic-ai/sdk` in devDependencies and an externals entry
-in `vite.lib.config.ts`. Left in place deliberately; your call whether it earns its keep.
+**`app/api/chat/route.ts` stays.** It is the last thing under `app/` that is not shipped CSS, and
+nothing in `demo/` or Storybook calls it. Deleting it looks like it would remove the Next.js surface
+from the repo. **It would not.** `next` is a hard peer dependency of `@storybook/nextjs-vite`, the
+Storybook framework this repo runs on, and `eslint.config.mjs` is built on `eslint-config-next/core-web-vitals`
+and `/typescript` — the whole lint ruleset. Next stays either way. Deleting the route would buy one
+devDependency (`@anthropic-ai/sdk`) and three unused scripts, at the cost of a working local chat
+endpoint. Dropping Next properly means switching Storybook to `@storybook/react-vite` and rewriting
+the lint config — a project, not a cleanup.
 
-**~~Stale docs in `.docs/plans/`~~ — done.** Eight plan docs were deleted: `prompt-figma-make` and
+**Stale docs in `.docs/plans/` — cleared.** Eight plan docs were deleted: `prompt-figma-make` and
 `playbook-site.md` (Figma Make and the retired site), plus six whose subject components were pruned
 and no longer exist — `ingredient-shop-list.md`, `recipe-card.md`, `makeup-shopping-journey.md`,
 `iga-butter-chicken-journey.md`, `provider-comparison-bloom.md`, `provider-comparison-bubbles.md`.
@@ -191,9 +239,9 @@ and `insurance-comparison-chat-ui.md` were kept — every component the first on
 and the second is design reasoning not tied to a deleted component. All recoverable from git history.
 
 `public/` also lost the five stock `create-next-app` SVGs (`file`, `globe`, `next`, `vercel`,
-`window`), which were referenced nowhere and were being copied into the published Storybook by
-`staticDirs`. It now holds only `CNAME`.
+`window`), which were referenced nowhere and were being copied into the published Storybook. The
+folder is now gone entirely — see section 4.
 
-**`README.md` links ahead of reality.** It points at `ui.lizzieteo.com`, the npm package, and
-`lizzieteo.com/work/conjure-ui`. All three are correct destinations; none of them resolve yet. They
-start working as sections 2, 3, and 4 land.
+**`README.md` links ahead of reality.** It points at the Storybook, the npm package, and
+`lizzieteo.com/work/conjure-ui`. All three are correct destinations; none resolve yet. They start
+working as sections 1, 2 and 5 land.
