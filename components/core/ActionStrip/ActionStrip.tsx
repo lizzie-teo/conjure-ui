@@ -26,7 +26,7 @@ function Primary({ className, children, ...props }: ActionProps) {
       <Button
         variant="default"
         size="default"
-        className={cn('w-full', className)}
+        className={cn('w-full h-12 md:h-10 pointer-coarse:min-h-11', className)}
         {...props}
       >
         {children}
@@ -48,7 +48,7 @@ function Secondary({ className, children, ...props }: ActionProps) {
       <Button
         variant="outline"
         size="default"
-        className={cn('w-full', className)}
+        className={cn('w-full h-12 md:h-10 pointer-coarse:min-h-11', className)}
         {...props}
       >
         {children}

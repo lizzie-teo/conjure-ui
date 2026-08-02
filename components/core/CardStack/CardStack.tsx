@@ -110,15 +110,24 @@ export function CardStack({
       }
       onClick={!isExpanded ? () => setExpanded(true) : undefined}
       onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
-      aria-expanded={isExpanded}
-      aria-label={isExpanded ? 'Card options expanded' : 'Tap to expand card options'}
+      // The root is only a button while collapsed. Once expanded it is a plain
+      // container — keeping role="button" there would nest the cards' own
+      // buttons inside a focusable button, which screen readers flatten into a
+      // single unlabelled control. Escape still collapses: the handler above
+      // catches keydowns bubbling from whatever card child holds focus.
+      role={!isExpanded ? 'button' : undefined}
+      tabIndex={!isExpanded ? 0 : undefined}
+      aria-expanded={!isExpanded ? false : undefined}
+      aria-label={!isExpanded ? 'Expand card options' : undefined}
     >
       {capped.map((child, i) => (
         <motion.div
           key={i}
           ref={i === 0 ? firstItemRef : undefined}
+          // Collapsed, the stack reads as one control, so its contents must
+          // leave the tab order and the a11y tree — otherwise every button
+          // inside every hidden card stays reachable behind the top card.
+          inert={!isExpanded ? true : undefined}
           className="absolute inset-x-0 top-0"
           style={{ zIndex: count - i }}
           animate={{

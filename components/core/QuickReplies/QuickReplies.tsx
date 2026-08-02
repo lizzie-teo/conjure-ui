@@ -54,7 +54,7 @@ export function QuickReplies({ options, onSelect, className, ...props }: QuickRe
             variant="outline"
             size="sm"
             onClick={() => onSelect(option)}
-            className="rounded-full whitespace-nowrap"
+            className="rounded-full whitespace-nowrap h-11 md:h-8 pointer-coarse:min-h-11"
           >
             {option}
           </Button>

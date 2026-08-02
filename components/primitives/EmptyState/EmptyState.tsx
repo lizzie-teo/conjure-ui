@@ -35,7 +35,7 @@ export function EmptyState({ icon, heading, body, action, className, ...props }:
         <Button
           variant="outline"
           onClick={action.onClick}
-          className="h-9 md:h-10 mt-1"
+          className="h-12 md:h-10 pointer-coarse:min-h-11 mt-1"
         >
           {action.label}
         </Button>

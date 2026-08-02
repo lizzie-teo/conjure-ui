@@ -62,7 +62,7 @@ import _singapore_standardchartered from './singapore/standardchartered.png'
 
 // Normalises imports across environments:
 // Next.js/webpack returns StaticImageData ({ src, width, height }) for images.
-// Vite (Storybook) and Figma Make return the URL string directly.
+// Vite (Storybook, and most consumer bundlers) returns the URL string directly.
 function u(mod: unknown): string {
   if (typeof mod === 'string') return mod
   const m = mod as Record<string, unknown>

@@ -106,7 +106,7 @@ function PromoField({ onApply, appliedCode, className, ...props }: PromoFieldPro
           placeholder="Promo code"
           aria-label="Promo code"
           className={cn(
-            'flex-1 h-12 md:h-10 rounded-md border border-border bg-background',
+            'flex-1 h-12 md:h-10 pointer-coarse:min-h-11 rounded-md border border-border bg-background',
             'px-3 text-sm text-foreground placeholder:text-muted-foreground',
             'outline-none focus:ring-2 focus:ring-ring focus:border-ring',
             'transition-shadow duration-150'
@@ -121,7 +121,7 @@ function PromoField({ onApply, appliedCode, className, ...props }: PromoFieldPro
             }
           }}
           disabled={!code.trim()}
-          className="h-12 md:h-10 px-4 shrink-0"
+          className="h-12 md:h-10 pointer-coarse:min-h-11 px-4 shrink-0"
         >
           Apply
         </Button>
@@ -189,7 +189,7 @@ export function CartSummary({
       )}
 
       <div className="px-4 md:px-5 pb-4 md:pb-5">
-        <Button onClick={onCheckout} className="w-full h-12 md:h-10">
+        <Button onClick={onCheckout} className="w-full h-12 md:h-10 pointer-coarse:min-h-11">
           Proceed to review
         </Button>
       </div>

@@ -1,0 +1,50 @@
+name: Deploy Storybook
+
+on:
+  push:
+    branches: [main]
+  # Lets a broken deploy be retried without an empty commit.
+  workflow_dispatch:
+
+# Pages allows one concurrent deployment. Unlike CI, an in-flight deploy is not
+# cancelled — a half-finished upload would leave the published site inconsistent.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # As in ci.yml, `npm ci` triggers `prepare`, which runs the library build.
+      - run: npm ci
+
+      - uses: actions/configure-pages@v5
+
+      # `staticDirs` in .storybook/main.ts copies public/ into the output, which
+      # is how public/CNAME reaches the published root and holds the custom
+      # domain across deploys.
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: storybook-static
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

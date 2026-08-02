@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { Button } from '../../ui/button'
 import { ApplePaySheet } from './ApplePaySheet'
 import { CreditCardGold, CreditCardSilver, CreditCardBronze } from '../../primitives/Apple-objects/CreditCardIcons'
-import { DoubleClickToPay } from '../DoubleClickToPay/DoubleClickToPay'
 
 const DEFAULTS = {
   merchantName: 'Acme Store',
@@ -171,17 +170,3 @@ export const LongAddress: Story = {
   ),
 }
 
-// Double-click prompt + Apple Pay sheet — full iPhone payment context
-export const WithDoubleClickPrompt: Story = {
-  name: 'With double-click prompt',
-  args: { open: true },
-  parameters: { layout: 'fullscreen' },
-  render: (args) => (
-    <div className="min-h-screen bg-zinc-900 relative">
-      <div className="flex items-center justify-end pt-24">
-        <DoubleClickToPay />
-      </div>
-      <ApplePaySheet {...args} onClose={() => {}} onConfirm={() => {}} />
-    </div>
-  ),
-}

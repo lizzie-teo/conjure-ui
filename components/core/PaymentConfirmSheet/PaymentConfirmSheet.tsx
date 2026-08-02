@@ -213,7 +213,7 @@ export function PaymentConfirmSheet({
             size="sm"
             onClick={onChangeMethod}
             disabled={loading}
-            className="shrink-0 h-12 md:h-10 px-3 text-xs md:text-sm text-muted-foreground hover:text-foreground"
+            className="shrink-0 h-12 md:h-10 pointer-coarse:min-h-11 px-3 text-xs md:text-sm text-muted-foreground hover:text-foreground"
           >
             Change
           </Button>

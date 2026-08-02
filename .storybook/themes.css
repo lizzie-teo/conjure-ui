@@ -6,6 +6,11 @@
 
    Each theme overrides only TIER 1 (brand) tokens. Six tokens is all it takes
    to fully rebrand: font, primary pair, background tint, radius, ring.
+
+   The themes below that name Inter rely on it being loaded by preview-head.html
+   — Storybook-only, exactly as a consumer would load their own brand font. With
+   no theme class applied, stories render in the system stack, which is what the
+   package ships.
 ────────────────────────────────────────────────────────────────────────────── */
 
 /* Travel / Airlines ── sky blue, slightly rounded, airy background */

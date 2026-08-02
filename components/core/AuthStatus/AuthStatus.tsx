@@ -8,21 +8,17 @@ import type { MotionDivProps } from '../../../lib/prop-types'
 
 export interface AuthStatusProps extends Omit<MotionDivProps, 'children'> {
   state: 'success' | 'error'
+  /**
+   * The outcome, as your brand says it. Required rather than defaulted: this
+   * package ships no English copy, and a wrong-language status on an auth step
+   * is worse than none.
+   */
+  label: string
+  /** Optional supporting line under the label. */
   message?: string
 }
 
-const defaults = {
-  success: {
-    label: 'Identity verified',
-    message: "You're all set — proceeding to payment.",
-  },
-  error: {
-    label: 'Not verified',
-    message: "We couldn't verify your identity. Please try again.",
-  },
-}
-
-export function AuthStatus({ state, message, className, ...props }: AuthStatusProps) {
+export function AuthStatus({ state, label, message, className, ...props }: AuthStatusProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -47,14 +43,9 @@ export function AuthStatus({ state, message, className, ...props }: AuthStatusPr
         ) : (
           <X className="size-4 text-destructive shrink-0" />
         )}
-        <StatusBadge
-          label={defaults[state].label}
-          variant={state === 'success' ? 'success' : 'error'}
-        />
+        <StatusBadge label={label} variant={state === 'success' ? 'success' : 'error'} />
       </div>
-      <p className="text-xs md:text-sm text-muted-foreground">
-        {message ?? defaults[state].message}
-      </p>
+      {message && <p className="text-xs md:text-sm text-muted-foreground">{message}</p>}
     </motion.div>
   )
 }

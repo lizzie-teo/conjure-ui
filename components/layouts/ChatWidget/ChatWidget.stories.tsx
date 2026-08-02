@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ChatWidget } from './ChatWidget'
 import { THREAD_REF_MOCK } from './mockData'
-import { ComparisonCard } from '../../core/ComparisonCard/ComparisonCard'
+import { CompareTable } from '../../core/CompareTable/CompareTable'
 import { DetailList } from '../../core/DetailList/DetailList'
-import { RecipeCard } from '../../core/RecipeCard/RecipeCard'
+import { RecipeCard } from '../../core/BundleCard/bindings'
 
 const meta = {
   title: 'Layouts/ChatWidget',
@@ -57,8 +57,8 @@ export const ThreadReferenceGlow: Story = {
   args: { mockData: THREAD_REF_MOCK },
 }
 
-export const RichContentComparisonCard: Story = {
-  name: 'Rich content — ComparisonCard (insurance)',
+export const RichContentCompareTable: Story = {
+  name: 'Rich content — CompareTable (insurance)',
   args: {
     mockData: {
       botName: 'Insurance Assistant',
@@ -71,22 +71,42 @@ export const RichContentComparisonCard: Story = {
           role: 'bot',
           text: "Based on your car's value, Comprehensive saves you money in most claim scenarios. Here's the breakdown:",
           richContent: (
-            <ComparisonCard
-              title="Why Comprehensive?"
-              subtitle="Based on your vehicle value and profile"
-              plans={[
-                { id: 'comp', label: 'Comprehensive' },
-                { id: 'tpp', label: 'Third Party' },
+            <CompareTable
+              columns={[
+                {
+                  id: 'comp',
+                  label: 'Comprehensive',
+                  price: 980,
+                  currency: 'AUD',
+                  attributes: {
+                    excess: '$695',
+                    theft: true,
+                    flood: true,
+                    hail: true,
+                    thirdPartyDamage: true,
+                  },
+                },
+                {
+                  id: 'tpp',
+                  label: 'Third Party',
+                  price: 420,
+                  currency: 'AUD',
+                  attributes: {
+                    excess: '$500',
+                    theft: false,
+                    flood: false,
+                    hail: false,
+                    thirdPartyDamage: true,
+                  },
+                },
               ]}
-              caveats={[
-                { id: 'no-at-fault', label: 'No at-fault claims', planCosts: { comp: 980, tpp: 420 } },
-                { id: 'one-at-fault', label: '1 at-fault claim', planCosts: { comp: 980, tpp: 5200 }, default: true },
-                { id: 'hail', label: 'Hail damage', planCosts: { comp: 980, tpp: 3800 } },
-              ]}
-              scenarios={[
-                { id: 'theft', label: 'Car stolen', insight: "Third Party doesn't cover theft. You'd lose the full market value (~$14,000) with no payout." },
-                { id: 'flood', label: 'Flood damage', insight: 'Comprehensive covers flood. Third Party leaves you covering the repair or replacement out-of-pocket.' },
-              ]}
+              attributeLabels={{
+                excess: 'Excess',
+                theft: 'Theft cover',
+                flood: 'Flood damage',
+                hail: 'Hail damage',
+                thirdPartyDamage: "Other people's cars",
+              }}
             />
           ),
           quickReplies: ['Get a quote', 'See full policy details', 'Ask something else'],
@@ -146,20 +166,24 @@ export const RichContentRecipeCard: Story = {
           text: "Here's the recipe. Tap ingredients to deselect any you already have, then add the rest to your cart:",
           richContent: (
             <RecipeCard
-              title="Pasta Carbonara"
-              prepTime="25 min"
-              difficulty="easy"
-              defaultServings={4}
-              image="https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&h=400&fit=crop"
-              imageAlt="Pasta carbonara in a bowl"
-              ingredients={[
-                { id: 'pasta', name: 'Spaghetti', quantity: 100, unit: 'g' },
-                { id: 'pancetta', name: 'Pancetta', quantity: 50, unit: 'g' },
-                { id: 'eggs', name: 'Eggs (whole)', quantity: 1, unit: 'whole' },
-                { id: 'yolks', name: 'Egg yolks', quantity: 1, unit: 'whole' },
-                { id: 'pecorino', name: 'Pecorino Romano, grated', quantity: 20, unit: 'g' },
-                { id: 'parmesan', name: 'Parmesan, grated', quantity: 10, unit: 'g' },
-              ]}
+              recipe={{
+                id: 'carbonara',
+                name: 'Pasta Carbonara',
+                prepTime: '25 min',
+                difficulty: 'easy',
+                defaultServings: 4,
+                image:
+                  'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&h=400&fit=crop',
+                imageAlt: 'Pasta carbonara in a bowl',
+                ingredients: [
+                  { id: 'pasta', name: 'Spaghetti', quantity: 100, unit: 'g' },
+                  { id: 'pancetta', name: 'Pancetta', quantity: 50, unit: 'g' },
+                  { id: 'eggs', name: 'Eggs (whole)', quantity: 1, unit: 'whole' },
+                  { id: 'yolks', name: 'Egg yolks', quantity: 1, unit: 'whole' },
+                  { id: 'pecorino', name: 'Pecorino Romano, grated', quantity: 20, unit: 'g' },
+                  { id: 'parmesan', name: 'Parmesan, grated', quantity: 10, unit: 'g' },
+                ],
+              }}
             />
           ),
         },

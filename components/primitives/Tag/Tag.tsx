@@ -34,7 +34,7 @@ export function Tag({ label, onRemove, className, ...props }: TagProps) {
           size="icon-xs"
           aria-label={`Remove ${label}`}
           onClick={onRemove}
-          className="size-3.5 md:size-3 rounded-full p-0"
+          className="size-3.5 md:size-3 rounded-full p-0 tap-target"
         >
           <X className="size-2.5" />
         </Button>

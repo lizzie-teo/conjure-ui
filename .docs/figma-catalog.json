@@ -3,11 +3,10 @@
     "figmaFileKey": "lmiDZ6eXQ0p7RPeL1XLAlz",
     "figmaFileName": "ai-chat-shad-cn",
     "figmaFileUrl": "https://www.figma.com/design/lmiDZ6eXQ0p7RPeL1XLAlz/ai-chat-shad-cn",
-    "lastUpdated": "2026-06-08",
-    "note": "All tiers built 2026-06-08, extended 2026-06-08. Tier 1 (16 primitives), Tier 2 (32 core), Tier 3 (4 layouts). All image-capable components have Has Image/Has Media variants.",
+    "lastUpdated": "2026-08-02",
+    "note": "Tier 1 (20 primitives), Tier 2 (25 core), Tier 3 (3 layouts). Library consolidated 2026-08-02: vertical cards collapsed into BundleCard, delivery flow collapsed into SlotPicker. All image-capable components have Has Image/Has Media variants.",
     "description": "Sync state between codebase components and the Figma design file. Update status + nodeId after every Figma build."
   },
-
   "tokens": {
     "cssSource": "app/theme.css",
     "figmaCollection": "Tokens",
@@ -15,22 +14,32 @@
     "status": "synced",
     "notes": "Semantic tokens (Light/Dark) alias Primitives. Full CSS-to-variable mapping in .docs/guidelines/figma-guidelines.md"
   },
-
   "primitives": {
     "Tag": {
       "status": "synced",
       "figmaPage": "Primitives",
       "figmaPageId": "4016:1562",
       "figmaNodeId": "4019:1391",
-      "variants": ["State=Default", "State=Hover"],
-      "props": ["Label (TEXT)", "Has Remove (BOOLEAN)"]
+      "variants": [
+        "State=Default",
+        "State=Hover"
+      ],
+      "props": [
+        "Label (TEXT)",
+        "Has Remove (BOOLEAN)"
+      ]
     },
     "BiometricIndicator": {
       "status": "synced",
       "figmaPage": "Primitives",
       "figmaPageId": "4016:1562",
       "figmaNodeId": "4022:1396",
-      "variants": ["State=Idle", "State=Pending", "State=Success", "State=Error"],
+      "variants": [
+        "State=Idle",
+        "State=Pending",
+        "State=Success",
+        "State=Error"
+      ],
       "props": []
     },
     "ProgressStep": {
@@ -38,127 +47,262 @@
       "figmaPage": "Primitives",
       "figmaPageId": "4016:1562",
       "figmaNodeId": "4023:1397",
-      "variants": ["Status=Pending", "Status=Active", "Status=Complete"],
-      "props": ["Label (TEXT)", "Has Label (BOOLEAN)"]
+      "variants": [
+        "Status=Pending",
+        "Status=Active",
+        "Status=Complete"
+      ],
+      "props": [
+        "Label (TEXT)",
+        "Has Label (BOOLEAN)"
+      ]
     },
     "StatusBadge": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4053:1440", "containerFrameId": "4053:1427",
-      "variants": ["Variant=Default", "Variant=Success", "Variant=Warning", "Variant=Error", "Variant=Info"],
-      "props": ["Label (TEXT)"]
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4053:1440",
+      "containerFrameId": "4053:1427",
+      "variants": [
+        "Variant=Default",
+        "Variant=Success",
+        "Variant=Warning",
+        "Variant=Error",
+        "Variant=Info"
+      ],
+      "props": [
+        "Label (TEXT)"
+      ]
     },
     "PriceDisplay": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4054:1432", "containerFrameId": "4053:1427",
-      "variants": ["Has Strikethrough=False", "Has Strikethrough=True"],
-      "props": ["Amount (TEXT)", "Strikethrough (TEXT)", "Has Strikethrough (BOOLEAN)"]
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4054:1432",
+      "containerFrameId": "4053:1427",
+      "variants": [
+        "Has Strikethrough=False",
+        "Has Strikethrough=True"
+      ],
+      "props": [
+        "Amount (TEXT)",
+        "Strikethrough (TEXT)",
+        "Has Strikethrough (BOOLEAN)"
+      ]
     },
     "TimestampLabel": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4054:1437", "containerFrameId": "4053:1427",
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4054:1437",
+      "containerFrameId": "4053:1427",
       "variants": [],
-      "props": ["Timestamp (TEXT)"]
+      "props": [
+        "Timestamp (TEXT)"
+      ]
     },
     "AvailabilityDot": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4055:1445", "containerFrameId": "4053:1427",
-      "variants": ["Level=Available, Show Label=False", "Level=Available, Show Label=True", "Level=Limited, Show Label=False", "Level=Limited, Show Label=True", "Level=Unavailable, Show Label=False", "Level=Unavailable, Show Label=True"],
-      "props": ["Label (TEXT)", "Show Label (BOOLEAN)"]
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4055:1445",
+      "containerFrameId": "4053:1427",
+      "variants": [
+        "Level=Available, Show Label=False",
+        "Level=Available, Show Label=True",
+        "Level=Limited, Show Label=False",
+        "Level=Limited, Show Label=True",
+        "Level=Unavailable, Show Label=False",
+        "Level=Unavailable, Show Label=True"
+      ],
+      "props": [
+        "Label (TEXT)",
+        "Show Label (BOOLEAN)"
+      ]
     },
     "QuantityStepper": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4055:1472", "containerFrameId": "4053:1427",
-      "variants": ["State=Default", "State=Disabled", "State=At Min", "State=At Max"],
-      "props": ["Count (TEXT)"]
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4055:1472",
+      "containerFrameId": "4053:1427",
+      "variants": [
+        "State=Default",
+        "State=Disabled",
+        "State=At Min",
+        "State=At Max"
+      ],
+      "props": [
+        "Count (TEXT)"
+      ]
     },
     "EntityAvatar": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4055:1487", "containerFrameId": "4053:1427",
-      "variants": ["Size=SM, Is Generating=False", "Size=SM, Is Generating=True", "Size=MD, Is Generating=False", "Size=MD, Is Generating=True", "Size=LG, Is Generating=False", "Size=LG, Is Generating=True"],
-      "props": ["Initials (TEXT)"]
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4055:1487",
+      "containerFrameId": "4053:1427",
+      "variants": [
+        "Size=SM, Is Generating=False",
+        "Size=SM, Is Generating=True",
+        "Size=MD, Is Generating=False",
+        "Size=MD, Is Generating=True",
+        "Size=LG, Is Generating=False",
+        "Size=LG, Is Generating=True"
+      ],
+      "props": [
+        "Initials (TEXT)"
+      ]
     },
     "SkeletonBlock": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4057:1443", "containerFrameId": "4053:1427",
-      "variants": ["Shape=Line", "Shape=Heading", "Shape=Code", "Shape=Bullet List"],
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4057:1443",
+      "containerFrameId": "4053:1427",
+      "variants": [
+        "Shape=Line",
+        "Shape=Heading",
+        "Shape=Code",
+        "Shape=Bullet List"
+      ],
       "props": []
-    },
-    "CutoffBadge": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4057:1452", "containerFrameId": "4053:1427",
-      "variants": ["Missed=False", "Missed=True"],
-      "props": ["Time (TEXT)"]
-    },
-    "WaveformIndicator": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4057:1461", "containerFrameId": "4053:1427",
-      "variants": [],
-      "props": []
-    },
-    "MorphingBlob": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4059:1429", "containerFrameId": "4053:1427",
-      "variants": ["Size=SM", "Size=MD"],
-      "props": []
-    },
-    "EditWindowNotice": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4059:1437", "containerFrameId": "4053:1427",
-      "variants": [],
-      "props": ["Deadline (TEXT)"]
     },
     "AddressTile": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4059:1446", "containerFrameId": "4053:1427",
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4059:1446",
+      "containerFrameId": "4053:1427",
       "variants": [],
-      "props": ["Name (TEXT)", "Line 1 (TEXT)", "Line 2 (TEXT)", "Has Line 2 (BOOLEAN)", "City Line (TEXT)", "Country (TEXT)"]
+      "props": [
+        "Name (TEXT)",
+        "Line 1 (TEXT)",
+        "Line 2 (TEXT)",
+        "Has Line 2 (BOOLEAN)",
+        "City Line (TEXT)",
+        "Country (TEXT)"
+      ]
     },
-    "BankLogo":           { "status": "skipped", "reason": "asset/logo — not a styled component" },
+    "BankLogo": {
+      "status": "skipped",
+      "reason": "asset/logo \u2014 not a styled component"
+    },
     "PaymentMethodTile": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4062:1467", "containerFrameId": "4053:1427",
-      "variants": ["Type=Card, Selected=False", "Type=Card, Selected=True", "Type=ApplePay, Selected=False", "Type=ApplePay, Selected=True", "Type=GooglePay, Selected=False", "Type=GooglePay, Selected=True", "Type=Bank, Selected=False", "Type=Bank, Selected=True"],
-      "props": ["Label (TEXT)"]
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4062:1467",
+      "containerFrameId": "4053:1427",
+      "variants": [
+        "Type=Card, Selected=False",
+        "Type=Card, Selected=True",
+        "Type=ApplePay, Selected=False",
+        "Type=ApplePay, Selected=True",
+        "Type=GooglePay, Selected=False",
+        "Type=GooglePay, Selected=True",
+        "Type=Bank, Selected=False",
+        "Type=Bank, Selected=True"
+      ],
+      "props": [
+        "Label (TEXT)"
+      ]
     },
-    "DeliveryMethodIcon": { "status": "skipped", "reason": "icon wrapper — covered by Icons page" },
+    "DeliveryMethodIcon": {
+      "status": "skipped",
+      "reason": "icon wrapper \u2014 covered by Icons page"
+    },
     "ApplePayButton": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4062:1474", "containerFrameId": "4053:1427",
-      "variants": ["Disabled=False", "Disabled=True"],
-      "props": ["Label (TEXT)"]
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4062:1474",
+      "containerFrameId": "4053:1427",
+      "variants": [
+        "Disabled=False",
+        "Disabled=True"
+      ],
+      "props": [
+        "Label (TEXT)"
+      ]
     },
-    "Apple-objects":      { "status": "skipped", "reason": "platform asset folder" },
-    "payment-logos":      { "status": "skipped", "reason": "third-party brand assets — not bundled" },
-    "bank-logos":         { "status": "skipped", "reason": "data constant only — exports BANK_LOGOS URL map, no UI component" },
+    "Apple-objects": {
+      "status": "skipped",
+      "reason": "platform asset folder"
+    },
+    "payment-logos": {
+      "status": "skipped",
+      "reason": "third-party brand assets \u2014 not bundled"
+    },
+    "bank-logos": {
+      "status": "skipped",
+      "reason": "data constant only \u2014 exports BANK_LOGOS URL map, no UI component"
+    },
     "EmptyState": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4090:1442", "containerFrameId": "4053:1427",
-      "variants": ["Has Icon=False, Has Action=False", "Has Icon=True, Has Action=False", "Has Icon=True, Has Action=True"],
-      "props": ["Heading (TEXT)", "Body (TEXT)", "Has Icon (BOOLEAN)", "Has Action (BOOLEAN)"]
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4090:1442",
+      "containerFrameId": "4053:1427",
+      "variants": [
+        "Has Icon=False, Has Action=False",
+        "Has Icon=True, Has Action=False",
+        "Has Icon=True, Has Action=True"
+      ],
+      "props": [
+        "Heading (TEXT)",
+        "Body (TEXT)",
+        "Has Icon (BOOLEAN)",
+        "Has Action (BOOLEAN)"
+      ]
     },
     "ToastBanner": {
-      "status": "synced", "figmaPage": "Primitives", "figmaPageId": "4016:1562",
-      "figmaNodeId": "4090:1477", "containerFrameId": "4053:1427",
-      "variants": ["Variant=Info", "Variant=Success", "Variant=Warning", "Variant=Error"],
-      "props": ["Message (TEXT)"]
+      "status": "synced",
+      "figmaPage": "Primitives",
+      "figmaPageId": "4016:1562",
+      "figmaNodeId": "4090:1477",
+      "containerFrameId": "4053:1427",
+      "variants": [
+        "Variant=Info",
+        "Variant=Success",
+        "Variant=Warning",
+        "Variant=Error"
+      ],
+      "props": [
+        "Message (TEXT)"
+      ]
     }
   },
-
   "core": {
     "MessageBubble": {
       "status": "synced",
       "figmaPage": "MessageBubble",
       "figmaPageId": "4037:1394",
       "figmaNodeId": "4045:1417",
-      "variants": ["Role=User, Grouped=False", "Role=User, Grouped=True", "Role=Assistant, Grouped=False", "Role=Assistant, Grouped=True"],
-      "props": ["Content (TEXT)", "Timestamp (TEXT)", "Has Timestamp (BOOLEAN)", "Has Feedback (BOOLEAN)"]
+      "variants": [
+        "Role=User, Grouped=False",
+        "Role=User, Grouped=True",
+        "Role=Assistant, Grouped=False",
+        "Role=Assistant, Grouped=True"
+      ],
+      "props": [
+        "Content (TEXT)",
+        "Timestamp (TEXT)",
+        "Has Timestamp (BOOLEAN)",
+        "Has Feedback (BOOLEAN)"
+      ]
     },
     "ChatInput": {
       "status": "synced",
       "figmaPage": "ChatInput",
       "figmaPageId": "4037:1393",
       "figmaNodeId": "4044:1457",
-      "variants": ["State=Empty", "State=Filled", "State=Focused", "State=Disabled"],
+      "variants": [
+        "State=Empty",
+        "State=Filled",
+        "State=Focused",
+        "State=Disabled"
+      ],
       "props": []
     },
     "QuickReplies": {
@@ -167,7 +311,11 @@
       "figmaPageId": "4037:1392",
       "figmaNodeId": "4042:1391",
       "variants": [],
-      "props": ["Option 1 (TEXT)", "Option 2 (TEXT)", "Option 3 (TEXT)"]
+      "props": [
+        "Option 1 (TEXT)",
+        "Option 2 (TEXT)",
+        "Option 3 (TEXT)"
+      ]
     },
     "TypingIndicator": {
       "status": "synced",
@@ -178,211 +326,322 @@
       "props": []
     },
     "MediaCard": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4073:1408", "containerFrameId": "4063:1392",
-      "variants": ["Has Media=False", "Has Media=True"],
-      "props": ["Title (TEXT)", "Description (TEXT)", "Has Media (BOOLEAN)"]
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4073:1408",
+      "containerFrameId": "4063:1392",
+      "variants": [
+        "Has Media=False",
+        "Has Media=True"
+      ],
+      "props": [
+        "Title (TEXT)",
+        "Description (TEXT)",
+        "Has Media (BOOLEAN)"
+      ]
     },
     "DetailList": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4065:1420", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "SelectionGroup": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4065:1459", "containerFrameId": "4063:1392",
-      "variants": ["Type=Radio", "Type=Checkbox"], "props": []
-    },
-    "CardStack": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4067:1408", "containerFrameId": "4063:1392",
-      "variants": ["Count=1", "Count=3"], "props": []
-    },
-    "CardStrip": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4067:1424", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "ComparisonCard": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4067:1457", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "SummaryPanel": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4065:1484", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "ActionStrip": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4065:1467", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "AuthPrompt": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4068:1415", "containerFrameId": "4063:1392",
-      "variants": ["State=Idle", "State=Pending", "State=Success", "State=Error"], "props": []
-    },
-    "AuthStatus": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4068:1426", "containerFrameId": "4063:1392",
-      "variants": ["Status=Success", "Status=Failed"], "props": []
-    },
-    "PaymentConfirmSheet": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4068:1450", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "PaymentSuccess": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4068:1468", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "CartItem": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4076:1418", "containerFrameId": "4063:1392",
-      "variants": ["Has Image=True", "Has Image=False"],
-      "props": ["Name (TEXT)", "Price (TEXT)", "Has Image (BOOLEAN)"]
-    },
-    "CartSummary": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4070:1432", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "OrderReview": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4070:1465", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "RecipeCard": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4077:1436", "containerFrameId": "4063:1392",
-      "variants": ["Has Image=False", "Has Image=True"],
-      "props": ["Title (TEXT)", "Has Image (BOOLEAN)"]
-    },
-    "IngredientShopList": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4078:1466", "containerFrameId": "4063:1392",
-      "variants": ["Has Image=True", "Has Image=False"],
-      "props": ["Has Image (BOOLEAN)"]
-    },
-    "ChipToCard": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4067:1477", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "ApplePaySheet": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4079:1418", "containerFrameId": "4063:1392",
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4065:1420",
+      "containerFrameId": "4063:1392",
       "variants": [],
-      "props": ["Merchant (TEXT)", "Total (TEXT)"]
-    },
-    "DoubleClickToPay": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4079:1436", "containerFrameId": "4063:1392",
-      "variants": ["State=Default", "State=Pending", "State=Success"], "props": []
-    },
-    "BranchSelectStep": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4080:1458", "containerFrameId": "4063:1392",
-      "variants": ["Selected=False", "Selected=True"], "props": []
-    },
-    "DateSelectStep": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4080:1494", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "TimeSlotStep": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4081:1463", "containerFrameId": "4063:1392",
-      "variants": ["Time=Morning", "Time=Afternoon", "Time=Evening"], "props": []
-    },
-    "ScheduleStep": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4083:1470", "containerFrameId": "4063:1392",
-      "variants": ["Date Selected=False", "Date Selected=True"], "props": []
-    },
-    "RewardsStep": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4083:1535", "containerFrameId": "4063:1392",
-      "variants": ["Redeem=False", "Redeem=True"], "props": []
-    },
-    "DeliveryMethodStep": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4083:1573", "containerFrameId": "4063:1392",
-      "variants": ["Method=Home Delivery", "Method=Click & Collect"], "props": []
-    },
-    "DeliveryConfirmation": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4083:1620", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "DeliveryBookingSuccess": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4083:1648", "containerFrameId": "4063:1392",
-      "variants": [], "props": []
-    },
-    "CompareTable": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4092:1469", "containerFrameId": "4063:1392",
-      "variants": ["Has Image=False", "Has Image=True"],
-      "props": ["Has Image (BOOLEAN)"]
-    },
-    "OrderStatusCard": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4092:1567", "containerFrameId": "4063:1392",
-      "variants": ["Status=Processing", "Status=Shipped", "Status=Delivered"],
       "props": []
     },
-    "MakeupRecipeCard": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4096:1446", "containerFrameId": "4063:1392",
-      "variants": ["Has Image=False", "Has Image=True"],
-      "props": ["Has Image (BOOLEAN)"]
+    "SelectionGroup": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4065:1459",
+      "containerFrameId": "4063:1392",
+      "variants": [
+        "Type=Radio",
+        "Type=Checkbox"
+      ],
+      "props": []
+    },
+    "CardStack": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4067:1408",
+      "containerFrameId": "4063:1392",
+      "variants": [
+        "Count=1",
+        "Count=3"
+      ],
+      "props": []
+    },
+    "CardStrip": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4067:1424",
+      "containerFrameId": "4063:1392",
+      "variants": [],
+      "props": []
+    },
+    "SummaryPanel": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4065:1484",
+      "containerFrameId": "4063:1392",
+      "variants": [],
+      "props": []
+    },
+    "ActionStrip": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4065:1467",
+      "containerFrameId": "4063:1392",
+      "variants": [],
+      "props": []
+    },
+    "AuthPrompt": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4068:1415",
+      "containerFrameId": "4063:1392",
+      "variants": [
+        "State=Idle",
+        "State=Pending",
+        "State=Success",
+        "State=Error"
+      ],
+      "props": []
+    },
+    "AuthStatus": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4068:1426",
+      "containerFrameId": "4063:1392",
+      "variants": [
+        "Status=Success",
+        "Status=Failed"
+      ],
+      "props": []
+    },
+    "PaymentConfirmSheet": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4068:1450",
+      "containerFrameId": "4063:1392",
+      "variants": [],
+      "props": []
+    },
+    "PaymentSuccess": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4068:1468",
+      "containerFrameId": "4063:1392",
+      "variants": [],
+      "props": []
+    },
+    "CartItem": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4076:1418",
+      "containerFrameId": "4063:1392",
+      "variants": [
+        "Has Image=True",
+        "Has Image=False"
+      ],
+      "props": [
+        "Name (TEXT)",
+        "Price (TEXT)",
+        "Has Image (BOOLEAN)"
+      ]
+    },
+    "CartSummary": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4070:1432",
+      "containerFrameId": "4063:1392",
+      "variants": [],
+      "props": []
+    },
+    "OrderReview": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4070:1465",
+      "containerFrameId": "4063:1392",
+      "variants": [],
+      "props": []
+    },
+    "ChipToCard": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4067:1477",
+      "containerFrameId": "4063:1392",
+      "variants": [],
+      "props": []
+    },
+    "ApplePaySheet": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4079:1418",
+      "containerFrameId": "4063:1392",
+      "variants": [],
+      "props": [
+        "Merchant (TEXT)",
+        "Total (TEXT)"
+      ]
+    },
+    "CompareTable": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4092:1469",
+      "containerFrameId": "4063:1392",
+      "variants": [
+        "Has Image=False",
+        "Has Image=True"
+      ],
+      "props": [
+        "Has Image (BOOLEAN)"
+      ]
+    },
+    "OrderStatusCard": {
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4092:1567",
+      "containerFrameId": "4063:1392",
+      "variants": [
+        "Status=Processing",
+        "Status=Shipped",
+        "Status=Delivered"
+      ],
+      "props": []
     },
     "ReceiptSummary": {
-      "status": "synced", "figmaPage": "AI Chat — Core", "figmaPageId": "4063:1391",
-      "figmaNodeId": "4096:1514", "containerFrameId": "4063:1392",
-      "variants": ["Has Image=False", "Has Image=True"],
-      "props": ["Has Image (BOOLEAN)"]
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Core",
+      "figmaPageId": "4063:1391",
+      "figmaNodeId": "4096:1514",
+      "containerFrameId": "4063:1392",
+      "variants": [
+        "Has Image=False",
+        "Has Image=True"
+      ],
+      "props": [
+        "Has Image (BOOLEAN)"
+      ]
+    },
+    "BundleCard": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Structural card behind RecipeCard / LookCard / ShopList bindings. Variants should cover selectable vs navigable rows, hero present/absent, and the swap disclosure."
+    },
+    "SlotPicker": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Replaces ScheduleStep + DateSelectStep + TimeSlotStep. Variants: no date chosen, date chosen, priced vs free slots."
     }
   },
-
   "layouts": {
     "ChatWidget": {
-      "status": "synced", "figmaPage": "AI Chat — Layouts", "figmaPageId": "4087:1391",
-      "figmaNodeId": "4087:1502", "containerFrameId": "4087:1392",
-      "variants": ["Vertical=Grocery", "Vertical=Pharmacy"], "props": []
-    },
-    "DeliveryFlow": {
-      "status": "synced", "figmaPage": "AI Chat — Layouts", "figmaPageId": "4087:1391",
-      "figmaNodeId": "4087:1608", "containerFrameId": "4087:1392",
-      "variants": ["Step=Method", "Step=Schedule", "Step=Confirm", "Step=Success"], "props": []
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Layouts",
+      "figmaPageId": "4087:1391",
+      "figmaNodeId": "4087:1502",
+      "containerFrameId": "4087:1392",
+      "variants": [
+        "Vertical=Grocery",
+        "Vertical=Pharmacy"
+      ],
+      "props": []
     },
     "ModalSheet": {
-      "status": "synced", "figmaPage": "AI Chat — Layouts", "figmaPageId": "4087:1391",
-      "figmaNodeId": "4087:1427", "containerFrameId": "4087:1392",
-      "variants": ["Size=SM", "Size=MD", "Size=LG"],
-      "props": ["Title (TEXT)"]
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Layouts",
+      "figmaPageId": "4087:1391",
+      "figmaNodeId": "4087:1427",
+      "containerFrameId": "4087:1392",
+      "variants": [
+        "Size=SM",
+        "Size=MD",
+        "Size=LG"
+      ],
+      "props": [
+        "Title (TEXT)"
+      ]
     },
     "DeliveryTracker": {
-      "status": "synced", "figmaPage": "AI Chat — Layouts", "figmaPageId": "4087:1391",
-      "figmaNodeId": "4098:1478", "containerFrameId": "4087:1392",
-      "variants": ["Has Map=False", "Has Map=True"],
-      "props": ["Has Map (BOOLEAN)"]
+      "status": "synced",
+      "figmaPage": "AI Chat \u2014 Layouts",
+      "figmaPageId": "4087:1391",
+      "figmaNodeId": "4098:1478",
+      "containerFrameId": "4087:1392",
+      "variants": [
+        "Has Map=False",
+        "Has Map=True"
+      ],
+      "props": [
+        "Has Map (BOOLEAN)"
+      ]
     }
   },
-
   "figmaNative": {
-    "description": "Components that exist in the Figma file mapping to shadcn/ui base components. These are the shared atoms for all molecules — never recreate inline.",
-    "Button":        { "figmaPage": "Button",        "figmaPageId": "139:288",  "codeSource": "components/ui/button.tsx" },
-    "Input":         { "figmaPage": "Input",          "figmaPageId": "172:990",  "codeSource": "shadcn/ui" },
-    "Badge":         { "figmaPage": "Badge",           "figmaPageId": "96:527",   "figmaNodeId": "96:545", "codeSource": "shadcn/ui" },
-    "DropdownMenu":  { "figmaPage": "Dropdown Menu",  "figmaPageId": "210:6037", "codeSource": "shadcn/ui" },
-    "Menubar":       { "figmaPage": "Menubar",         "figmaPageId": "210:6030", "codeSource": "shadcn/ui" },
-    "Separator":     { "figmaPage": "Separator",       "figmaPageId": "210:6049", "codeSource": "shadcn/ui" },
-    "Table":         { "figmaPage": "Table",           "figmaPageId": "210:6055", "codeSource": "shadcn/ui" },
-    "Tabs":          { "figmaPage": "Tabs",            "figmaPageId": "210:6056", "codeSource": "shadcn/ui" },
-    "Sidebar":       { "figmaPage": "Sidebar",         "figmaPageId": "1460:2161","codeSource": "shadcn/ui" }
+    "description": "Components that exist in the Figma file mapping to shadcn/ui base components. These are the shared atoms for all molecules \u2014 never recreate inline.",
+    "Button": {
+      "figmaPage": "Button",
+      "figmaPageId": "139:288",
+      "codeSource": "components/ui/button.tsx"
+    },
+    "Input": {
+      "figmaPage": "Input",
+      "figmaPageId": "172:990",
+      "codeSource": "shadcn/ui"
+    },
+    "Badge": {
+      "figmaPage": "Badge",
+      "figmaPageId": "96:527",
+      "figmaNodeId": "96:545",
+      "codeSource": "shadcn/ui"
+    },
+    "DropdownMenu": {
+      "figmaPage": "Dropdown Menu",
+      "figmaPageId": "210:6037",
+      "codeSource": "shadcn/ui"
+    },
+    "Menubar": {
+      "figmaPage": "Menubar",
+      "figmaPageId": "210:6030",
+      "codeSource": "shadcn/ui"
+    },
+    "Separator": {
+      "figmaPage": "Separator",
+      "figmaPageId": "210:6049",
+      "codeSource": "shadcn/ui"
+    },
+    "Table": {
+      "figmaPage": "Table",
+      "figmaPageId": "210:6055",
+      "codeSource": "shadcn/ui"
+    },
+    "Tabs": {
+      "figmaPage": "Tabs",
+      "figmaPageId": "210:6056",
+      "codeSource": "shadcn/ui"
+    },
+    "Sidebar": {
+      "figmaPage": "Sidebar",
+      "figmaPageId": "1460:2161",
+      "codeSource": "shadcn/ui"
+    }
   }
 }

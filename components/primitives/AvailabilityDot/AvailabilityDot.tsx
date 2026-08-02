@@ -75,8 +75,13 @@ export function AvailabilityDot({
       aria-hidden={ariaHidden}
       {...props}
     >
-      {/* Icon gets the semantic color; label text is always high-contrast */}
-      <Icon className={availabilityColorClasses[level]} />
+      {/*
+        Icon gets the semantic color; label text is always high-contrast.
+        `size-2.5` matches the SVG's intrinsic 10×10 — it is there to opt out of
+        `Button`'s `[&_svg:not([class*='size-'])]:size-4`, which otherwise
+        inflates the dot to 16px wherever a dot sits inside a button.
+      */}
+      <Icon className={cn('size-2.5', availabilityColorClasses[level])} />
       {showLabel && (
         <span className={cn('text-xs', availabilityLabelColorClasses[level])}>
           {availabilityLabels[level]}

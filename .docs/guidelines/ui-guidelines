@@ -72,10 +72,84 @@ Industry starting points:
 
 **Rule**: `px-4 md:px-8 lg:px-12` ✅ · `px-4 lg:px-32` ❌
 
-### Touch Targets (mandatory on all interactive elements)
-- Buttons and inputs: `h-12 md:h-10` — larger on mobile for fat-finger safety
-- Icon buttons: `size-12 md:size-10`
-- Minimum tap target: 44×44px (never go below this on mobile)
+### Two axes, not one: viewport vs. input device
+
+The single most common mistake in this library was treating `md:` as "desktop".
+It is not. It is a **width** query, and width does not tell you whether a finger
+or a cursor is driving.
+
+| Axis | Query | Governs |
+|------|-------|---------|
+| **Viewport** | `md:` `lg:` `xl:` | Layout, density, spacing, type scale, column counts |
+| **Input device** | `pointer-coarse:` `pointer-fine:` | Hit area — and nothing else |
+
+A 1024px iPad in landscape matches `md:` **and** is finger-operated. Sizing a
+control down at `md:` hands that user a 40px target. A 700px-wide browser window
+on a desktop matches the mobile branch and gets oversized controls for a mouse.
+Both are wrong, and neither is fixable with breakpoints.
+
+**Never use a breakpoint to decide a touch target.**
+
+### Minimum hit area (mandatory on every interactive element)
+
+| Pointer | Minimum | Comfortable | Standard |
+|---------|---------|-------------|----------|
+| Coarse (finger, stylus) | **44 × 44 px** | 48 × 48 | Apple HIG · WCAG 2.5.5 (AAA) |
+| Fine (mouse, trackpad) | **24 × 24 px** | 32 × 32 | WCAG 2.2 SC 2.5.8 (AA) |
+| Gap between adjacent targets | **8 px** | 12 px | Material |
+
+Both minimums are exposed as `--tap-target-min`, which resolves to 24px under a
+fine pointer and 44px under a coarse one. You rarely read it directly — the
+`tap-target` utility does.
+
+### Which mechanism to use
+
+Decide by asking: **may this control get visually bigger under a finger?**
+
+**Yes — it can grow.** Size it with a `pointer-coarse:` variant. Standalone
+buttons, steppers, close buttons, anything whose box is the affordance.
+
+```tsx
+// Full-width CTA — 48 on phone, 40 for a cursor, never under 44 for a finger
+<Button className="w-full h-12 md:h-10 pointer-coarse:min-h-11">Confirm</Button>
+
+// Icon button
+<Button className="size-12 md:size-10 pointer-coarse:size-12" aria-label="Close" />
+```
+
+Prefer `min-h-11` over `h-11` in the coarse branch: `min-height` beats `height`
+regardless of which utility Tailwind emits first, so the rule can't lose a
+specificity race with `md:`.
+
+**No — its size is the design.** Use `tap-target`, which expands the hit area
+with a centred pseudo-element while the visual box stays put. Switch tracks, tag
+removes, inline icon affordances, message feedback buttons.
+
+```tsx
+// A 14px remove affordance that still accepts a 44px finger
+<Button className="size-3.5 md:size-3 rounded-full p-0 tap-target" aria-label="Remove" />
+```
+
+Two limits on `tap-target`, both of which will bite silently:
+
+1. It sets `position: relative` — **never put it on an absolutely positioned
+   element**, it will override the placement. Those can always grow, so use the
+   `pointer-coarse:` route instead.
+2. The hit area extends past the visual box, so **adjacent controls closer than
+   `--tap-target-min` apart will overlap**, and the later sibling wins every tap.
+   Carousel dots 6px apart are the classic case: 44px pseudo areas make the last
+   dot swallow the whole strip. Tightly packed controls need real tiling —
+   a `size-11` button with the visual as an inner element — not a pseudo area.
+
+Rule of thumb: `tap-target` for an *isolated* small control, real sizing for a
+*row* of them.
+
+### Verifying
+
+`node scripts/tap-audit.js` scans every component for controls that fall below
+the minimum on either pointer. It must report zero before a component ships.
+Chrome DevTools device emulation reports `pointer: coarse`, so both branches are
+testable without a physical device.
 
 ### Typography (Progressive)
 | Element | Classes |
@@ -130,14 +204,14 @@ Message bubbles: `max-w-[75%] md:max-w-sm` — constrain width to preserve reada
 
 ### Button
 ```tsx
-<Button className="h-12 md:h-10" variant="default">Click Me</Button>
+<Button className="h-12 md:h-10 pointer-coarse:min-h-11" variant="default">Click Me</Button>
 ```
 
 ### Form Input
 ```tsx
 <div className="space-y-2">
   <Label>Label</Label>
-  <Input className="h-12 md:h-10" />
+  <Input className="h-12 md:h-10 pointer-coarse:min-h-11" />
 </div>
 ```
 
@@ -234,26 +308,31 @@ const myAvatarVariants = cva(entityAvatarBase, {
 
 ---
 
-## Stories & Figma Make
+## Stories as the machine-readable contract
 
-Every story file must follow this contract so that **props and mock data appear in Figma Make** when a component is cloned.
+Every story file must follow this contract. Stories are not just visual examples — they are how
+**consumers and AI builders discover what a component takes**: through Storybook's Controls panel,
+through autodocs, and through `@storybook/addon-mcp`, which serves stories to coding agents. A
+component whose args are empty or inlined is one an agent has to guess at.
 
 ### `meta.args` — required, always
 
-`meta.args` is the single source of truth for Figma Make's props panel. Set it with complete, realistic values covering all required props.
+`meta.args` is the single source of truth for the Controls panel and for anything reading the
+component surface. Set it with complete, realistic values covering all required props.
 
 ```tsx
 const meta = {
   title: 'Primitives/StatusBadge',
   component: StatusBadge,
   tags: ['autodocs'],
-  args: { label: 'Confirmed', variant: 'success' },   // ← Figma Make reads this
+  args: { label: 'Confirmed', variant: 'success' },   // ← the discoverable surface
 } satisfies Meta<typeof StatusBadge>
 ```
 
 ### `Default` story — required, always
 
-Figma Make clones from `Default`. Name it exactly `Default`.
+`Default` is the canonical example — what autodocs leads with and what an agent copies. Name it
+exactly `Default`.
 
 ```tsx
 export const Default: Story = {}                    // inherits meta.args
@@ -278,7 +357,7 @@ const meta = { args: { flights: [{ id: '1', destination: 'Tokyo', ... }] } }
 
 ### Compound components — expose content via `args`
 
-When a component uses a compound slot API (children as sub-components), the `Default` story must expose key text/content as `args` through a `render` function — otherwise the Figma Make props panel is empty.
+When a component uses a compound slot API (children as sub-components), the `Default` story must expose key text/content as `args` through a `render` function — otherwise the Controls panel is empty and the component looks propless to anything reading it.
 
 ```tsx
 const meta = {
@@ -299,7 +378,7 @@ export const Default: Story = {
 
 | Export | Args | Purpose |
 |--------|------|---------|
-| `Default` | from `meta.args` | Always present — Figma Make's clone target |
+| `Default` | from `meta.args` | Always present — the canonical example anything copies from |
 | Named variant (`Success`, `Disabled`) | overrides for that variant | One per meaningful state |
 | Showcase (`AllVariants`, `AllStates`) | `render: () =>` ok | Visual reference, no interactivity needed |
 
@@ -316,7 +395,8 @@ export const Default: Story = {
 - [ ] Use shadcn/ui `Button` — never raw `<button>`
 - [ ] Theme tokens only — no hex, rgb, hardcoded colors
 - [ ] Icons: ≤48px standard · >48px use `ICON_STROKE_WIDTH`
-- [ ] Responsive: `h-12 md:h-10` on every interactive element, progressive spacing at every breakpoint
+- [ ] Responsive: progressive spacing at every breakpoint
+- [ ] Hit area: `node scripts/tap-audit.js` reports zero — coarse ≥44px, fine ≥24px
 - [ ] a11y: `aria-label`, `alt`, `aria-live` regions
 - [ ] If the component animates or transitions — **also invoke `#motion`**
 
@@ -346,7 +426,7 @@ export const Default: Story = {
 **✅ DO:**
 - Search repo before creating anything new
 - Progressive spacing: `p-4 md:p-6 lg:p-8`
-- Touch targets: `h-12 md:h-10` on all interactive elements
+- Touch targets: `h-12 md:h-10 pointer-coarse:min-h-11` — a breakpoint never decides a hit area
 - Use `100dvh` (not `100vh`) for full-screen mobile layouts
 - `ICON_STROKE_WIDTH` for icons >48px
 

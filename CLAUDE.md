@@ -11,15 +11,19 @@ class or `ThemeProvider`. **This is a library, not a standalone app.**
 ```bash
 npm run storybook    # ← primary dev environment (port 6006)
 npm run dev          # Vite demo harness (demo/) — fast component preview
-npm run next         # Next.js marketing/docs site (app/) — rarely needed
 npm test             # renders every story + runs interaction tests (~10s)
 npm run typecheck
 npm run lint         # --max-warnings 0: warnings fail
 npm run build        # library build → dist/
 ```
 
-Always develop and test components in Storybook. `npm run dev` is Vite, **not** Next — the Next
-app is a separate harness under `app/` and is not part of the published package.
+Always develop and test components in Storybook. `npm run dev` is Vite, **not** Next.
+
+`app/` no longer holds a site. The Next marketing pages were retired in favour of the case study at
+`lizzieteo.com/work/conjure-ui`, which links to the published Storybook. What remains under `app/`
+is the two CSS files that ship in the package, plus `api/chat/route.ts` — an Anthropic-backed chat
+endpoint kept for local experimentation and the only reason `npm run next` / `build:next` still
+exist. Nothing in `demo/` or Storybook calls it.
 
 ## Project structure
 
@@ -31,9 +35,10 @@ components/
   ui/                 # Button only — do not add to this folder (plain React button, no external deps)
   ThemeProvider.tsx   # Runtime CSS variable injection
 demo/                 # Vite harness — `npm run dev` entry point
-app/                  # Next.js site (marketing + docs). Not published.
+app/                  # Only the shipped CSS + a local-only API route. No site.
   theme.css           # Design tokens — the 3 tiers. No client themes live here.
   globals.css         # Tailwind plumbing — imports theme.css, @theme inline mappings, @layer base
+  api/chat/route.ts   # Anthropic chat endpoint — local experimentation only, not published
 lib/
   tokens.css          # Token reference docs (comments only — consumers read this)
   theme-config.ts     # Design constants (ICON_STROKE_WIDTH)
@@ -45,7 +50,9 @@ lib/
   themes.css          # Demo-only .theme-{client} examples — NOT shipped to consumers
 .docs/
   plans/              # Architecture decision docs
-  for-designers/      # Designer-facing handoff (Figma Make white-label setup)
+  for-designers/      # Designer-facing handoff
+    ai-builder-white-label-setup.md   # Branding a client via Claude Code / Codex / Replit / Lovable
+    figma-sync-prompts.md             # #figcheck / #figbuild shortcuts
   guidelines/
     ui-guidelines             # CSS architecture, responsive, a11y, component rules
     style-guidelines.md       # Clean look design language — colors, radius, shadows, typography
@@ -84,22 +91,35 @@ Tokens live in `app/theme.css` in three tiers:
 | 3. System | Shadows, Apple Pay, charts, layout internals | No |
 
 Consumers apply a brand three ways: a `.theme-{client}` class of their own, a `<ThemeProvider
-tokens={…}>` for runtime overrides, or (the Figma Make path) by pasting their generated `:root`
-and `.dark` blocks straight into `theme.css`.
+tokens={…}>` for runtime overrides, or by editing the `:root` and `.dark` values in `theme.css`
+directly.
+
+That third way is **fork-only**. `theme.css` ships inside the package, so for anyone who installed
+from npm it lives in `node_modules` and every upgrade overwrites it. Docs must never tell an
+installing consumer to edit it — the guidance is a theme class in their own stylesheet, or
+`ThemeProvider`. `.docs/for-designers/ai-builder-white-label-setup.md` is the guide that says so.
 
 **`app/theme.css` ships no `.theme-{client}` classes.** The example client themes (`theme-travel`,
 `theme-retail`, …) live in `.storybook/themes.css`, are loaded only by Storybook, and are
 explicitly not part of the package. To add a demo theme, edit `.storybook/themes.css` — nothing
 else needs to change, since `preview.tsx` only toggles Light/Dark.
 
-Token names follow the shadcn/ui convention so they line up with Figma Make's generated
-`globals.css`. Leave `app/globals.css` alone — it is shared infrastructure.
+**The library loads no webfont.** `--font-sans` defaults to the system stack, and consumers load
+their brand face and override that one token — Inter is what the docs recommend they start from.
+Never add a font `@import` to `app/globals.css` or `app/theme.css`: both ship in the package, so an
+import there forces a third-party request (and a GDPR problem) on every consumer. Dev surfaces load
+Inter themselves — `.storybook/preview-head.html`, `demo/index.html` — neither of which is
+published.
+
+Token names follow the shadcn/ui convention, so a theme authored against that vocabulary drops in
+without renaming. Leave `app/globals.css` alone — it is shared infrastructure.
 
 ## Build & publish
 
 `npm run build` = Vite library build (`vite.lib.config.ts`) → `dist/`, then `tsc -p
 tsconfig.build.json` for declarations. `prepublishOnly` runs it before publish. `package.json`
-`files` is `["dist", "app/globals.css", "app/theme.css"]`.
+`files` is `["dist", "app/globals.css", "app/theme.css", "CHANGELOG.md"]` — the changelog ships so a
+consumer's agent can read what changed straight from `node_modules`.
 
 Two build-config choices exist for non-obvious reasons — do not "clean them up":
 
@@ -108,12 +128,52 @@ Two build-config choices exist for non-obvious reasons — do not "clean them up
 - `incremental: false` is deliberate. Vite's `emptyOutDir` wipes `dist`, then an incremental `tsc`
   consults its buildinfo, sees no changes and emits nothing — shipping a types-free package.
 
+## Releasing
+
+**Tags publish; branches do not.** `.github/workflows/release.yml` fires on `v*` tags only, so a
+merge to `main` can never ship a version by accident.
+
+```bash
+# 1. write the release notes first — the workflow reads them back out
+#    edit CHANGELOG.md: move [Unreleased] items under a new ## [X.Y.Z] heading
+# 2. bump + tag in one step (npm writes package.json and creates the tag)
+npm version minor -m "Release v%s"
+git push --follow-tags
+```
+
+The workflow re-runs typecheck → lint → tests → clean build → entry-point check before publishing,
+refuses to run if the tag disagrees with `package.json`, publishes with npm provenance, then opens a
+GitHub Release whose body is the matching `CHANGELOG.md` section. That release is what notifies
+consumers who watch the repo; Dependabot picks up the npm version separately.
+
+Two consequences worth knowing:
+
+- **Provenance means publishing must go through the workflow.** `publishConfig.provenance` is `true`,
+  which needs the `id-token: write` that only CI has. A local `npm publish` will fail — that is the
+  intent, not a bug. `NPM_TOKEN` must exist as a repository secret.
+- **Pre-1.0, breaking changes go in the minor.** `0.2.x` → `0.3.0`. The breaking surface here is
+  wider than the exported functions: a renamed Tier 1 or Tier 2 token is breaking even though
+  nothing throws, because the consumer's brand silently falls back instead of erroring. Alias a
+  renamed token for at least one minor. `CHANGELOG.md` opens with the full definition.
+
+## Published Storybook
+
+Storybook is the public face of the library, deployed to **GitHub Pages at
+[ui.lizzieteo.com](https://ui.lizzieteo.com)** by `.github/workflows/pages.yml` on every push to
+`main`. That is the URL to link — not a Chromatic build URL, which is a CI artifact.
+
+The custom domain is held by `public/CNAME`, which reaches the published root because
+`.storybook/main.ts` lists `../public` in `staticDirs`. Delete that file and the domain drops on the
+next deploy. Serving at a domain root is also why Storybook needs no base-path config here.
+
 ## Testing
 
 `npm test` runs every story through a real Chromium (Vitest browser mode + Playwright). Most are
-smoke tests — the story renders, nothing throws. 12 of them are interaction tests written with
+smoke tests — the story renders, nothing throws. 19 of them are interaction tests written with
 `play()`, covering the behaviour worth pinning: stepper bounds, radio/checkbox `aria-checked`,
-collapsible `aria-expanded`, Enter vs Shift+Enter in the composer, and the modal's focus trap.
+collapsible `aria-expanded` (by mouse *and* keyboard), Enter vs Shift+Enter in the composer, the
+modal's focus trap, `BundleCard`'s swap-and-select, and `SlotPicker` clearing the slot when the
+date changes.
 
 Prefer asserting through **roles and ARIA state** rather than class names — that is what the
 component actually promises consumers.
@@ -127,8 +187,9 @@ component actually promises consumers.
   animation. Assertions that something disappeared must be wrapped in `waitFor`.
 
 CI (`.github/workflows/ci.yml`) runs typecheck → lint → tests → clean rebuild → a check that every
-published entry point and `.d.ts` exists, on every push and PR. The separate Chromatic workflow
-handles visual regressions.
+published entry point and `.d.ts` exists, on every push and PR. Two workflows run alongside it:
+Chromatic for visual regressions, and `pages.yml` to publish Storybook (see above). Neither gates
+the other — a Chromatic diff does not block the deploy.
 
 ## Third-party assets
 
@@ -146,12 +207,17 @@ brand portal and place them in `public/payment-logos/`. See
    extend this to layout, spacing, or your own palette.
 2. **shadcn `Button` for anything button-like** — never raw `<button className="…">`. Import from
    `@/components/ui/button`.
-   *Sole exception:* `role="switch"` toggles. A switch is not a button — it needs a track/thumb
-   and `aria-checked`, which `Button`'s variants fight. Two exist (`RewardsStep`,
-   `BranchSelectStep`) and they are near-identical; if a third appears, extract a `Switch`
-   primitive rather than widening this exception.
+   *Narrow exception:* `role="switch"` toggles. A switch is not a button — it needs a track/thumb
+   and `aria-checked`, which `Button`'s variants fight. None currently exist (the two that did
+   went with the delivery flow); the first one needed should be extracted as a `Switch`
+   primitive rather than hand-rolled again.
+   A control is also never nested inside another control — no `Button` inside a `role="button"`
+   root. Where a card doubles as one control (`CardStack`, `SummaryPanel.Header`), the root drops
+   its button role once expanded, or the inner affordance is a plain `aria-hidden` marker.
 3. **Responsive at every breakpoint** — `md:` variants are mandatory on all sizes and spacing.
-   `h-12 md:h-10` on every interactive element. `p-4 md:p-6 lg:p-8` on every container.
+   `p-4 md:p-6 lg:p-8` on every container. **Hit area is a separate axis** — size it
+   with `pointer-coarse:`, never `md:`; the canonical CTA is
+   `h-12 md:h-10 pointer-coarse:min-h-11`. Verify with `node scripts/tap-audit.js`.
 4. **No new dependencies without asking** — published library; every added dep becomes a
    consumer's dep too. Runtime deps are currently just `class-variance-authority`, `clsx`,
    `lucide-react`, `motion`, `tailwind-merge`. React is a peer dependency.
@@ -159,7 +225,7 @@ brand portal and place them in `public/payment-logos/`. See
    `components/core/`, Layouts in `components/layouts/`. Each gets its own subfolder with
    `ComponentName.tsx` + `ComponentName.stories.tsx`.
 6. **Compound component API** — Components and Layouts expose sub-components as static properties
-   (`MediaCard.Title`, `RecipeCard.Header`, etc.). Sub-components live in the same file as the parent.
+   (`MediaCard.Title`, `BundleCard.ItemList`, etc.). Sub-components live in the same file as the parent.
 7. **Every component needs a `.stories.tsx`** — Storybook is the contract for consumers.
    *Exception:* `primitives/Apple-objects/` and the logo/asset folders, which are platform assets
    rather than styled components (the figma-drift script classifies them the same way).
@@ -215,7 +281,7 @@ anything is pending, suggest running `#figbuild`.
 
 ## Known gaps
 
-- **Interaction coverage is deliberately partial** — 12 `play()` tests across 7 files, aimed at the
+- **Interaction coverage is deliberately partial** — 19 `play()` tests across 9 files, aimed at the
   components with real behaviour. The rest are smoke tests. Add a `play()` when you add behaviour,
   not for static presentation.
 - **`argTypes` are inferred, not declared.** Storybook's react-docgen reads the TypeScript props,

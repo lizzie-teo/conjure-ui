@@ -69,7 +69,7 @@ export function ChipToCard({
                   variant="ghost"
                   size="sm"
                   onClick={() => select(null)}
-                  className="text-muted-foreground"
+                  className="text-muted-foreground h-11 md:h-8 pointer-coarse:min-h-11"
                 >
                   ← Back to options
                 </Button>
@@ -93,7 +93,7 @@ export function ChipToCard({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="rounded-full"
+                    className="rounded-full h-11 md:h-8 pointer-coarse:min-h-11"
                     onClick={() => select(chip.id)}
                   >
                     {chip.label}

@@ -83,7 +83,7 @@ export function ToastBanner({
           size="icon-sm"
           onClick={onDismiss}
           aria-label="Dismiss notification"
-          className="shrink-0 opacity-70 hover:opacity-100 hover:bg-transparent transition-opacity focus-visible:ring-current"
+          className="shrink-0 tap-target opacity-70 hover:opacity-100 hover:bg-transparent transition-opacity focus-visible:ring-current"
         >
           <X className="size-4 md:size-5" aria-hidden />
         </Button>

@@ -56,7 +56,18 @@ This is the baseline. All industry themes (travel, retail, healthcare, etc.) ove
 
 ## Typography
 
-Font: **Poppins** (loaded in globals.css). Clean, geometric, neutral — never needs a second font family.
+Font: whatever `--font-sans` resolves to. **The library loads no webfont** — `app/theme.css`
+defaults the token to the system stack, and consumers override it with their brand face. One
+family only; never introduce a second.
+
+For our own surfaces (the Next site, Storybook demo themes) and as the documented recommendation
+to consumers, that font is **Inter**: variable, neutral enough that a client's brand still reads
+as theirs, and drawn for UI text at 12–16px rather than for headlines. Use
+`font-variant-numeric: tabular-nums` wherever numbers stack — prices, comparison tables, order
+totals.
+
+Do not add a font `@import` to `app/globals.css`. That file ships in the package, so an import
+there forces a third-party request on every consumer.
 
 ### Scale
 
@@ -214,7 +225,7 @@ Shadows increase opacity in dark mode — they need to work against dark surface
 | One accent color per view | Multiple competing accent colors |
 | `rounded-full` chips, `rounded-xl` cards | Same radius everywhere |
 | Cool off-white background | Warm yellow-tinted backgrounds |
-| Poppins light/normal for large text | Bold large text |
+| Light/normal weight for large text | Bold large text |
 
 ---
 

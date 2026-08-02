@@ -16,12 +16,6 @@ export type { TagProps } from './Tag/Tag'
 export { ProgressStep, progressStepDotBase, progressStepStatusClasses } from './ProgressStep/ProgressStep'
 export type { ProgressStepProps } from './ProgressStep/ProgressStep'
 
-export { WaveformIndicator } from './WaveformIndicator/WaveformIndicator'
-export type { WaveformIndicatorProps } from './WaveformIndicator/WaveformIndicator'
-
-export { MorphingBlob } from './MorphingBlob/MorphingBlob'
-export type { MorphingBlobProps } from './MorphingBlob/MorphingBlob'
-
 export { SkeletonBlock } from './SkeletonBlock/SkeletonBlock'
 export type { SkeletonBlockProps } from './SkeletonBlock/SkeletonBlock'
 
@@ -49,11 +43,6 @@ export type { DeliveryMethodIconProps, DeliveryMethodType } from './DeliveryMeth
 export { AvailabilityDot, availabilityColorClasses, availabilityLabelColorClasses } from './AvailabilityDot/AvailabilityDot'
 export type { AvailabilityDotProps, AvailabilityLevel } from './AvailabilityDot/AvailabilityDot'
 
-export { CutoffBadge } from './CutoffBadge/CutoffBadge'
-export type { CutoffBadgeProps } from './CutoffBadge/CutoffBadge'
-
-export { EditWindowNotice } from './EditWindowNotice/EditWindowNotice'
-export type { EditWindowNoticeProps } from './EditWindowNotice/EditWindowNotice'
 
 export { PaymentMethodTile } from './PaymentMethodTile/PaymentMethodTile'
 export type { PaymentMethodTileProps } from './PaymentMethodTile/PaymentMethodTile'

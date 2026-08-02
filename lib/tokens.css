@@ -77,8 +77,24 @@
 /* ── Typography tokens ─────────────────────────────────────────── */
 
 /* Font families — set via CSS variable to avoid loading two font stacks */
-/* --font-sans           system-ui, sans-serif   Override with Google Font or brand font */
-/* --font-mono           monospace               Used in code/dosage displays            */
+/* --font-sans           system stack            Override with your brand font */
+/* --font-mono           monospace               Used in code/dosage displays   */
+
+/* The library loads NO webfont. It ships the system stack so that installing   */
+/* conjure-ui costs zero font bytes and makes no third-party request. You load  */
+/* your brand font, then override the one token:                               */
+/*                                                                              */
+/*   .theme-acme { --font-sans: 'Acme Grotesk', ui-sans-serif, system-ui; }     */
+/*                                                                              */
+/* No brand font yet? Inter is the recommended starting point — variable (one   */
+/* file covers 100–900), drawn for UI text at 12–16px, and it has real tabular  */
+/* figures, which matters for the price and table components:                   */
+/*                                                                              */
+/*   .prices { font-variant-numeric: tabular-nums; }                            */
+/*                                                                              */
+/* Self-host it (@fontsource-variable/inter) or use your framework's font       */
+/* loader — next/font/google in Next, so the file is served from your origin    */
+/* rather than hotlinked from Google.                                           */
 
 /* ── Shadow tokens ─────────────────────────────────────────────── */
 

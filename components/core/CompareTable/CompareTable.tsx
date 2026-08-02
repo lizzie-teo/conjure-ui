@@ -128,7 +128,7 @@ export function CompareTable({
                 <td key={col.id} className="p-3 md:p-4 text-center">
                   <Button
                     onClick={() => onSelect(col.id)}
-                    className="h-9 md:h-10 w-full"
+                    className="h-12 md:h-10 pointer-coarse:min-h-11 w-full"
                     size="sm"
                   >
                     Add to cart

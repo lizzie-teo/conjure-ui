@@ -157,7 +157,7 @@ export function PaymentSuccess({
         {secondaryLabel && onSecondary && (
           <Button
             variant="ghost"
-            className="h-12 md:h-10 w-full text-muted-foreground hover:text-foreground"
+            className="h-12 md:h-10 pointer-coarse:min-h-11 w-full text-muted-foreground hover:text-foreground"
             onClick={onSecondary}
           >
             {secondaryLabel}

@@ -129,7 +129,7 @@ export function OrderReview({
       </Section>
 
       <div className="px-4 md:px-5">
-        <Button onClick={onConfirm} className="w-full h-12 md:h-10">
+        <Button onClick={onConfirm} className="w-full h-12 md:h-10 pointer-coarse:min-h-11">
           Confirm &amp; authenticate
         </Button>
       </div>

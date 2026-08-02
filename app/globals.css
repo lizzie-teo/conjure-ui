@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=optional');
+/* No font is loaded here. globals.css ships to consumers, so a webfont @import
+   would force a third-party request they never opted into. --font-sans defaults
+   to the system stack in theme.css; consumers load their own brand font and
+   override that one token. Dev surfaces (Storybook, demo, the Next site) load
+   Inter themselves. */
 @import "./theme.css";
 @import "tailwindcss";
 
@@ -80,6 +84,27 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+/* Expands a control's hit area to `--tap-target-min` without changing how it
+   looks or how it lays out. For controls whose visual size is part of the
+   design — switches, tag removes, inline icon buttons, feedback affordances.
+
+   When the control CAN simply be bigger, size it with `pointer-coarse:` instead.
+   Do not put this on an absolutely-positioned element: it sets
+   `position: relative` and would override the placement. */
+@utility tap-target {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: max(100%, var(--tap-target-min));
+    height: max(100%, var(--tap-target-min));
   }
 }
 

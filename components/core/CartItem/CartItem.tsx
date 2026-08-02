@@ -60,7 +60,7 @@ export function CartItem({
               size="icon-sm"
               aria-label={`Remove ${name}`}
               onClick={onRemove}
-              className="size-8 md:size-7 shrink-0 -mt-0.5 -mr-1 text-muted-foreground"
+              className="size-8 md:size-7 tap-target shrink-0 -mt-0.5 -mr-1 text-muted-foreground"
             >
               <X className="size-4" />
             </Button>

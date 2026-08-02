@@ -3,7 +3,6 @@
 import { createContext, useContext, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { ChevronDown } from 'lucide-react'
-import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
 import type { ComponentPropsWithRef } from 'react'
 
@@ -31,6 +30,13 @@ type BodyProps = ComponentPropsWithRef<'div'>
 function Header({ children, className, ...props }: HeaderProps) {
   const { isOpen, toggle, collapsible } = useContext(SummaryPanelCtx)
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      toggle()
+    }
+  }
+
   return (
     <div
       // Spread first: when collapsible, the header owns a button a11y contract
@@ -42,19 +48,25 @@ function Header({ children, className, ...props }: HeaderProps) {
         className
       )}
       onClick={collapsible ? toggle : undefined}
+      // role="button" without a tab stop and key handling is a control only a
+      // mouse can reach — the panel would be permanently open for keyboard users.
+      onKeyDown={collapsible ? handleKeyDown : undefined}
       role={collapsible ? 'button' : undefined}
+      tabIndex={collapsible ? 0 : undefined}
       aria-expanded={collapsible ? isOpen : undefined}
     >
       <div className="font-semibold text-sm md:text-base text-foreground">{children}</div>
       {collapsible && (
-        <motion.div
+        <motion.span
+          aria-hidden
+          // A decorative marker, not a second control: a real Button here would
+          // nest a button inside the header's own button role.
+          className="inline-flex items-center justify-center size-6 shrink-0"
           animate={{ rotate: isOpen ? 0 : -90 }}
           transition={{ duration: 0.2, ease: [0, 0, 0.2, 1] }}
         >
-          <Button variant="ghost" size="icon-xs" aria-hidden tabIndex={-1}>
-            <ChevronDown className="size-3.5 md:size-4 text-muted-foreground" />
-          </Button>
-        </motion.div>
+          <ChevronDown className="size-3.5 md:size-4 text-muted-foreground" />
+        </motion.span>
       )}
     </div>
   )

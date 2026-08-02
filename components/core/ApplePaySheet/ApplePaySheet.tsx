@@ -323,7 +323,7 @@ export function ApplePaySheet({
                 size="icon"
                 onClick={onClose}
                 aria-label="Close Apple Pay"
-                className="size-10 rounded-full bg-[var(--apple-fills-tertiary)] hover:bg-[var(--apple-fills-tertiary-hover)] dark:mix-blend-plus-lighter focus-visible:ring-0 focus-visible:outline-none shrink-0"
+                className="size-10 tap-target rounded-full bg-[var(--apple-fills-tertiary)] hover:bg-[var(--apple-fills-tertiary-hover)] dark:mix-blend-plus-lighter focus-visible:ring-0 focus-visible:outline-none shrink-0"
               >
                 <X
                   className="size-6 text-[var(--apple-labels-vibrant-secondary)] dark:mix-blend-plus-lighter"

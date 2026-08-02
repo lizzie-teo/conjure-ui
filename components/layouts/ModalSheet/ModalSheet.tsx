@@ -264,7 +264,7 @@ export function ModalSheet({
               size="icon"
               aria-label="Close"
               onClick={onClose}
-              className="absolute top-2 md:top-3 right-2 md:right-3 z-10 size-12 md:size-10"
+              className="absolute top-2 md:top-3 right-2 md:right-3 z-10 size-12 md:size-10 pointer-coarse:size-12"
             >
               <X size={18} />
             </Button>

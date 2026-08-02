@@ -93,7 +93,7 @@ function Send({ className, 'aria-label': ariaLabel = 'Send message', ...props }:
       onClick={handleSend}
       disabled={!canSend}
       aria-label={ariaLabel}
-      className={cn('shrink-0 rounded-full size-9 md:size-10', className)}
+      className={cn('shrink-0 rounded-full size-11 md:size-10 pointer-coarse:size-11', className)}
     >
       <AnimatePresence mode="wait" initial={false}>
         {canSend ? (

@@ -62,7 +62,7 @@ export function AuthPrompt({
 
           {state === 'idle' && (
             <Button
-              className="h-12 md:h-10 w-full md:w-auto"
+              className="h-12 md:h-10 pointer-coarse:min-h-11 w-full md:w-auto"
               onClick={onAuthenticate}
             >
               Authenticate
@@ -70,7 +70,7 @@ export function AuthPrompt({
           )}
 
           {state === 'pending' && (
-            <Button className="h-12 md:h-10 w-full md:w-auto" disabled>
+            <Button className="h-12 md:h-10 pointer-coarse:min-h-11 w-full md:w-auto" disabled>
               Authenticating…
             </Button>
           )}
@@ -78,7 +78,7 @@ export function AuthPrompt({
           {state === 'error' && onRetry && (
             <Button
               variant="outline"
-              className="h-12 md:h-10 w-full md:w-auto"
+              className="h-12 md:h-10 pointer-coarse:min-h-11 w-full md:w-auto"
               onClick={onRetry}
             >
               Try again

@@ -108,6 +108,38 @@ export const CollapsibleTogglesBody: Story = {
   },
 }
 
+export const CollapsibleIsKeyboardOperable: Story = {
+  name: 'Test: collapsible header works from the keyboard',
+  render: () => (
+    <div className="max-w-sm">
+      <SummaryPanel collapsible defaultOpen>
+        <SummaryPanel.Header>Order Summary</SummaryPanel.Header>
+        <SummaryPanel.Body>
+          <DetailList>
+            <DetailList.Row label="Total" value="$42.00" />
+          </DetailList>
+        </SummaryPanel.Body>
+      </SummaryPanel>
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    const header = canvas.getByRole('button', { name: /order summary/i })
+
+    // A control that claims role="button" has to be reachable by Tab and
+    // operable by Enter and Space, or it is a mouse-only control lying about it.
+    await userEvent.tab()
+    await expect(header).toHaveFocus()
+
+    await userEvent.keyboard('{Enter}')
+    await expect(header).toHaveAttribute('aria-expanded', 'false')
+    await waitFor(() => expect(canvas.queryByText('$42.00')).not.toBeInTheDocument())
+
+    await userEvent.keyboard(' ')
+    await expect(header).toHaveAttribute('aria-expanded', 'true')
+    await waitFor(() => expect(canvas.getByText('$42.00')).toBeInTheDocument())
+  },
+}
+
 export const NonCollapsibleHasNoButton: Story = {
   name: 'Test: non-collapsible header is not a button',
   render: () => (

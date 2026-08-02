@@ -8,9 +8,9 @@ const config: StorybookConfig = {
     config.optimizeDeps.include.push('motion', 'motion/react');
     return config;
   },
+  // Components own their stories beside their source. There is no top-level
+  // `stories/` folder — a glob for one would match nothing and warn every run.
   "stories": [
-    "../stories/**/*.mdx",
-    "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
     "../components/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
   "addons": [

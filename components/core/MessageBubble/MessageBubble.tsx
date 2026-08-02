@@ -182,7 +182,7 @@ function FeedbackRow({
         <Button
           variant="ghost"
           size="icon"
-          className="size-7 text-muted-foreground hover:text-foreground"
+          className="size-7 tap-target text-muted-foreground hover:text-foreground"
           onClick={handleThumbsUp}
           aria-label="Helpful"
         >
@@ -196,7 +196,7 @@ function FeedbackRow({
         <Button
           variant="ghost"
           size="icon"
-          className="size-7 text-muted-foreground hover:text-foreground"
+          className="size-7 tap-target text-muted-foreground hover:text-foreground"
           onClick={handleThumbsDown}
           aria-label="Not helpful"
         >
