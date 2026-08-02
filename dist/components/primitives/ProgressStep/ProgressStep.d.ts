@@ -1,7 +1,7 @@
-export interface ProgressStepProps {
+import type { ComponentPropsWithRef } from 'react';
+export interface ProgressStepProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
     status: 'pending' | 'active' | 'complete';
     label?: string;
-    className?: string;
 }
 export declare const progressStepDotBase = "size-3 md:size-3.5 rounded-full border-2 flex items-center justify-center";
 export declare const progressStepStatusClasses: {
@@ -9,4 +9,4 @@ export declare const progressStepStatusClasses: {
     active: string;
     complete: string;
 };
-export declare function ProgressStep({ status, label, className }: ProgressStepProps): import("react").JSX.Element;
+export declare function ProgressStep({ status, label, className, ...props }: ProgressStepProps): import("react").JSX.Element;

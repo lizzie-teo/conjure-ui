@@ -1,12 +1,12 @@
 'use client'
 
+import type { ComponentPropsWithRef } from 'react'
 import { cn } from '../../../lib/utils'
 
-export interface PaymentLogoProps {
+export interface PaymentLogoProps extends Omit<ComponentPropsWithRef<'img'>, 'size'> {
   src: string
   alt: string
   size?: 'sm' | 'md' | 'lg'
-  className?: string
 }
 
 const sizes = {
@@ -15,13 +15,14 @@ const sizes = {
   lg: 'h-10 md:h-9',
 }
 
-export function PaymentLogo({ src, alt, size = 'md', className }: PaymentLogoProps) {
+export function PaymentLogo({ src, alt, size = 'md', className, ...props }: PaymentLogoProps) {
   return (
     <img
       src={src}
       alt={alt}
       className={cn('w-auto object-contain', sizes[size], className)}
       draggable={false}
+      {...props}
     />
   )
 }

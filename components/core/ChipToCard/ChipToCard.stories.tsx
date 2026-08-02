@@ -8,24 +8,46 @@ import { ActionStrip } from '../ActionStrip/ActionStrip'
 import { DetailList } from '../DetailList/DetailList'
 import { ChipToCard } from './ChipToCard'
 
+const DEFAULT_CHIPS = [
+  {
+    id: 'economy',
+    label: 'Economy',
+    card: (
+      <div className="p-4">
+        <p className="font-semibold text-sm">Economy to Tokyo</p>
+        <p className="text-xs text-muted-foreground">Qantas · $899</p>
+      </div>
+    ),
+  },
+  {
+    id: 'business',
+    label: 'Business',
+    card: (
+      <div className="p-4">
+        <p className="font-semibold text-sm">Business to Tokyo</p>
+        <p className="text-xs text-muted-foreground">Qantas · $3,499</p>
+      </div>
+    ),
+  },
+]
+
 const meta = {
   title: 'Components/ChipToCard',
   component: ChipToCard,
   tags: ['autodocs'],
+  // Shared render helper — not a story.
+  excludeStories: ['flightCard'],
+  // `chips` is required, so meta must supply it for stories that use `render`.
+  args: { chips: DEFAULT_CHIPS },
 } satisfies Meta<typeof ChipToCard>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  render: () => (
+  render: (args) => (
     <div className="max-w-xs">
-      <ChipToCard
-        chips={[
-          { id: 'economy', label: 'Economy', card: <div className="p-4"><p className="font-semibold text-sm">Economy to Tokyo</p><p className="text-xs text-muted-foreground">Qantas · $899</p></div> },
-          { id: 'business', label: 'Business', card: <div className="p-4"><p className="font-semibold text-sm">Business to Tokyo</p><p className="text-xs text-muted-foreground">Qantas · $3,499</p></div> },
-        ]}
-      />
+      <ChipToCard {...args} />
     </div>
   ),
 }

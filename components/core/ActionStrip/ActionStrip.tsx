@@ -2,12 +2,10 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 import { Button } from '../../ui/button'
+import type { ComponentPropsWithRef } from 'react'
 import { cn } from '../../../lib/utils'
 
-export interface ActionStripProps {
-  className?: string
-  children?: React.ReactNode
-}
+export type ActionStripProps = ComponentPropsWithRef<'div'>
 
 interface PrimaryProps {
   onClick?: () => void
@@ -69,13 +67,14 @@ function Secondary({ onClick, disabled, className, children }: SecondaryProps) {
   )
 }
 
-export function ActionStrip({ className, children }: ActionStripProps) {
+export function ActionStrip({ className, children, ...props }: ActionStripProps) {
   return (
     <div
       className={cn(
         'flex items-center gap-2 md:gap-3 px-4 md:px-5 py-3 md:py-4',
         className
       )}
+      {...props}
     >
       {children}
     </div>

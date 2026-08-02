@@ -1,13 +1,14 @@
 import { type EntityAvatarProps } from '../../primitives';
+import type { MotionDivProps } from '../../../lib/prop-types';
 type Role = 'user' | 'assistant';
-export interface MessageBubbleProps {
+export interface MessageBubbleProps extends MotionDivProps {
     role: Role;
     /** True for consecutive messages from the same sender — hides the avatar */
     grouped?: boolean;
     /** True while the AI is actively generating — triggers avatar breathe and stops on first token */
     isGenerating?: boolean;
-    className?: string;
-    children?: React.ReactNode;
+    /** Briefly flashes a glow overlay when the AI references this message */
+    isReferenced?: boolean;
 }
 interface ContentProps {
     children?: React.ReactNode;
@@ -23,10 +24,16 @@ interface TimestampSubProps {
     datetime: string;
     className?: string;
 }
-export declare function MessageBubble({ role, grouped, isGenerating, className, children, }: MessageBubbleProps): import("react").JSX.Element;
+interface FeedbackRowProps {
+    onThumbsUp?: () => void;
+    onThumbsDown?: () => void;
+    className?: string;
+}
+export declare function MessageBubble({ role, grouped, isGenerating, isReferenced, className, children, ...props }: MessageBubbleProps): import("react").JSX.Element;
 export declare namespace MessageBubble {
     var Content: ({ children, words, className }: ContentProps) => import("react").JSX.Element;
     var Avatar: ({ size, ...props }: EntityAvatarProps) => import("react").JSX.Element | null;
     var Timestamp: ({ datetime, className }: TimestampSubProps) => import("react").JSX.Element;
+    var FeedbackRow: ({ onThumbsUp, onThumbsDown, className }: FeedbackRowProps) => import("react").JSX.Element;
 }
 export {};

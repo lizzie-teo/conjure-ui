@@ -1,4 +1,3 @@
-export interface TypingIndicatorProps {
-    className?: string;
-}
-export declare function TypingIndicator({ className }: TypingIndicatorProps): import("react").JSX.Element;
+import type { MotionDivProps } from '../../../lib/prop-types';
+export type TypingIndicatorProps = Omit<MotionDivProps, 'children'>;
+export declare function TypingIndicator({ className, ...props }: TypingIndicatorProps): import("react").JSX.Element;

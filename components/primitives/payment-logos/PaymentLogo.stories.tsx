@@ -33,6 +33,8 @@ const meta = {
   title: 'Primitives/PaymentLogo',
   component: PaymentLogo,
   tags: ['autodocs'],
+  // Shared fixtures and render helpers — not stories.
+  excludeStories: ['LOGOS', 'LogoGrid'],
   args: {
     src: PAYMENT_LOGOS['cards/mastercard.svg'],
     alt: 'Mastercard',

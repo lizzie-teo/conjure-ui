@@ -3,11 +3,12 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
-export interface QuickRepliesProps {
+export interface QuickRepliesProps extends Omit<MotionDivProps, 'children' | 'onSelect'> {
   options: string[]
+  /** Note: replaces the DOM `onSelect` — receives the chosen option string. */
   onSelect: (option: string) => void
-  className?: string
 }
 
 const containerVariants = {
@@ -27,7 +28,7 @@ const itemVariantsReduced = {
   show: { opacity: 1, transition: { duration: 0.2 } },
 }
 
-export function QuickReplies({ options, onSelect, className }: QuickRepliesProps) {
+export function QuickReplies({ options, onSelect, className, ...props }: QuickRepliesProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -41,6 +42,7 @@ export function QuickReplies({ options, onSelect, className }: QuickRepliesProps
       )}
       role="group"
       aria-label="Quick reply options"
+      {...props}
     >
       {options.map((option) => (
         <motion.div

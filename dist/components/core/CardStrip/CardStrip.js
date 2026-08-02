@@ -1,7 +1,7 @@
 "use client";
 import { cn as e } from "../../../lib/utils.js";
 import { jsx as t } from "react/jsx-runtime";
-import { motion as n, useReducedMotion as r } from "framer-motion";
+import { motion as n, useReducedMotion as r } from "motion/react";
 //#region components/core/CardStrip/CardStrip.tsx
 function i({ children: n, className: r }) {
 	return /* @__PURE__ */ t("div", {
@@ -9,12 +9,12 @@ function i({ children: n, className: r }) {
 		children: n
 	});
 }
-function a({ children: i, className: a }) {
-	let o = r();
+function a({ children: i, className: a, ...o }) {
+	let s = r();
 	return /* @__PURE__ */ t(n.div, {
 		initial: {
 			opacity: 0,
-			y: o ? 0 : 8
+			y: s ? 0 : 8
 		},
 		animate: {
 			opacity: 1,
@@ -35,6 +35,7 @@ function a({ children: i, className: a }) {
 			WebkitOverflowScrolling: "touch"
 		},
 		"aria-label": "Scroll for more options",
+		...o,
 		children: i
 	});
 }

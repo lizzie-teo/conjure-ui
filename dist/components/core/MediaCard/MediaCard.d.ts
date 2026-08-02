@@ -1,7 +1,5 @@
-export interface MediaCardProps {
-    className?: string;
-    children?: React.ReactNode;
-}
+import type { MotionDivProps } from '../../../lib/prop-types';
+export type MediaCardProps = MotionDivProps;
 interface MediaProps {
     src: string;
     alt: string;
@@ -27,7 +25,7 @@ interface BodyProps {
     children: React.ReactNode;
     className?: string;
 }
-export declare function MediaCard({ className, children }: MediaCardProps): import("react").JSX.Element;
+export declare function MediaCard({ className, children, ...props }: MediaCardProps): import("react").JSX.Element;
 export declare namespace MediaCard {
     var Media: ({ src, alt, className }: MediaProps) => import("react").JSX.Element;
     var Body: ({ children, className }: BodyProps) => import("react").JSX.Element;

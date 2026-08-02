@@ -2,11 +2,9 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
-export interface CardStripProps {
-  children?: React.ReactNode
-  className?: string
-}
+export type CardStripProps = MotionDivProps
 
 interface ItemProps {
   children: React.ReactNode
@@ -21,7 +19,7 @@ function Item({ children, className }: ItemProps) {
   )
 }
 
-export function CardStrip({ children, className }: CardStripProps) {
+export function CardStrip({ children, className, ...props }: CardStripProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -35,6 +33,7 @@ export function CardStrip({ children, className }: CardStripProps) {
       )}
       style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
       aria-label="Scroll for more options"
+      {...props}
     >
       {children}
     </motion.div>

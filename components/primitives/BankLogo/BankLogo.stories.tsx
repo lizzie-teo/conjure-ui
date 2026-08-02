@@ -142,6 +142,17 @@ const meta = {
   title: 'Primitives/BankLogo',
   component: BankLogo,
   tags: ['autodocs'],
+  // Shared fixtures and render helpers — not stories.
+  excludeStories: [
+    'GLOBAL',
+    'AUSTRALIA',
+    'SINGAPORE',
+    'JAPAN',
+    'NEW_ZEALAND',
+    'REGIONS',
+    'LogoGrid',
+    'RegionBrowser',
+  ],
   args: {
     src: BANK_LOGOS['global/chase.svg'],
     alt: 'Chase',

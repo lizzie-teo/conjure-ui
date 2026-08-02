@@ -1,5 +1,6 @@
 'use client'
 
+import type { ComponentPropsWithRef } from 'react'
 import { Check, CreditCard, Landmark } from 'lucide-react'
 import { cn } from '../../../lib/utils'
 
@@ -58,14 +59,12 @@ const brandMarks: Record<string, React.ReactNode> = {
   bank: <Landmark className="size-5" aria-hidden />,
 }
 
-export interface PaymentMethodTileProps {
+export interface PaymentMethodTileProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   type: 'card' | 'apple-pay' | 'google-pay' | 'bank'
   label: string
   /** URL of a card network logo (e.g. `/payment-logos/cards/mastercard.svg`). When provided for `type="card"`, replaces the generic card icon. */
   networkLogoSrc?: string
   selected?: boolean
-  onClick?: () => void
-  className?: string
 }
 
 export function PaymentMethodTile({
@@ -75,6 +74,7 @@ export function PaymentMethodTile({
   selected,
   onClick,
   className,
+  ...props
 }: PaymentMethodTileProps) {
   const isInteractive = Boolean(onClick)
 
@@ -92,6 +92,9 @@ export function PaymentMethodTile({
 
   return (
     <div
+      // Spread first: the role/tabIndex/keyboard handling below is this tile's
+      // a11y contract and must not be silently overridden by a consumer prop.
+      {...props}
       role={isInteractive ? 'button' : undefined}
       aria-pressed={isInteractive ? selected : undefined}
       tabIndex={isInteractive ? 0 : undefined}
@@ -101,7 +104,8 @@ export function PaymentMethodTile({
           ? (e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault()
-                onClick?.()
+                // Dispatch a real click so `onClick` receives a genuine event.
+                e.currentTarget.click()
               }
             }
           : undefined

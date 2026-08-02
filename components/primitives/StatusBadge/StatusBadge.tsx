@@ -1,3 +1,4 @@
+import type { ComponentPropsWithRef } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '../../../lib/utils'
 
@@ -21,14 +22,15 @@ const statusBadgeVariants = cva(statusBadgeBase, {
   }
 )
 
-export interface StatusBadgeProps extends VariantProps<typeof statusBadgeVariants> {
+export interface StatusBadgeProps
+  extends Omit<ComponentPropsWithRef<'span'>, 'children'>,
+    VariantProps<typeof statusBadgeVariants> {
   label: string
-  className?: string
 }
 
-export function StatusBadge({ label, variant, className }: StatusBadgeProps) {
+export function StatusBadge({ label, variant, className, ...props }: StatusBadgeProps) {
   return (
-    <span className={cn(statusBadgeVariants({ variant }), className)}>
+    <span className={cn(statusBadgeVariants({ variant }), className)} {...props}>
       {label}
     </span>
   )

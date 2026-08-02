@@ -4,6 +4,7 @@ import { createContext, useContext, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { Check } from 'lucide-react'
 import { cn } from '../../../lib/utils'
+import type { MotionDivProps } from '../../../lib/prop-types'
 import { Button } from '../../ui/button'
 
 const MotionButton = motion(Button)
@@ -22,13 +23,13 @@ const SelectionGroupCtx = createContext<SelectionGroupContextValue>({
   toggle: () => {},
 })
 
-export interface SelectionGroupProps {
+export interface SelectionGroupProps
+  extends Omit<MotionDivProps, 'onChange' | 'defaultValue'> {
   type?: SelectionType
   value?: string | string[]
   defaultValue?: string | string[]
+  /** Note: replaces the DOM `onChange` — receives the new selection. */
   onChange?: (value: string | string[]) => void
-  className?: string
-  children?: React.ReactNode
 }
 
 export interface OptionProps {
@@ -133,6 +134,7 @@ export function SelectionGroup({
   onChange,
   className,
   children,
+  ...props
 }: SelectionGroupProps) {
   const isControlled = value !== undefined
   const [internal, setInternal] = useState<string[]>(() => normalise(defaultValue))
@@ -162,6 +164,7 @@ export function SelectionGroup({
         animate="show"
         role={type === 'radio' ? 'radiogroup' : 'group'}
         className={cn('flex flex-col gap-2 md:gap-2.5', className)}
+        {...props}
       >
         {children}
       </motion.div>

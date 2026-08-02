@@ -7,9 +7,10 @@ function r(e, t) {
 		currency: t
 	}).format(e);
 }
-function i({ amount: i, currency: a, strikethrough: o, className: s }) {
+function i({ amount: i, currency: a, strikethrough: o, className: s, ...c }) {
 	return /* @__PURE__ */ n("span", {
 		className: e("inline-flex items-baseline gap-1.5", s),
+		...c,
 		children: [o !== void 0 && /* @__PURE__ */ t("span", {
 			className: "text-muted-foreground line-through text-xs md:text-sm",
 			children: r(o, a)

@@ -1,7 +1,7 @@
-export interface PriceDisplayProps {
+import type { ComponentPropsWithRef } from 'react';
+export interface PriceDisplayProps extends Omit<ComponentPropsWithRef<'span'>, 'children'> {
     amount: number;
     currency: string;
     strikethrough?: number;
-    className?: string;
 }
-export declare function PriceDisplay({ amount, currency, strikethrough, className }: PriceDisplayProps): import("react").JSX.Element;
+export declare function PriceDisplay({ amount, currency, strikethrough, className, ...props }: PriceDisplayProps): import("react").JSX.Element;

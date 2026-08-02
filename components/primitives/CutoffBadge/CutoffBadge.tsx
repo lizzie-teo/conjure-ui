@@ -1,10 +1,10 @@
+import type { ComponentPropsWithRef } from 'react'
 import { Clock } from 'lucide-react'
 import { cn } from '../../../lib/utils'
 
-export interface CutoffBadgeProps {
+export interface CutoffBadgeProps extends Omit<ComponentPropsWithRef<'span'>, 'children'> {
   cutoffAt: string
   missed?: boolean
-  className?: string
 }
 
 function formatTime(isoString: string): string {
@@ -15,7 +15,7 @@ function formatTime(isoString: string): string {
   }).format(new Date(isoString))
 }
 
-export function CutoffBadge({ cutoffAt, missed = false, className }: CutoffBadgeProps) {
+export function CutoffBadge({ cutoffAt, missed = false, className, ...props }: CutoffBadgeProps) {
   const timeStr = formatTime(cutoffAt)
 
   return (
@@ -25,6 +25,7 @@ export function CutoffBadge({ cutoffAt, missed = false, className }: CutoffBadge
         missed ? 'text-muted-foreground line-through' : 'text-warning',
         className
       )}
+      {...props}
     >
       <Clock className="size-3 shrink-0" />
       <span>Order by {timeStr}</span>

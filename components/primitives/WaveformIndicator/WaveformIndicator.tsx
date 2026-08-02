@@ -1,14 +1,14 @@
 'use client'
 
+import type { ComponentPropsWithRef } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
 
-export interface WaveformIndicatorProps {
+export interface WaveformIndicatorProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   barCount?: number
-  className?: string
 }
 
-export function WaveformIndicator({ barCount = 5, className }: WaveformIndicatorProps) {
+export function WaveformIndicator({ barCount = 5, className, ...props }: WaveformIndicatorProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -16,6 +16,7 @@ export function WaveformIndicator({ barCount = 5, className }: WaveformIndicator
       role="status"
       aria-label="AI is thinking"
       className={cn('inline-flex items-end gap-0.5 md:gap-1', className)}
+      {...props}
     >
       {Array.from({ length: barCount }).map((_, i) => (
         <motion.span

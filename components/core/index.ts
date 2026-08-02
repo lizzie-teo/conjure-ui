@@ -55,6 +55,12 @@ export type { PaymentConfirmSheetProps, SummaryRow } from './PaymentConfirmSheet
 export { PaymentSuccess } from './PaymentSuccess/PaymentSuccess'
 export type { PaymentSuccessProps, PaymentSuccessRow } from './PaymentSuccess/PaymentSuccess'
 
+export { ApplePaySheet } from './ApplePaySheet/ApplePaySheet'
+export type { ApplePaySheetProps, ApplePayCard, ApplePayContact, ApplePayShipping } from './ApplePaySheet/ApplePaySheet'
+
+export { DoubleClickToPay } from './DoubleClickToPay/DoubleClickToPay'
+export type { DoubleClickToPayProps } from './DoubleClickToPay/DoubleClickToPay'
+
 export { ComparisonCard } from './ComparisonCard/ComparisonCard'
 export type { ComparisonCardProps, ComparisonPlan, ComparisonCaveat, ComparisonScenario } from './ComparisonCard/ComparisonCard'
 

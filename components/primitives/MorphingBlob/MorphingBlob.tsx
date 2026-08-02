@@ -2,10 +2,10 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
-export interface MorphingBlobProps {
+export interface MorphingBlobProps extends Omit<MotionDivProps, 'children'> {
   size?: 'sm' | 'md'
-  className?: string
 }
 
 const sizeClasses: Record<NonNullable<MorphingBlobProps['size']>, string> = {
@@ -22,7 +22,7 @@ const BLOB_RADII = [
   '60% 40% 55% 45% / 45% 55% 45% 55%',
 ]
 
-export function MorphingBlob({ size = 'md', className }: MorphingBlobProps) {
+export function MorphingBlob({ size = 'md', className, ...props }: MorphingBlobProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -35,6 +35,7 @@ export function MorphingBlob({ size = 'md', className }: MorphingBlobProps) {
           ? {}
           : { duration: 3, repeat: Infinity, ease: 'easeInOut' }
       }
+      {...props}
     />
   )
 }

@@ -2,11 +2,9 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
-export interface DetailListProps {
-  className?: string
-  children?: React.ReactNode
-}
+export type DetailListProps = MotionDivProps
 
 export interface RowProps {
   label: string
@@ -49,13 +47,14 @@ function Row({ label, value, className }: RowProps) {
   )
 }
 
-export function DetailList({ className, children }: DetailListProps) {
+export function DetailList({ className, children, ...props }: DetailListProps) {
   return (
     <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="show"
       className={cn('divide-y-0 px-4 md:px-5 py-1', className)}
+      {...props}
     >
       {children}
     </motion.div>

@@ -1,7 +1,7 @@
 "use client";
 import { cn as e } from "../../../lib/utils.js";
 import { jsx as t, jsxs as n } from "react/jsx-runtime";
-import { motion as r, useReducedMotion as i } from "framer-motion";
+import { motion as r, useReducedMotion as i } from "motion/react";
 //#region components/core/DetailList/DetailList.tsx
 var a = {
 	hidden: {},
@@ -48,12 +48,13 @@ function c({ label: a, value: c, className: l }) {
 		})]
 	});
 }
-function l({ className: n, children: i }) {
+function l({ className: n, children: i, ...o }) {
 	return /* @__PURE__ */ t(r.div, {
 		variants: a,
 		initial: "hidden",
 		animate: "show",
 		className: e("divide-y-0 px-4 md:px-5 py-1", n),
+		...o,
 		children: i
 	});
 }

@@ -1,6 +1,7 @@
+import type { ComponentPropsWithRef } from 'react'
 import { cn } from '../../../lib/utils'
 
-export interface AddressTileProps {
+export interface AddressTileProps extends Omit<ComponentPropsWithRef<'address'>, 'children'> {
   name: string
   line1: string
   line2?: string
@@ -20,6 +21,7 @@ export function AddressTile({
   postcode,
   country,
   className,
+  ...props
 }: AddressTileProps) {
   const cityLine = [city, state, postcode].filter(Boolean).join(', ')
 
@@ -29,6 +31,7 @@ export function AddressTile({
         'not-italic text-xs md:text-sm text-foreground leading-relaxed space-y-0.5',
         className
       )}
+      {...props}
     >
       <p className="font-medium">{name}</p>
       <p className="text-muted-foreground">{line1}</p>

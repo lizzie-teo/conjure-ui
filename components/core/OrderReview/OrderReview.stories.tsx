@@ -44,6 +44,8 @@ const meta = {
   title: 'Components/OrderReview',
   component: OrderReview,
   tags: ['autodocs'],
+  // Shared fixtures — not stories.
+  excludeStories: ['SINGLE_ITEM', 'MULTI_ITEMS'],
   parameters: {
     layout: 'padded',
   },

@@ -1,5 +1,6 @@
 'use client'
 
+import type { ComponentPropsWithRef } from 'react'
 import { Check, Fingerprint, X } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
@@ -25,12 +26,11 @@ const stateAriaLabels = {
   error: 'Authentication failed',
 }
 
-export interface BiometricIndicatorProps {
+export interface BiometricIndicatorProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   state: 'idle' | 'pending' | 'success' | 'error'
-  className?: string
 }
 
-export function BiometricIndicator({ state, className }: BiometricIndicatorProps) {
+export function BiometricIndicator({ state, className, ...props }: BiometricIndicatorProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -41,6 +41,7 @@ export function BiometricIndicator({ state, className }: BiometricIndicatorProps
         'relative inline-flex items-center justify-center size-20 md:size-16',
         className
       )}
+      {...props}
     >
       {/* Static ring — transitions color with state */}
       <div

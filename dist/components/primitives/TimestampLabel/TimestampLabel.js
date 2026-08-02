@@ -14,12 +14,13 @@ function r(e) {
 	};
 	return t.getFullYear() !== (/* @__PURE__ */ new Date()).getFullYear() && (i.year = "numeric"), new Intl.DateTimeFormat(void 0, i).format(t);
 }
-function i({ datetime: i, className: a }) {
-	let o = n(() => r(i), [i]);
+function i({ datetime: i, className: a, ...o }) {
+	let s = n(() => r(i), [i]);
 	return /* @__PURE__ */ t("time", {
 		dateTime: i,
 		className: e("text-muted-foreground text-xs md:text-sm", a),
-		children: o
+		...o,
+		children: s
 	});
 }
 //#endregion

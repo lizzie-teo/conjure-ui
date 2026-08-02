@@ -210,11 +210,18 @@ export function DeliveryFlow({
 
   const selectedSlot = timeSlots.find((s) => s.id === state.selectedSlotId)
 
+  // Last-resort edit window when neither an explicit `editableUntil` nor a
+  // selected date is available. Read the clock once per flow instance — calling
+  // Date.now() in render would yield a new deadline on every re-render.
+  const [fallbackEditableUntil] = useState(() =>
+    new Date(Date.now() + 86_400_000).toISOString(),
+  )
+
   const resolvedEditableUntil =
     editableUntil ??
     (state.selectedDate
       ? `${state.selectedDate}T00:00:00.000Z`
-      : new Date(Date.now() + 86_400_000).toISOString())
+      : fallbackEditableUntil)
 
   if (status === 'resolved' && selectedSlot) {
     return (

@@ -14,6 +14,8 @@ const meta = {
   title: 'Components/CardStack',
   component: CardStack,
   tags: ['autodocs'],
+  // Shared render helper — not a story.
+  excludeStories: ['FlightOption'],
 } satisfies Meta<typeof CardStack>
 
 export default meta

@@ -1,6 +1,6 @@
-export interface TagProps {
+import type { MotionSpanProps } from '../../../lib/prop-types';
+export interface TagProps extends MotionSpanProps {
     label: string;
     onRemove?: () => void;
-    className?: string;
 }
-export declare function Tag({ label, onRemove, className }: TagProps): import("react").JSX.Element;
+export declare function Tag({ label, onRemove, className, ...props }: TagProps): import("react").JSX.Element;

@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { ChevronDown } from 'lucide-react'
 import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
+import type { ComponentPropsWithRef } from 'react'
 
 interface SummaryPanelContextValue {
   isOpen: boolean
@@ -18,11 +19,9 @@ const SummaryPanelCtx = createContext<SummaryPanelContextValue>({
   collapsible: false,
 })
 
-export interface SummaryPanelProps {
+export interface SummaryPanelProps extends ComponentPropsWithRef<'div'> {
   defaultOpen?: boolean
   collapsible?: boolean
-  className?: string
-  children?: React.ReactNode
 }
 
 interface HeaderProps {
@@ -101,6 +100,7 @@ export function SummaryPanel({
   collapsible = false,
   className,
   children,
+  ...props
 }: SummaryPanelProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
@@ -111,6 +111,7 @@ export function SummaryPanel({
           'rounded-xl border border-border bg-card shadow-card overflow-hidden',
           className
         )}
+        {...props}
       >
         {children}
       </div>

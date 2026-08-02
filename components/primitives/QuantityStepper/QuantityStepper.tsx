@@ -1,16 +1,18 @@
 'use client'
 
+import type { ComponentPropsWithRef } from 'react'
 import { Minus, Plus } from 'lucide-react'
 import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
 
-export interface QuantityStepperProps {
+export interface QuantityStepperProps
+  extends Omit<ComponentPropsWithRef<'div'>, 'children' | 'onChange'> {
   value: number
   min?: number
   max?: number
+  /** Note: replaces the DOM `onChange` — receives the new quantity, not an event. */
   onChange: (value: number) => void
   disabled?: boolean
-  className?: string
 }
 
 export function QuantityStepper({
@@ -20,6 +22,7 @@ export function QuantityStepper({
   onChange,
   disabled = false,
   className,
+  ...props
 }: QuantityStepperProps) {
   const atMin = value <= min
   const atMax = value >= max
@@ -29,6 +32,7 @@ export function QuantityStepper({
       role="group"
       aria-label="Quantity"
       className={cn('inline-flex items-center gap-2', className)}
+      {...props}
     >
       <Button
         variant="outline"

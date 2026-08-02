@@ -8,6 +8,8 @@ const meta = {
   title: 'Components/CartItem',
   component: CartItem,
   tags: ['autodocs'],
+  // Shared fixture — not a story.
+  excludeStories: ['PLACEHOLDER_IMAGE'],
   args: {
     image: PLACEHOLDER_IMAGE,
     name: 'Premium Leather Watch',

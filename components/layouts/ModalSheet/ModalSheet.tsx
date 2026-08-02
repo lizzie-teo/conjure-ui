@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useId, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useRef, useSyncExternalStore } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { X } from 'lucide-react'
 import { Button } from '../../ui/button'
@@ -24,6 +24,29 @@ const sizeClass = {
   md: 'md:max-w-[480px]',
   lg: 'md:max-w-[600px]',
 } as const
+
+// ── Breakpoint subscription ───────────────────────────────────────────────────
+
+const DESKTOP_QUERY = '(min-width: 768px)'
+
+/**
+ * Reads a media query through useSyncExternalStore rather than an effect that
+ * calls setState, which would cascade an extra render on every mount.
+ * Server snapshot is `false` so SSR matches the mobile-first base styles.
+ */
+function useIsDesktop(): boolean {
+  const subscribe = useCallback((onChange: () => void) => {
+    const mq = window.matchMedia(DESKTOP_QUERY)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(DESKTOP_QUERY).matches,
+    () => false,
+  )
+}
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
@@ -97,16 +120,8 @@ export function ModalSheet({
   const triggerRef = useRef<Element | null>(null)
   const titleId = useId()
   const descId = useId()
-  const [isDesktop, setIsDesktop] = useState(false)
-
   // Detect md+ breakpoint for animation variant switching
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)')
-    setIsDesktop(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
+  const isDesktop = useIsDesktop()
 
   // Scroll lock
   useEffect(() => {

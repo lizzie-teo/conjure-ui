@@ -7,10 +7,13 @@
     "declarationDir": "dist",
     "outDir": "dist",
     "moduleResolution": "bundler",
-    "tsBuildInfoFile": ".tsbuildinfo-lib",
+    // Vite wipes dist via emptyOutDir; an incremental cache would then let tsc
+    // decide it has nothing to emit and publish a package with no .d.ts files.
+    "incremental": false,
     "plugins": []
   },
   "include": [
+    "svg.d.ts",
     "index.ts",
     "components/**/*.ts",
     "components/**/*.tsx",

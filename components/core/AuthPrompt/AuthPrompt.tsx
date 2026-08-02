@@ -3,14 +3,14 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { Button } from '../../ui/button'
 import { BiometricIndicator } from '../../primitives/BiometricIndicator/BiometricIndicator'
+import type { ComponentPropsWithRef } from 'react'
 import { cn } from '../../../lib/utils'
 
-export interface AuthPromptProps {
+export interface AuthPromptProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   state: 'idle' | 'pending' | 'success' | 'error'
   onAuthenticate: () => void
   onRetry?: () => void
   errorMessage?: string
-  className?: string
 }
 
 const stateMessages = {
@@ -26,6 +26,7 @@ export function AuthPrompt({
   onRetry,
   errorMessage,
   className,
+  ...props
 }: AuthPromptProps) {
   const shouldReduce = useReducedMotion()
 
@@ -35,6 +36,7 @@ export function AuthPrompt({
         'flex flex-col items-center gap-5 md:gap-6 p-6 md:p-8',
         className
       )}
+      {...props}
     >
       <BiometricIndicator state={state} />
 

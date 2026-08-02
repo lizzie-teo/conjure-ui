@@ -1,5 +1,5 @@
-export interface MorphingBlobProps {
+import type { MotionDivProps } from '../../../lib/prop-types';
+export interface MorphingBlobProps extends Omit<MotionDivProps, 'children'> {
     size?: 'sm' | 'md';
-    className?: string;
 }
-export declare function MorphingBlob({ size, className }: MorphingBlobProps): import("react").JSX.Element;
+export declare function MorphingBlob({ size, className, ...props }: MorphingBlobProps): import("react").JSX.Element;

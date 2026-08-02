@@ -12,9 +12,10 @@ var r = "inline-flex items-center rounded-full px-2 py-0.5 text-xs md:text-sm fo
 	variants: { variant: i },
 	defaultVariants: { variant: "default" }
 });
-function o({ label: n, variant: r, className: i }) {
+function o({ label: n, variant: r, className: i, ...o }) {
 	return /* @__PURE__ */ t("span", {
 		className: e(a({ variant: r }), i),
+		...o,
 		children: n
 	});
 }

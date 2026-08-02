@@ -1,3 +1,4 @@
+import type { ComponentPropsWithRef } from 'react'
 import { cn } from '../../../lib/utils'
 
 export type AvailabilityLevel = 'available' | 'limited' | 'unavailable'
@@ -54,20 +55,25 @@ const icons = {
   unavailable: UnavailableIcon,
 }
 
-export interface AvailabilityDotProps {
+export interface AvailabilityDotProps extends Omit<ComponentPropsWithRef<'span'>, 'children'> {
   level: AvailabilityLevel
   showLabel?: boolean
-  className?: string
-  'aria-hidden'?: boolean | 'true' | 'false'
 }
 
-export function AvailabilityDot({ level, showLabel = false, className, 'aria-hidden': ariaHidden }: AvailabilityDotProps) {
+export function AvailabilityDot({
+  level,
+  showLabel = false,
+  className,
+  'aria-hidden': ariaHidden,
+  ...props
+}: AvailabilityDotProps) {
   const Icon = icons[level]
   return (
     <span
       className={cn('inline-flex items-center gap-1.5', className)}
       aria-label={ariaHidden ? undefined : availabilityLabels[level]}
       aria-hidden={ariaHidden}
+      {...props}
     >
       {/* Icon gets the semantic color; label text is always high-contrast */}
       <Icon className={availabilityColorClasses[level]} />

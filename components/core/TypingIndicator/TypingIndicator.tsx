@@ -2,12 +2,11 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
-export interface TypingIndicatorProps {
-  className?: string
-}
+export type TypingIndicatorProps = Omit<MotionDivProps, 'children'>
 
-export function TypingIndicator({ className }: TypingIndicatorProps) {
+export function TypingIndicator({ className, ...props }: TypingIndicatorProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -22,6 +21,7 @@ export function TypingIndicator({ className }: TypingIndicatorProps) {
       )}
       aria-label="Assistant is typing"
       role="status"
+      {...props}
     >
       {[0, 1, 2].map((i) => (
         <motion.span

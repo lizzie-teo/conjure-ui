@@ -29,6 +29,9 @@ interface LineCoords {
   fromY: number
   toX: number
   toY: number
+  /** Scroll height of the container, captured alongside the coords so the
+   *  overlay SVG can be sized without reading a ref during render. */
+  height: number
 }
 
 function computeCenterRelative(el: HTMLElement, container: HTMLElement): { x: number; y: number } {
@@ -85,7 +88,13 @@ export function ChatWidget({
         if (container && targetEl && sourceEl) {
           const from = computeCenterRelative(targetEl, container)
           const to = computeCenterRelative(sourceEl, container)
-          setLineCoords({ fromX: from.x, fromY: from.y, toX: to.x, toY: to.y })
+          setLineCoords({
+            fromX: from.x,
+            fromY: from.y,
+            toX: to.x,
+            toY: to.y,
+            height: container.scrollHeight,
+          })
           setLineVisible(true)
         }
       }
@@ -126,7 +135,7 @@ export function ChatWidget({
             <svg
               aria-hidden="true"
               className="absolute inset-0 w-full pointer-events-none"
-              style={{ height: scrollContainerRef.current?.scrollHeight ?? '100%' }}
+              style={{ height: lineCoords.height }}
               overflow="visible"
             >
               <motion.path

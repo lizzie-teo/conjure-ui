@@ -15,6 +15,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated output — linting it produced ~450 phantom errors in minified bundles.
+    "dist/**",
+    "storybook-static/**",
   ]),
   ...storybook.configs["flat/recommended"]
 ]);

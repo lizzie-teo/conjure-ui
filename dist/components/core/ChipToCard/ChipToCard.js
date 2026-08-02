@@ -2,52 +2,23 @@
 import { cn as e } from "../../../lib/utils.js";
 import { Button as t } from "../../ui/button.js";
 import { jsx as n, jsxs as r } from "react/jsx-runtime";
-import { useId as i, useState as a } from "react";
-import { AnimatePresence as o, LayoutGroup as s, motion as c, useReducedMotion as l } from "framer-motion";
+import { AnimatePresence as i, LayoutGroup as a, motion as o, useReducedMotion as s } from "motion/react";
+import { useId as c, useState as l } from "react";
 //#region components/core/ChipToCard/ChipToCard.tsx
 function u({ chips: u, selectedId: d, onSelectedChange: f, defaultSelectedId: p, className: m }) {
-	let h = d !== void 0, [g, _] = a(p ?? null), v = h ? d : g, y = l(), b = i(), x = u.find((e) => e.id === v), S = (e) => {
+	let h = d !== void 0, [g, _] = l(p ?? null), v = h ? d : g, y = s(), b = c(), x = u.find((e) => e.id === v), S = (e) => {
 		h || _(e), f?.(e);
 	};
-	return /* @__PURE__ */ n(s, {
+	return /* @__PURE__ */ n(a, {
 		id: b,
-		children: /* @__PURE__ */ r("div", {
-			className: e(m),
-			children: [/* @__PURE__ */ n("div", {
-				className: "flex flex-wrap gap-2",
-				children: /* @__PURE__ */ n(o, {
-					initial: !1,
-					children: !v && u.map((e) => /* @__PURE__ */ n(c.div, {
-						layoutId: `${b}-${e.id}`,
-						exit: {
-							opacity: 0,
-							scale: y ? 1 : .9,
-							transition: {
-								duration: .15,
-								ease: [
-									.4,
-									0,
-									1,
-									1
-								]
-							}
-						},
-						className: "shrink-0",
-						whileTap: y ? void 0 : { scale: .97 },
-						children: /* @__PURE__ */ n(t, {
-							variant: "outline",
-							size: "sm",
-							className: "rounded-full",
-							onClick: () => S(e.id),
-							children: e.label
-						})
-					}, e.id))
-				})
-			}), /* @__PURE__ */ n(o, {
+		children: /* @__PURE__ */ n("div", {
+			className: e("relative", m),
+			children: /* @__PURE__ */ n(i, {
+				mode: "popLayout",
 				initial: !1,
-				children: v && x && /* @__PURE__ */ r(c.div, {
+				children: v && x ? /* @__PURE__ */ r(o.div, {
 					layoutId: `${b}-${v}`,
-					className: "mt-3 rounded-xl border border-border bg-card overflow-hidden shadow-[var(--shadow-card)]",
+					className: "rounded-xl border border-border bg-card overflow-hidden shadow-[var(--shadow-card)]",
 					initial: { opacity: +!!y },
 					animate: { opacity: 1 },
 					exit: {
@@ -82,8 +53,26 @@ function u({ chips: u, selectedId: d, onSelectedChange: f, defaultSelectedId: p,
 							children: "← Back to options"
 						})
 					})]
-				}, v)
-			})]
+				}, v) : /* @__PURE__ */ n(o.div, {
+					className: "flex flex-wrap gap-2",
+					exit: {
+						opacity: 0,
+						transition: { duration: .1 }
+					},
+					children: u.map((e) => /* @__PURE__ */ n(o.div, {
+						layoutId: `${b}-${e.id}`,
+						className: "shrink-0",
+						whileTap: y ? void 0 : { scale: .97 },
+						children: /* @__PURE__ */ n(t, {
+							variant: "outline",
+							size: "sm",
+							className: "rounded-full",
+							onClick: () => S(e.id),
+							children: e.label
+						})
+					}, e.id))
+				}, "chip-list")
+			})
 		})
 	});
 }

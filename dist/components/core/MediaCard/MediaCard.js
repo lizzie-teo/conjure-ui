@@ -1,7 +1,7 @@
 "use client";
 import { cn as e } from "../../../lib/utils.js";
 import { jsx as t } from "react/jsx-runtime";
-import { motion as n, useReducedMotion as r } from "framer-motion";
+import { motion as n, useReducedMotion as r } from "motion/react";
 //#region components/core/MediaCard/MediaCard.tsx
 function i({ src: n, alt: r, className: i }) {
 	return /* @__PURE__ */ t("div", {
@@ -43,12 +43,12 @@ function l({ children: n, className: r }) {
 		children: n
 	});
 }
-function u({ className: i, children: a }) {
-	let o = r();
+function u({ className: i, children: a, ...o }) {
+	let s = r();
 	return /* @__PURE__ */ t(n.div, {
 		initial: {
 			opacity: 0,
-			y: o ? 0 : 10
+			y: s ? 0 : 10
 		},
 		animate: {
 			opacity: 1,
@@ -64,7 +64,7 @@ function u({ className: i, children: a }) {
 			]
 		},
 		whileHover: {
-			y: o ? 0 : -3,
+			y: s ? 0 : -3,
 			transition: {
 				duration: .2,
 				ease: [
@@ -76,6 +76,7 @@ function u({ className: i, children: a }) {
 			}
 		},
 		className: e("rounded-xl border border-border bg-card overflow-hidden shadow-[var(--shadow-card)]", "transition-shadow duration-200 hover:shadow-[var(--shadow-elevated)] cursor-pointer", i),
+		...o,
 		children: a
 	});
 }

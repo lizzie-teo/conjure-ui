@@ -179,7 +179,7 @@ function IngredientList({ ingredients, className }: IngredientListProps) {
                       fill="none"
                       initial={shouldReduce ? false : { opacity: 0, scale: 0.4 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      exit={shouldReduce ? false : { opacity: 0, scale: 0.4 }}
+                      exit={shouldReduce ? { opacity: 0 } : { opacity: 0, scale: 0.4 }}
                       transition={{ duration: 0.15, ease: [0, 0, 0.2, 1] }}
                       className="size-2.5 md:size-3"
                     >

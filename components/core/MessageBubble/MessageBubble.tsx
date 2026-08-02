@@ -6,6 +6,7 @@ import { ThumbsUp, ThumbsDown } from 'lucide-react'
 import { cn } from '../../../lib/utils'
 import { Button } from '../../ui/button'
 import { EntityAvatar, type EntityAvatarProps, TimestampLabel } from '../../primitives'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
 type Role = 'user' | 'assistant'
 
@@ -15,7 +16,7 @@ const BubbleContext = createContext<{ role: Role; grouped: boolean; isGenerating
   isGenerating: false,
 })
 
-export interface MessageBubbleProps {
+export interface MessageBubbleProps extends MotionDivProps {
   role: Role
   /** True for consecutive messages from the same sender — hides the avatar */
   grouped?: boolean
@@ -23,8 +24,6 @@ export interface MessageBubbleProps {
   isGenerating?: boolean
   /** Briefly flashes a glow overlay when the AI references this message */
   isReferenced?: boolean
-  className?: string
-  children?: React.ReactNode
 }
 
 interface ContentProps {
@@ -207,6 +206,7 @@ export function MessageBubble({
   isReferenced = false,
   className,
   children,
+  ...props
 }: MessageBubbleProps) {
   const shouldReduce = useReducedMotion()
   const isUser = role === 'user'
@@ -238,6 +238,7 @@ export function MessageBubble({
           isUser ? 'flex-row-reverse items-end' : 'flex-col items-start',
           className
         )}
+        {...props}
       >
         <AnimatePresence>
           {isReferenced && (

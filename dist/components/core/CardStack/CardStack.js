@@ -1,8 +1,8 @@
 "use client";
 import { cn as e } from "../../../lib/utils.js";
 import { jsx as t } from "react/jsx-runtime";
-import { Children as n, useLayoutEffect as r, useRef as i, useState as a } from "react";
-import { motion as o, useReducedMotion as s } from "framer-motion";
+import { motion as n, useReducedMotion as r } from "motion/react";
+import { Children as i, useLayoutEffect as a, useRef as o, useState as s } from "react";
 //#region components/core/CardStack/CardStack.tsx
 var c = 5, l = 6, u = 12;
 function d({ children: n, className: r }) {
@@ -12,8 +12,8 @@ function d({ children: n, className: r }) {
 	});
 }
 function f({ children: d, expanded: f, onExpandChange: p, defaultExpanded: m = !1, className: h }) {
-	let g = f !== void 0, [_, v] = a(m), y = g ? f : _, b = s(), x = i(null), [S, C] = a(0), [w, T] = a(!1), E = n.toArray(d), D = Math.min(E.length, c), O = E.slice(0, D);
-	process.env.NODE_ENV === "development" && E.length > c && console.warn(`CardStack: received ${E.length} items but only ${c} are supported. Extra items are hidden.`), r(() => {
+	let g = f !== void 0, [_, v] = s(m), y = g ? f : _, b = r(), x = o(null), [S, C] = s(0), [w, T] = s(!1), E = i.toArray(d), D = Math.min(E.length, c), O = E.slice(0, D);
+	process.env.NODE_ENV === "development" && E.length > c && console.warn(`CardStack: received ${E.length} items but only ${c} are supported. Extra items are hidden.`), a(() => {
 		if (!x.current) return;
 		let e = () => {
 			let e = x.current.getBoundingClientRect().height;
@@ -26,7 +26,7 @@ function f({ children: d, expanded: f, onExpandChange: p, defaultExpanded: m = !
 	let k = S + u, A = S + (D - 1) * l, j = S + (D - 1) * k, M = (e) => {
 		g || v(e), p?.(e);
 	};
-	return /* @__PURE__ */ t(o.div, {
+	return /* @__PURE__ */ t(n.div, {
 		className: e("relative select-none", !y && "cursor-pointer", h),
 		animate: w ? { height: y ? j : A } : void 0,
 		transition: !w || b ? { duration: 0 } : {
@@ -42,13 +42,13 @@ function f({ children: d, expanded: f, onExpandChange: p, defaultExpanded: m = !
 		tabIndex: 0,
 		"aria-expanded": y,
 		"aria-label": y ? "Card options expanded" : "Tap to expand card options",
-		children: O.map((e, n) => /* @__PURE__ */ t(o.div, {
-			ref: n === 0 ? x : void 0,
+		children: O.map((e, r) => /* @__PURE__ */ t(n.div, {
+			ref: r === 0 ? x : void 0,
 			className: "absolute inset-x-0 top-0",
-			style: { zIndex: D - n },
+			style: { zIndex: D - r },
 			animate: {
-				y: b ? 0 : n * (y ? k : l),
-				rotate: b ? 0 : n * (y ? 0 : -1.5)
+				y: b ? 0 : r * (y ? k : l),
+				rotate: b ? 0 : r * (y ? 0 : -1.5)
 			},
 			transition: {
 				type: "spring",
@@ -56,7 +56,7 @@ function f({ children: d, expanded: f, onExpandChange: p, defaultExpanded: m = !
 				damping: 28
 			},
 			children: e
-		}, n))
+		}, r))
 	});
 }
 f.Item = d;

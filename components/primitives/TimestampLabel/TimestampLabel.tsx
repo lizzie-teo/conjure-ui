@@ -1,11 +1,11 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, type ComponentPropsWithRef } from 'react'
 import { cn } from '../../../lib/utils'
 
-export interface TimestampLabelProps {
+export interface TimestampLabelProps
+  extends Omit<ComponentPropsWithRef<'time'>, 'children' | 'dateTime'> {
   datetime: string
-  className?: string
 }
 
 function formatRelative(datetime: string): string {
@@ -28,13 +28,14 @@ function formatRelative(datetime: string): string {
   return new Intl.DateTimeFormat(undefined, opts).format(date)
 }
 
-export function TimestampLabel({ datetime, className }: TimestampLabelProps) {
+export function TimestampLabel({ datetime, className, ...props }: TimestampLabelProps) {
   const label = useMemo(() => formatRelative(datetime), [datetime])
 
   return (
     <time
       dateTime={datetime}
       className={cn('text-muted-foreground text-xs md:text-sm', className)}
+      {...props}
     >
       {label}
     </time>

@@ -1,9 +1,11 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type ComponentPropsWithRef } from 'react'
 import { X, Info, CheckCircle, AlertTriangle, XCircle } from 'lucide-react'
 import { motion, useReducedMotion, AnimatePresence } from 'motion/react'
+import { Button } from '../../ui/button'
 import { cn } from '../../../lib/utils'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
 const variantConfig = {
   info: {
@@ -28,12 +30,11 @@ const variantConfig = {
   },
 }
 
-export interface ToastBannerProps {
+export interface ToastBannerProps extends Omit<MotionDivProps, 'children'> {
   message: string
   variant?: keyof typeof variantConfig
   duration?: number
   onDismiss?: () => void
-  className?: string
 }
 
 export function ToastBanner({
@@ -42,6 +43,7 @@ export function ToastBanner({
   duration = 4000,
   onDismiss,
   className,
+  ...props
 }: ToastBannerProps) {
   const shouldReduce = useReducedMotion()
   const { icon: Icon, className: variantClass, role } = variantConfig[variant]
@@ -71,17 +73,20 @@ export function ToastBanner({
         variantClass,
         className
       )}
+      {...props}
     >
       <Icon className="size-4 md:size-5 shrink-0 mt-0.5" aria-hidden />
       <span className="flex-1 min-w-0 leading-snug">{message}</span>
       {onDismiss && (
-        <button
+        <Button
+          variant="ghost"
+          size="icon-sm"
           onClick={onDismiss}
           aria-label="Dismiss notification"
-          className="shrink-0 opacity-70 hover:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded"
+          className="shrink-0 opacity-70 hover:opacity-100 hover:bg-transparent transition-opacity focus-visible:ring-current"
         >
           <X className="size-4 md:size-5" aria-hidden />
-        </button>
+        </Button>
       )}
       {duration > 0 && !shouldReduce && onDismiss && (
         <motion.div
@@ -95,16 +100,14 @@ export function ToastBanner({
   )
 }
 
-export function ToastBannerGroup({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
+export type ToastBannerGroupProps = ComponentPropsWithRef<'div'>
+
+export function ToastBannerGroup({ children, className, ...props }: ToastBannerGroupProps) {
   return (
     <AnimatePresence mode="popLayout">
-      <div className={cn('flex flex-col gap-2', className)}>{children}</div>
+      <div className={cn('flex flex-col gap-2', className)} {...props}>
+        {children}
+      </div>
     </AnimatePresence>
   )
 }

@@ -13,6 +13,8 @@ const meta = {
   title: 'Components/CardStrip',
   component: CardStrip,
   tags: ['autodocs'],
+  // Shared render helper — not a story.
+  excludeStories: ['FlightCard'],
 } satisfies Meta<typeof CardStrip>
 
 export default meta

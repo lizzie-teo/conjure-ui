@@ -30,6 +30,8 @@ const meta = {
   title: 'Components/PaymentConfirmSheet',
   component: PaymentConfirmSheet,
   tags: ['autodocs'],
+  // Shared fixture — not a story.
+  excludeStories: ['COMMON_NETWORKS'],
   parameters: { layout: 'centered' },
   decorators: [wrapper],
   args: {

@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 import { cva, type VariantProps } from 'class-variance-authority'
+import type { MotionDivProps } from '../../../lib/prop-types'
 import { cn } from '../../../lib/utils'
 
 export const entityAvatarBase = 'inline-flex shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground font-medium overflow-hidden'
@@ -22,16 +23,17 @@ const avatarVariants = cva(entityAvatarBase, {
   }
 )
 
-export interface EntityAvatarProps extends VariantProps<typeof avatarVariants> {
+export interface EntityAvatarProps
+  extends Omit<MotionDivProps, 'children'>,
+    VariantProps<typeof avatarVariants> {
   fallback: string
   src?: string
   alt?: string
   /** Pulse breathe loop while AI is composing — stops as soon as streaming begins */
   isGenerating?: boolean
-  className?: string
 }
 
-export function EntityAvatar({ fallback, src, alt, size, isGenerating = false, className }: EntityAvatarProps) {
+export function EntityAvatar({ fallback, src, alt, size, isGenerating = false, className, ...props }: EntityAvatarProps) {
   const shouldReduce = useReducedMotion()
   const initials = fallback
     .split(' ')
@@ -48,6 +50,7 @@ export function EntityAvatar({ fallback, src, alt, size, isGenerating = false, c
           : { scale: 1 }
       }
       transition={{ duration: 2.4, repeat: isGenerating ? Infinity : 0, ease: 'easeInOut' }}
+      {...props}
     >
       {src ? (
         <img src={src} alt={alt ?? fallback} className="size-full object-cover" />

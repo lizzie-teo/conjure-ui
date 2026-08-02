@@ -1,5 +1,6 @@
 'use client'
 
+import type { ComponentPropsWithRef } from 'react'
 import { cn } from '../../../lib/utils'
 import { Button } from '../../ui/button'
 
@@ -12,28 +13,23 @@ function AppleMark({ className }: { className?: string }) {
   )
 }
 
-export interface ApplePayButtonProps {
+export interface ApplePayButtonProps extends Omit<ComponentPropsWithRef<'button'>, 'children'> {
   /**
    * Verb label rendered before the Apple Pay mark.
    * Follows Apple's button-type spec: "Pay with", "Buy with", "Book with", etc.
    * Pass an empty string to show the mark only.
    */
   label?: string
-  onClick?: () => void
-  disabled?: boolean
-  className?: string
 }
 
 export function ApplePayButton({
   label = 'Pay with',
-  onClick,
-  disabled,
   className,
+  style,
+  ...props
 }: ApplePayButtonProps) {
   return (
     <Button
-      onClick={onClick}
-      disabled={disabled}
       aria-label={label ? `${label} Apple Pay` : 'Apple Pay'}
       className={cn(
         'h-12 md:h-11 w-full active:opacity-90',
@@ -45,7 +41,9 @@ export function ApplePayButton({
         backgroundColor: 'var(--apple-pay-surface)',
         color: 'white',
         fontFamily: 'var(--font-apple)',
+        ...style,
       }}
+      {...props}
     >
       {/* Baseline-aligned flex row matching Figma: label (19px) + mark + Pay (23px) */}
       <span className="flex items-baseline gap-[3px]">

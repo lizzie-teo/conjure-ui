@@ -4,11 +4,11 @@ import { Check, X } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { cn } from '../../../lib/utils'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
-export interface AuthStatusProps {
+export interface AuthStatusProps extends Omit<MotionDivProps, 'children'> {
   state: 'success' | 'error'
   message?: string
-  className?: string
 }
 
 const defaults = {
@@ -22,7 +22,7 @@ const defaults = {
   },
 }
 
-export function AuthStatus({ state, message, className }: AuthStatusProps) {
+export function AuthStatus({ state, message, className, ...props }: AuthStatusProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -39,6 +39,7 @@ export function AuthStatus({ state, message, className }: AuthStatusProps) {
       )}
       role="status"
       aria-live="polite"
+      {...props}
     >
       <div className="flex items-center gap-2">
         {state === 'success' ? (

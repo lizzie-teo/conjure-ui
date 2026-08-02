@@ -1,13 +1,13 @@
 'use client'
 
+import type { ComponentPropsWithRef } from 'react'
 import { Check } from 'lucide-react'
 import { motion, useReducedMotion, AnimatePresence } from 'motion/react'
 import { cn } from '../../../lib/utils'
 
-export interface ProgressStepProps {
+export interface ProgressStepProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   status: 'pending' | 'active' | 'complete'
   label?: string
-  className?: string
 }
 
 export const progressStepDotBase = 'size-3 md:size-3.5 rounded-full border-2 flex items-center justify-center'
@@ -18,13 +18,14 @@ export const progressStepStatusClasses = {
   complete: 'bg-primary border-primary',
 }
 
-export function ProgressStep({ status, label, className }: ProgressStepProps) {
+export function ProgressStep({ status, label, className, ...props }: ProgressStepProps) {
   const shouldReduce = useReducedMotion()
 
   return (
     <div
       className={cn('inline-flex flex-col items-center gap-1', className)}
       aria-current={status === 'active' ? 'step' : undefined}
+      {...props}
     >
       <div className="relative">
         <div className={cn(progressStepDotBase, progressStepStatusClasses[status])}>

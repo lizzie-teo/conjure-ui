@@ -13,6 +13,8 @@ import { ChipToCard } from '@/components/core/ChipToCard/ChipToCard'
 
 const meta = {
   title: 'Layouts/Rich Content — When to Use',
+  // Shared layout helpers — not stories.
+  excludeStories: ['ChatShell', 'Bot', 'User'],
 } satisfies Meta
 
 export default meta

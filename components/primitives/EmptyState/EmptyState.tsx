@@ -1,18 +1,18 @@
 'use client'
 
+import type { ComponentPropsWithRef } from 'react'
 import { Package } from 'lucide-react'
 import { cn } from '../../../lib/utils'
 import { Button } from '../../ui/button'
 
-export interface EmptyStateProps {
+export interface EmptyStateProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   icon?: React.ReactNode
   heading: string
   body?: string
   action?: { label: string; onClick: () => void }
-  className?: string
 }
 
-export function EmptyState({ icon, heading, body, action, className }: EmptyStateProps) {
+export function EmptyState({ icon, heading, body, action, className, ...props }: EmptyStateProps) {
   return (
     <div
       className={cn(
@@ -20,6 +20,7 @@ export function EmptyState({ icon, heading, body, action, className }: EmptyStat
         'px-4 py-8 md:py-12 text-center',
         className
       )}
+      {...props}
     >
       <div className="text-muted-foreground/50 [&_svg]:size-10 [&_svg]:md:size-12">
         {icon ?? <Package aria-hidden />}

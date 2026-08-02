@@ -2,11 +2,9 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
+import type { MotionDivProps } from '../../../lib/prop-types'
 
-export interface MediaCardProps {
-  className?: string
-  children?: React.ReactNode
-}
+export type MediaCardProps = MotionDivProps
 
 interface MediaProps {
   src: string
@@ -87,7 +85,7 @@ function Meta({ children, className }: MetaProps) {
   )
 }
 
-export function MediaCard({ className, children }: MediaCardProps) {
+export function MediaCard({ className, children, ...props }: MediaCardProps) {
   const shouldReduce = useReducedMotion()
 
   return (
@@ -101,6 +99,7 @@ export function MediaCard({ className, children }: MediaCardProps) {
         'transition-shadow duration-200 hover:shadow-[var(--shadow-elevated)] cursor-pointer',
         className
       )}
+      {...props}
     >
       {children}
     </motion.div>

@@ -1,12 +1,12 @@
 'use client'
 
+import type { ComponentPropsWithRef } from 'react'
 import { useReducedMotion } from 'motion/react'
 import { cn } from '../../../lib/utils'
 
-export interface SkeletonBlockProps {
+export interface SkeletonBlockProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   shape: 'line' | 'heading' | 'code' | 'bullet-list'
   lines?: number
-  className?: string
 }
 
 // Token-based shimmer: sweeps from muted → accent (slightly lighter) → muted
@@ -19,7 +19,7 @@ const SHIMMER_GRADIENT = {
 // Widths cycle across lines to give a natural "real text" silhouette
 const LINE_WIDTHS = ['w-full', 'w-5/6', 'w-4/5', 'w-full', 'w-3/4', 'w-5/6']
 
-export function SkeletonBlock({ shape, lines = 3, className }: SkeletonBlockProps) {
+export function SkeletonBlock({ shape, lines = 3, className, style, ...props }: SkeletonBlockProps) {
   const shouldReduce = useReducedMotion()
   const shimmerClass = shouldReduce ? '' : 'animate-shimmer'
   const shimmerStyle = shouldReduce ? undefined : SHIMMER_GRADIENT
@@ -28,14 +28,19 @@ export function SkeletonBlock({ shape, lines = 3, className }: SkeletonBlockProp
     return (
       <div
         className={cn('h-6 md:h-7 w-3/4 rounded-md bg-muted', shimmerClass, className)}
-        style={shimmerStyle}
+        style={{ ...shimmerStyle, ...style }}
+        {...props}
       />
     )
   }
 
   if (shape === 'code') {
     return (
-      <div className={cn('rounded-lg bg-muted p-3 md:p-4 space-y-2 md:space-y-3', className)}>
+      <div
+        className={cn('rounded-lg bg-muted p-3 md:p-4 space-y-2 md:space-y-3', className)}
+        style={style}
+        {...props}
+      >
         {Array.from({ length: lines }).map((_, i) => (
           <div
             key={i}
@@ -53,7 +58,7 @@ export function SkeletonBlock({ shape, lines = 3, className }: SkeletonBlockProp
 
   if (shape === 'bullet-list') {
     return (
-      <div className={cn('space-y-2 md:space-y-3', className)}>
+      <div className={cn('space-y-2 md:space-y-3', className)} style={style} {...props}>
         {Array.from({ length: lines }).map((_, i) => (
           <div key={i} className="flex items-center gap-2 md:gap-3">
             <span className="size-1.5 md:size-2 rounded-full bg-muted-foreground/30 shrink-0" />
@@ -73,7 +78,7 @@ export function SkeletonBlock({ shape, lines = 3, className }: SkeletonBlockProp
 
   // shape === 'line'
   return (
-    <div className={cn('space-y-2 md:space-y-3', className)}>
+    <div className={cn('space-y-2 md:space-y-3', className)} style={style} {...props}>
       {Array.from({ length: lines }).map((_, i) => (
         <div
           key={i}
