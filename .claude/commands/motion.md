@@ -1,4 +1,4 @@
-Read `.docs/motion-guidelines` in full, then apply every rule from it to the current task.
+Read `.docs/guidelines/motion-guidelines` in full, then apply every rule from it to the current task.
 
 Before writing any animation code, verify:
 
@@ -17,9 +17,14 @@ Before writing any animation code, verify:
 - Every child needs a stable `key`
 - Every child needs an `exit` variant — elements never just disappear
 
+**Imports**
+- This project uses the `motion` package (v12): `import { motion, useReducedMotion } from 'motion/react'`
+- Never `from 'framer-motion'` — nothing in the codebase imports that
+
 **Reduced motion (mandatory)**
-- Import `useReducedMotion` from framer-motion
+- Import `useReducedMotion` from `motion/react`
 - When true: keep opacity transitions, remove all y/x/scale movement
+- `useReducedMotion()` returns `boolean | null` — coerce with `?? false` when passing to a prop typed `boolean`
 
 **Immersive patterns**
 - Cards: `whileHover={{ y: -3 }}` + `transition-shadow hover:shadow-md`

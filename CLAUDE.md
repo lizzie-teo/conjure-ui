@@ -63,6 +63,15 @@ have no extension, `style-guidelines.md` does. Use the exact names above.
 **Dependency direction:** primitives ← core ← layouts. Never sideways, never upward. A primitive
 must not import from core or layouts. A core component must not import from layouts.
 
+**Import style:** shipped component source uses **relative** imports (`../../ui/button`). The `@/`
+alias is configured in `tsconfig.json`, but it is only safe in `.stories.tsx`, which is not
+published — a `@/` import in shipped source would not resolve for consumers. All 21 current `@/`
+imports are in stories; keep it that way.
+
+**Animation:** the `motion` package v12, imported as `motion/react` — never `framer-motion`.
+`useReducedMotion()` returns `boolean | null`, so coerce with `?? false` when passing to a
+`boolean` prop.
+
 ## Theming
 
 Tokens live in `app/theme.css` in three tiers:
@@ -198,8 +207,5 @@ anything is pending, suggest running `#figbuild`.
   github:lizzie-teo/conjure-ui`, because there is no `prepare` script to build on install. Either
   add `"prepare": "npm run build"` and gitignore `dist/`, or keep committing it and rebuild before
   every commit that touches `components/`.
-- **`.docs/for-designers/figma-make-white-label-setup.md` is stale** — it tells designers to import
-  `app/theme.css` for "per-client theme classes", but that file no longer defines any. The examples
-  are in `.storybook/themes.css`, which is not in its import list.
 - **Tier 3 testing was never started** — stories smoke-render but assert almost nothing (1 `play()`
   across 63 story files), no `argTypes`, no CI gate.
