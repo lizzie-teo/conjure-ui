@@ -162,8 +162,8 @@ no external requests, so no npm package and no CDN. What still transfers:
 - **The component source**, pasted in. Every component is dependency-light — `clsx`,
   `tailwind-merge`, `class-variance-authority`, `lucide-react`, `motion`. Where `motion` is not
   available, the components still render; you lose the animation, not the layout.
-- **[ui.lizzieteo.com](https://ui.lizzieteo.com)** as the visual reference — every component, every
-  variant, in light and dark.
+- **[lizzie-teo.github.io/conjure-ui](https://lizzie-teo.github.io/conjure-ui/)** as the visual
+  reference — every component, every variant, in light and dark.
 
 Understand what you give up: a copy is a fork. Nothing published later reaches it.
 

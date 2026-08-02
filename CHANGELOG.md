@@ -33,7 +33,7 @@ repository, so there is no upgrade path from those installs — pin the npm vers
 - `ThemeProvider` for setting brand tokens at runtime, as an alternative to a `.theme-{client}`
   class.
 - 45 components across the three tiers, each with a `.stories.tsx` published to
-  [ui.lizzieteo.com](https://ui.lizzieteo.com).
+  [lizzie-teo.github.io/conjure-ui](https://lizzie-teo.github.io/conjure-ui/).
 - TypeScript declarations for every entry point, which is what lets AI builders read the component
   surface without the source.
 - Every exported component and compound sub-component accepts a `ref` and spreads unrecognised

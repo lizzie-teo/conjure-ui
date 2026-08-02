@@ -22,8 +22,13 @@ const config: StorybookConfig = {
     "@storybook/addon-themes"
   ],
   "framework": "@storybook/nextjs-vite",
+  // There is no `../public` entry, and no `public/` folder — the custom domain
+  // is parked, and publishing a CNAME before its DNS record exists would take
+  // the site down rather than move it (see CLAUDE.md). Restoring it needs no
+  // config change: Vite's default publicDir copies `public/` on its own, which
+  // is why the staticDirs entry this replaced was redundant, and why deleting
+  // the entry alone did not stop the file shipping.
   "staticDirs": [
-    "../public",
     { from: "../components/primitives/payment-logos", to: "/payment-logos" }
   ]
 };

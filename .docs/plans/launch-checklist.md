@@ -52,32 +52,46 @@ gh secret set CHROMATIC_PROJECT_TOKEN
 
 ---
 
-## 2. Point the domain at it
+## 2. The custom domain — deferred, and that is fine
 
-Once Pages is live it serves at `lizzie-teo.github.io/conjure-ui/`. `public/CNAME` already contains
-`ui.lizzieteo.com` and is copied into the published root by Storybook's `staticDirs`, so the repo
-side is done — only the DNS record is missing.
+**Status: parked on 2 Aug.** `lizzieteo.com` was bought through Squarespace and is going to be moved
+off it, so no DNS record is being added there in the meantime.
 
-**In Squarespace DNS for `lizzieteo.com`**, add:
+Nothing else waits on this. Pages serves at `lizzie-teo.github.io/conjure-ui/`, and Storybook works
+there unchanged — `build-storybook` emits relative asset paths (`./assets/…`), so a project subpath
+needs no `base` config. The earlier note claiming the domain root was *why* no base path was needed
+had the causation backwards.
 
-| Type | Host | Value |
-| --- | --- | --- |
-| CNAME | `ui` | `lizzie-teo.github.io` |
+What changed to park it:
 
-Then repo → Settings → Pages → Custom domain → `ui.lizzieteo.com`, and tick **Enforce HTTPS** once
-the certificate finishes provisioning (usually minutes, occasionally an hour).
+- `public/CNAME` is deleted, and with it the `public/` folder. **This is the load-bearing part.**
+  Publishing that file before the DNS record exists makes Pages claim `ui.lizzieteo.com` and 301 the
+  working `github.io` URL to a domain that does not resolve — the site goes down rather than moving.
+  Removing the `../public` entry from `staticDirs` was **not** enough on its own: Vite's default
+  `publicDir` copies `public/` regardless, so the file kept shipping. That staticDirs entry was
+  redundant all along and is now gone too.
+- `README.md`, `CHANGELOG.md`, `package.json` `homepage`, `CLAUDE.md` and the designer guide all
+  point at the `github.io` URL.
 
-Nothing to buy — a subdomain of a domain you already own is a DNS record, not a purchase.
+**Those links do not need changing back.** GitHub 301s the `github.io` URL to the custom domain once
+one is set, so everything written now keeps working. That matters for `README.md` especially, which
+is the npm landing page and is frozen at publish time for every released version.
 
-**Verify:**
+### When the domain has moved
+
+1. At the new DNS host, add: `CNAME` · host `ui` · value `lizzie-teo.github.io`.
+2. Recreate `public/CNAME` containing exactly `ui.lizzieteo.com`, and push. No config change —
+   Vite's `publicDir` picks it up.
+3. Repo → Settings → Pages → Custom domain → `ui.lizzieteo.com`. Tick **Enforce HTTPS** once the
+   certificate provisions (usually minutes, occasionally an hour).
 
 ```bash
-dig +short ui.lizzieteo.com          # currently returns nothing
+dig +short ui.lizzieteo.com
 curl -sI https://ui.lizzieteo.com | head -3
+curl -sI https://lizzie-teo.github.io/conjure-ui/ | head -3   # should now 301
 ```
 
-Then open a deep link (`?path=/story/...`) and hard-refresh it — that is the check that the custom
-domain is serving at the root, which is what lets Storybook run without base-path config.
+Then open a deep link (`?path=/story/...`) and hard-refresh it.
 
 ---
 

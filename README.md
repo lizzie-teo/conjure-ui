@@ -3,7 +3,7 @@
 White-label AI chat components for React — 45 components across three tiers, built so a client
 rebrand is a token edit rather than a fork.
 
-**[Browse every component →](https://ui.lizzieteo.com)** · [Case study](https://lizzieteo.com/work/conjure-ui) · [npm](https://www.npmjs.com/package/@lizzie-teo/conjure-ui)
+**[Browse every component →](https://lizzie-teo.github.io/conjure-ui/)** · [Case study](https://lizzieteo.com/work/conjure-ui) · [npm](https://www.npmjs.com/package/@lizzie-teo/conjure-ui)
 
 ## Install
 

@@ -178,12 +178,27 @@ Two consequences worth knowing:
 ## Published Storybook
 
 Storybook is the public face of the library, deployed to **GitHub Pages at
-[ui.lizzieteo.com](https://ui.lizzieteo.com)** by `.github/workflows/pages.yml` on every push to
-`main`. That is the URL to link — not a Chromatic build URL, which is a CI artifact.
+[lizzie-teo.github.io/conjure-ui](https://lizzie-teo.github.io/conjure-ui/)** by
+`.github/workflows/pages.yml` on every push to `main`. That is the URL to link — not a Chromatic
+build URL, which is a CI artifact.
 
-The custom domain is held by `public/CNAME`, which reaches the published root because
-`.storybook/main.ts` lists `../public` in `staticDirs`. Delete that file and the domain drops on the
-next deploy. Serving at a domain root is also why Storybook needs no base-path config here.
+**The custom domain is deferred, not abandoned.** `ui.lizzieteo.com` needs a DNS record at a
+registrar the domain is being moved off, so there is currently no `public/` folder and no CNAME in
+the published output. Publishing a CNAME *before* its DNS record exists is the failure case: Pages
+would claim the domain and 301 the working `github.io` URL to one that does not resolve, taking the
+site down rather than moving it.
+
+Restoring it is one file — `public/CNAME` containing the domain, nothing else. **Vite's default
+`publicDir` copies `public/` on its own**, so no `staticDirs` entry is needed; the one that used to
+sit there was redundant, which is why removing it did not stop the file shipping.
+
+Link the `github.io` URL freely in the meantime — GitHub 301s it to the custom domain once one is
+set, so nothing written now goes stale. That matters most for `README.md`, which is also the npm
+landing page and is frozen at publish time for every released version.
+
+Storybook needs no base-path config because `build-storybook` emits relative asset paths
+(`./assets/…`), so the output works at a domain root and at a project subpath alike. Do not add a
+`base` in `viteFinal` on the assumption that a subpath needs one.
 
 ## Testing
 
