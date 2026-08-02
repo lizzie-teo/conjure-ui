@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A newer push to the same branch makes the in-flight run irrelevant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # `npm ci` triggers `prepare`, which runs the library build — so a broken
+      # build fails here before anything else gets a chance to run.
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      # The story suite runs in a real Chromium via Playwright.
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Test (renders every story)
+        run: npm test
+
+      # Rebuild explicitly from a clean dist so a missing declaration or a
+      # dropped entry point is caught, not inherited from the prepare step.
+      - name: Build
+        run: rm -rf dist && npm run build
+
+      - name: Verify package contents
+        run: |
+          echo "Files npm would publish:"
+          npm pack --dry-run
+          for f in dist/index.js dist/index.d.ts \
+                   dist/components/primitives/index.d.ts \
+                   dist/components/core/index.d.ts \
+                   dist/components/layouts/index.d.ts; do
+            test -f "$f" || { echo "::error::missing published entry point: $f"; exit 1; }
+          done
+          echo "All entry points and type declarations present."

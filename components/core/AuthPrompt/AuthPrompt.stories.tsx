@@ -43,7 +43,6 @@ export const Interactive: Story = {
   name: 'Interactive — walk through states',
   render: () => {
     const states = ['idle', 'pending', 'success', 'error'] as const
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [idx, setIdx] = useState(0)
     const state = states[idx]
 
