@@ -41,11 +41,17 @@ jobs:
       # "Resource not accessible by integration" instead of the plain "verify
       # that the repository has Pages enabled" you get without it. Self-enabling
       # would take a PAT, which is not worth storing for a one-time setup step.
+      #
+      # It was switched on out-of-band on 2 Aug 2026, which is what turned this
+      # workflow green after 8 straight failures:
+      #   gh api -X POST repos/lizzie-teo/conjure-ui/pages -f build_type=workflow
       - uses: actions/configure-pages@v5
 
-      # `staticDirs` in .storybook/main.ts copies public/ into the output, which
-      # is how public/CNAME reaches the published root and holds the custom
-      # domain across deploys.
+      # Restoring the parked custom domain needs no change here: Vite's default
+      # publicDir copies `public/` into the build on its own, so a public/CNAME
+      # reaches the published root without a `staticDirs` entry. The entry that
+      # used to sit there was redundant, which is why deleting it did not stop
+      # the file shipping.
       - name: Build Storybook
         run: npm run build-storybook
 

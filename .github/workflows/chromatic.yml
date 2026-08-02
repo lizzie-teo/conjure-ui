@@ -5,11 +5,15 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Lets a failed build be retried without an empty commit, as in pages.yml.
+  workflow_dispatch:
 
 jobs:
   chromatic:
     runs-on: ubuntu-latest
     steps:
+      # TurboSnap needs full history to diff the current commit against the last
+      # build's baseline. A shallow clone silently disables it.
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -21,8 +25,18 @@ jobs:
 
       - run: npm ci
 
+      # Pinned to the major, not `@latest` — `@latest` lets an upstream breaking
+      # release turn CI red on a day nothing here changed. v18 still picks up
+      # fixes; bump the major deliberately.
       - name: Publish to Chromatic
-        uses: chromaui/action@latest
+        uses: chromaui/action@v18
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           buildScriptName: build-storybook
+          # TurboSnap: snapshot only the stories the changed files actually
+          # affect. A full build is 287 snapshots, so without this a handful of
+          # pushes a week exhausts the free monthly allowance. Edits to shared
+          # config — theme.css, globals.css, .storybook/* — still force a full
+          # run, which is the behaviour you want: a renamed token changes every
+          # component's appearance without throwing anywhere.
+          onlyChanged: true
