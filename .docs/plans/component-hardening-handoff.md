@@ -126,7 +126,7 @@ element **will not typecheck**; this type is why.
 ### Verify after each batch
 
 ```bash
-npx tsc --noEmit -p tsconfig.json 2>&1 | grep "error TS" | grep -v "^\.next/"
+npm run typecheck
 ```
 
 Run `npm test` at the end of a batch — it renders all stories in a real browser and is the
