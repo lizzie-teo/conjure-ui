@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { expect, fn } from 'storybook/test'
 import { ChatInput } from './ChatInput'
 
 const meta = {
@@ -57,4 +58,62 @@ export const Disabled: Story = {
       <ChatInput.Send />
     </ChatInput>
   ),
+}
+
+// ── Interaction tests ─────────────────────────────────────────────────────────
+
+export const SendButtonGatesOnContent: Story = {
+  name: 'Test: send is disabled until there is text',
+  render: (args) => (
+    <ChatInput {...args}>
+      <ChatInput.Field />
+      <ChatInput.Send />
+    </ChatInput>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    const send = canvas.getByRole('button', { name: /send message/i })
+    await expect(send).toBeDisabled()
+
+    await userEvent.type(canvas.getByRole('textbox', { name: /message input/i }), 'hello')
+    await expect(send).toBeEnabled()
+  },
+}
+
+export const EnterSendsShiftEnterDoesNot: Story = {
+  name: 'Test: Enter sends, Shift+Enter does not',
+  render: () => {
+    const onSend = fn()
+    return (
+      <ChatInput onSend={onSend} data-testid="input">
+        <ChatInput.Field />
+        <ChatInput.Send />
+      </ChatInput>
+    )
+  },
+  play: async ({ canvas, userEvent }) => {
+    const field = canvas.getByRole('textbox', { name: /message input/i })
+
+    // Shift+Enter must insert a newline, not submit
+    await userEvent.type(field, 'line one{Shift>}{Enter}{/Shift}line two')
+    await expect(field).toHaveValue('line one\nline two')
+
+    // plain Enter submits and clears the field
+    await userEvent.type(field, '{Enter}')
+    await expect(field).toHaveValue('')
+  },
+}
+
+export const ForwardsRestPropsToRoot: Story = {
+  name: 'Test: forwards rest props to its root',
+  render: (args) => (
+    <ChatInput {...args} data-testid="chat-input-root" id="composer">
+      <ChatInput.Field />
+      <ChatInput.Send />
+    </ChatInput>
+  ),
+  play: async ({ canvas }) => {
+    // rule 8: unrecognised props reach the DOM so consumers can target the node
+    const root = canvas.getByTestId('chat-input-root')
+    await expect(root).toHaveAttribute('id', 'composer')
+  },
 }

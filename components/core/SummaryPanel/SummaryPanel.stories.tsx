@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { expect, waitFor } from 'storybook/test'
 import { PriceDisplay } from '@/components/primitives'
 import { DetailList } from '../DetailList/DetailList'
 import { SummaryPanel } from './SummaryPanel'
@@ -72,4 +73,58 @@ export const CollapsedByDefault: Story = {
       </SummaryPanel>
     </div>
   ),
+}
+
+// ── Interaction tests ─────────────────────────────────────────────────────────
+
+export const CollapsibleTogglesBody: Story = {
+  name: 'Test: collapsible header toggles the body',
+  render: () => (
+    <div className="max-w-sm">
+      <SummaryPanel collapsible defaultOpen>
+        <SummaryPanel.Header>Order Summary</SummaryPanel.Header>
+        <SummaryPanel.Body>
+          <DetailList>
+            <DetailList.Row label="Total" value="$42.00" />
+          </DetailList>
+        </SummaryPanel.Body>
+      </SummaryPanel>
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    const header = canvas.getByRole('button', { name: /order summary/i })
+
+    await expect(header).toHaveAttribute('aria-expanded', 'true')
+    await expect(canvas.getByText('$42.00')).toBeInTheDocument()
+
+    await userEvent.click(header)
+    await expect(header).toHaveAttribute('aria-expanded', 'false')
+    // body unmounts via AnimatePresence, so wait it out rather than asserting instantly
+    await waitFor(() => expect(canvas.queryByText('$42.00')).not.toBeInTheDocument())
+
+    await userEvent.click(header)
+    await expect(header).toHaveAttribute('aria-expanded', 'true')
+    await waitFor(() => expect(canvas.getByText('$42.00')).toBeInTheDocument())
+  },
+}
+
+export const NonCollapsibleHasNoButton: Story = {
+  name: 'Test: non-collapsible header is not a button',
+  render: () => (
+    <div className="max-w-sm">
+      <SummaryPanel>
+        <SummaryPanel.Header>Booking Summary</SummaryPanel.Header>
+        <SummaryPanel.Body>
+          <DetailList>
+            <DetailList.Row label="Route" value="SYD → NRT" />
+          </DetailList>
+        </SummaryPanel.Body>
+      </SummaryPanel>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    // a static panel must not advertise itself as interactive to screen readers
+    await expect(canvas.queryByRole('button', { name: /booking summary/i })).not.toBeInTheDocument()
+    await expect(canvas.getByText('SYD → NRT')).toBeInTheDocument()
+  },
 }

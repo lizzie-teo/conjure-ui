@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { expect, waitFor } from 'storybook/test'
 import { StatusBadge } from '@/components/primitives'
 import { PriceDisplay } from '@/components/primitives'
 import { DetailList } from '../DetailList/DetailList'
@@ -241,4 +242,26 @@ export const PharmacyContext: Story = {
       />
     </div>
   ),
+}
+
+// ── Interaction tests ─────────────────────────────────────────────────────────
+
+export const ChipExpandsToCardAndBack: Story = {
+  name: 'Test: chip expands to card and back',
+  render: (args) => (
+    <div className="max-w-xs">
+      <ChipToCard {...args} />
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Business' }))
+
+    // the chip list is replaced by the selected card
+    await waitFor(() => expect(canvas.getByText('Business to Tokyo')).toBeInTheDocument())
+
+    await userEvent.click(canvas.getByRole('button', { name: /back to options/i }))
+    await waitFor(() => expect(canvas.getByRole('button', { name: 'Economy' })).toBeInTheDocument())
+    // the card stays mounted through its AnimatePresence exit, so wait it out
+    await waitFor(() => expect(canvas.queryByText('Business to Tokyo')).not.toBeInTheDocument())
+  },
 }

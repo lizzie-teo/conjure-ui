@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { expect } from 'storybook/test'
 import { Plane, Briefcase, Package } from 'lucide-react'
 import { SelectionGroup } from './SelectionGroup'
 
@@ -152,5 +153,58 @@ export const InsurancePlans: Story = {
         </SelectionGroup>
       </div>
     )
+  },
+}
+
+// ── Interaction tests ─────────────────────────────────────────────────────────
+
+export const RadioSelectsOne: Story = {
+  name: 'Test: radio selects exactly one',
+  args: { type: 'radio', defaultValue: 'economy' },
+  render: (args) => (
+    <div className="max-w-sm">
+      <SelectionGroup {...args}>
+        <SelectionGroup.Option value="economy">Economy class</SelectionGroup.Option>
+        <SelectionGroup.Option value="business">Business class</SelectionGroup.Option>
+      </SelectionGroup>
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    const economy = canvas.getByRole('radio', { name: /economy/i })
+    const business = canvas.getByRole('radio', { name: /business/i })
+
+    await expect(economy).toHaveAttribute('aria-checked', 'true')
+    await expect(business).toHaveAttribute('aria-checked', 'false')
+
+    await userEvent.click(business)
+    // selecting one must deselect the other — that is what makes it a radio
+    await expect(business).toHaveAttribute('aria-checked', 'true')
+    await expect(economy).toHaveAttribute('aria-checked', 'false')
+  },
+}
+
+export const CheckboxSelectsMany: Story = {
+  name: 'Test: checkbox accumulates selections',
+  args: { type: 'checkbox' },
+  render: (args) => (
+    <div className="max-w-sm">
+      <SelectionGroup {...args}>
+        <SelectionGroup.Option value="bags">Extra bags</SelectionGroup.Option>
+        <SelectionGroup.Option value="seat">Seat choice</SelectionGroup.Option>
+      </SelectionGroup>
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    const bags = canvas.getByRole('checkbox', { name: /extra bags/i })
+    const seat = canvas.getByRole('checkbox', { name: /seat choice/i })
+
+    await userEvent.click(bags)
+    await userEvent.click(seat)
+    await expect(bags).toHaveAttribute('aria-checked', 'true')
+    await expect(seat).toHaveAttribute('aria-checked', 'true')
+
+    await userEvent.click(bags)
+    await expect(bags).toHaveAttribute('aria-checked', 'false')
+    await expect(seat).toHaveAttribute('aria-checked', 'true')
   },
 }

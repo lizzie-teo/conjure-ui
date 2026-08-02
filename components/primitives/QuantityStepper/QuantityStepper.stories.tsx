@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { expect } from 'storybook/test'
 import { useState } from 'react'
 import { QuantityStepper } from './QuantityStepper'
 
@@ -57,4 +58,39 @@ export const AllStates: Story = {
       </div>
     </div>
   ),
+}
+
+// ── Interaction tests ─────────────────────────────────────────────────────────
+
+export const IncrementsAndDecrements: Story = {
+  name: 'Test: increments and decrements',
+  render: () => <Controlled value={3} />,
+  play: async ({ canvas, userEvent }) => {
+    const value = () => canvas.getByText(/^\d+$/)
+
+    await expect(value()).toHaveTextContent('3')
+    await userEvent.click(canvas.getByRole('button', { name: /increase/i }))
+    await expect(value()).toHaveTextContent('4')
+    await userEvent.click(canvas.getByRole('button', { name: /decrease/i }))
+    await expect(value()).toHaveTextContent('3')
+  },
+}
+
+export const ClampsAtBounds: Story = {
+  name: 'Test: will not step past min or max',
+  render: () => <Controlled value={2} min={1} max={3} />,
+  play: async ({ canvas, userEvent }) => {
+    const value = () => canvas.getByText(/^\d+$/)
+    const inc = canvas.getByRole('button', { name: /increase/i })
+    const dec = canvas.getByRole('button', { name: /decrease/i })
+
+    await userEvent.click(inc)
+    await expect(value()).toHaveTextContent('3')
+    await expect(inc).toBeDisabled() // at max, so the control stops rather than overshooting
+
+    await userEvent.click(dec)
+    await userEvent.click(dec)
+    await expect(value()).toHaveTextContent('1')
+    await expect(dec).toBeDisabled()
+  },
 }

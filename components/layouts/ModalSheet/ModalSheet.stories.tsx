@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { expect, waitFor, within } from 'storybook/test'
 import { useState } from 'react'
 import { ModalSheet } from './ModalSheet'
 import { Button } from '../../ui/button'
@@ -190,4 +191,60 @@ export const AllSizes: Story = {
       </Toggle>
     </div>
   ),
+}
+
+// ── Interaction tests ─────────────────────────────────────────────────────────
+
+export const EscapeClosesAndFocusIsTrapped: Story = {
+  name: 'Test: opens, traps focus, Escape closes',
+  render: () => (
+    <Toggle label="Open" title="Confirm booking">
+      <ModalSheet.Body>
+        <p>Body copy</p>
+      </ModalSheet.Body>
+      <ModalSheet.Footer>
+        <Button>Confirm</Button>
+      </ModalSheet.Footer>
+    </Toggle>
+  ),
+  play: async ({ canvas, userEvent, step }) => {
+    const body = within(document.body)
+
+    await step('opens as a labelled modal dialog', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: 'Open' }))
+      const dialog = await body.findByRole('dialog')
+      await expect(dialog).toHaveAttribute('aria-modal', 'true')
+      // the built-in title header is what aria-labelledby points at
+      await expect(dialog).toHaveAccessibleName('Confirm booking')
+    })
+
+    await step('moves focus inside the dialog', async () => {
+      await waitFor(() =>
+        expect(body.getByRole('dialog').contains(document.activeElement)).toBe(true)
+      )
+    })
+
+    await step('Escape closes it', async () => {
+      await userEvent.keyboard('{Escape}')
+      await waitFor(() => expect(body.queryByRole('dialog')).not.toBeInTheDocument())
+    })
+  },
+}
+
+export const ForwardsRestPropsToDialog: Story = {
+  name: 'Test: forwards rest props to the dialog root',
+  render: () => (
+    <Toggle label="Open" title="Tagged">
+      <ModalSheet.Body>
+        <p>Body copy</p>
+      </ModalSheet.Body>
+    </Toggle>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Open' }))
+    const dialog = await within(document.body).findByRole('dialog')
+    // spreading must not clobber the role/aria-modal the component owns
+    await expect(dialog).toHaveAttribute('role', 'dialog')
+    await expect(dialog).toHaveAttribute('aria-modal', 'true')
+  },
 }
