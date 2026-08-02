@@ -34,7 +34,13 @@ jobs:
       # As in ci.yml, `npm ci` triggers `prepare`, which runs the library build.
       - run: npm ci
 
+      # `enablement: true` turns Pages on from the workflow rather than needing
+      # someone to find Settings → Pages first. Without it the whole job fails
+      # here on a repo where Pages has never been switched on — including a
+      # fresh clone or a transferred repo.
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       # `staticDirs` in .storybook/main.ts copies public/ into the output, which
       # is how public/CNAME reaches the published root and holds the custom
