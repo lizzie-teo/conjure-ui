@@ -9,12 +9,13 @@ class or `ThemeProvider`. **This is a library, not a standalone app.**
 ## Dev environment
 
 ```bash
-npm run storybook              # ← primary dev environment (port 6006)
-npm run dev                    # Vite demo harness (demo/) — fast component preview
-npm run next                   # Next.js marketing/docs site (app/) — rarely needed
-npx vitest run --project=storybook   # smoke-renders every story (~8s)
-npm run build                  # library build → dist/
-npm run lint
+npm run storybook    # ← primary dev environment (port 6006)
+npm run dev          # Vite demo harness (demo/) — fast component preview
+npm run next         # Next.js marketing/docs site (app/) — rarely needed
+npm test             # renders every story + runs interaction tests (~10s)
+npm run typecheck
+npm run lint         # --max-warnings 0: warnings fail
+npm run build        # library build → dist/
 ```
 
 Always develop and test components in Storybook. `npm run dev` is Vite, **not** Next — the Next
@@ -109,12 +110,25 @@ Two build-config choices exist for non-obvious reasons — do not "clean them up
 
 ## Testing
 
-`npx vitest run --project=storybook` renders every story as a smoke test. It is the real
-regression net for component changes — currently 345 stories across 63 files, ~8s.
+`npm test` runs every story through a real Chromium (Vitest browser mode + Playwright). Most are
+smoke tests — the story renders, nothing throws. 12 of them are interaction tests written with
+`play()`, covering the behaviour worth pinning: stepper bounds, radio/checkbox `aria-checked`,
+collapsible `aria-expanded`, Enter vs Shift+Enter in the composer, and the modal's focus trap.
 
-**Gotcha:** Storybook's CSF parser treats *every* named export in a `.stories.tsx` as a story.
-Helper functions and fixtures must go in `excludeStories` or be module-local, or they render as
-broken stories.
+Prefer asserting through **roles and ARIA state** rather than class names — that is what the
+component actually promises consumers.
+
+**Two gotchas:**
+
+- Storybook's CSF parser treats *every* named export in a `.stories.tsx` as a story. Helper
+  functions and fixtures must go in `excludeStories` or be module-local, or they render as
+  broken stories.
+- Anything animating out via `AnimatePresence` stays mounted for the length of its exit
+  animation. Assertions that something disappeared must be wrapped in `waitFor`.
+
+CI (`.github/workflows/ci.yml`) runs typecheck → lint → tests → clean rebuild → a check that every
+published entry point and `.d.ts` exists, on every push and PR. The separate Chromatic workflow
+handles visual regressions.
 
 ## Third-party assets
 
@@ -201,11 +215,13 @@ anything is pending, suggest running `#figbuild`.
 
 ## Known gaps
 
-- **`dist/` is committed** (155 files, not gitignored) and has drifted from source before.
-  Figma Make clones `components/` **source**, not `dist/` — so the designer workflow does not
-  depend on it. The only thing that would break if it were gitignored is `npm install
-  github:lizzie-teo/conjure-ui`, because there is no `prepare` script to build on install. Either
-  add `"prepare": "npm run build"` and gitignore `dist/`, or keep committing it and rebuild before
-  every commit that touches `components/`.
-- **Tier 3 testing was never started** — stories smoke-render but assert almost nothing (1 `play()`
-  across 63 story files), no `argTypes`, no CI gate.
+- **Interaction coverage is deliberately partial** — 12 `play()` tests across 7 files, aimed at the
+  components with real behaviour. The rest are smoke tests. Add a `play()` when you add behaviour,
+  not for static presentation.
+- **`argTypes` are inferred, not declared.** Storybook's react-docgen reads the TypeScript props,
+  so Controls work without hand-written `argTypes`. `preview.tsx` filters out the inherited DOM
+  attributes; if a genuinely useful prop goes missing from Controls, check that exclude regex
+  before adding `argTypes` by hand.
+- **`dist/` is no longer committed.** `prepare` builds it on install, including for
+  `npm install github:lizzie-teo/conjure-ui`. Do not re-add it to git — when it was tracked, the
+  committed output had silently fallen 78 files behind a real build.

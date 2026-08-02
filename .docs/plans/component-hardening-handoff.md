@@ -18,13 +18,14 @@ A four-part effort. **All four parts are done and verified.**
 ### Verification baseline — all green right now
 
 ```bash
-npx tsc --noEmit -p tsconfig.json   # 0 source errors (1 stale .next/ artifact, ignorable)
-npx vitest run --project=storybook  # 345 passed / 345
-npm run build                       # OK
-npm run lint                        # 79 errors — ALL pre-existing, see "Known pre-existing" below
+npm run typecheck   # 0 source errors (1 stale .next/ artifact, ignorable)
+npm test            # 362 passed / 362
+npm run lint        # 0 errors, 0 warnings (--max-warnings 0)
+npm run build       # OK
 ```
 
-Keep these numbers as the regression baseline. `345` and `0` must not get worse.
+CI runs exactly this sequence on every push and PR, so the baseline is now enforced rather than
+remembered. The 79 pre-existing lint errors described further down have all been cleared.
 
 ---
 
@@ -128,7 +129,7 @@ element **will not typecheck**; this type is why.
 npx tsc --noEmit -p tsconfig.json 2>&1 | grep "error TS" | grep -v "^\.next/"
 ```
 
-Run the story suite at the end of a batch — it smoke-renders all 345 stories in ~10s and is the
+Run `npm test` at the end of a batch — it renders all stories in a real browser and is the
 real regression net.
 
 ### Sub-components caught in a second pass
@@ -221,13 +222,14 @@ module-local.
 
 ---
 
-## Known pre-existing — not caused by this work
+## Known pre-existing — all now cleared
 
-- **63 lint errors**: stories import `@storybook/react` instead of `@storybook/nextjs-vite`
-  (`storybook/no-renderer-packages`). Mechanical fix.
-- **13 lint errors**: `react/no-unescaped-entities`. Cosmetic.
-- **2 raw `<button>`** remaining, violating rule #2 in CLAUDE.md: `RewardsStep`,
-  `BranchSelectStep`.
+- ~~63 lint errors: stories import `@storybook/react`~~ — migrated to `@storybook/nextjs-vite`.
+- ~~13 lint errors: `react/no-unescaped-entities`~~ — 14 in the end, fixed with typographic quotes.
+- **2 raw `<button>`** in `RewardsStep` and `BranchSelectStep` — reviewed and kept. Both are
+  `role="switch"` toggles, which shadcn `Button` is a poor base for. CLAUDE.md rule 2 now carries
+  an explicit, bounded exception for switches, with a tripwire: a third one means extracting a
+  `Switch` primitive rather than widening the exception.
 - **1 typecheck error** in `.next/types/validator.ts` — stale artifact referencing
   `app/figma-make/page.js`; the page moved to `app/(site)/figma-make/`. `.next/` is gitignored and
   regenerates.
