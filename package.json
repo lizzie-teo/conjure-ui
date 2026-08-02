@@ -4,6 +4,22 @@
   "description": "White-label AI chat component library for retail, pharmacy, grocery, travel and insurance chatbots",
   "author": "Lizzie Teo",
   "license": "MIT",
+  "keywords": [
+    "react",
+    "component-library",
+    "design-system",
+    "ai-chat",
+    "chatbot",
+    "chat-ui",
+    "white-label",
+    "tailwindcss",
+    "shadcn",
+    "design-tokens"
+  ],
+  "homepage": "https://ui.lizzieteo.com",
+  "bugs": {
+    "url": "https://github.com/lizzie-teo/conjure-ui/issues"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,11 +49,16 @@
   "files": [
     "dist",
     "app/globals.css",
-    "app/theme.css"
+    "app/theme.css",
+    "CHANGELOG.md"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/lizzie-teo/conjure-ui.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "dev": "vite",

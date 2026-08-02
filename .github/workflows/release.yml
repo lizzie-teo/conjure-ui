@@ -1,0 +1,94 @@
+name: Release
+
+# Publishing is driven entirely by tags: `npm version <bump>` writes package.json
+# and creates `vX.Y.Z`, and pushing that tag is what ships. Nothing publishes off
+# a branch push, so a merge to main can never release by accident.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write # create the GitHub Release
+  id-token: write # npm provenance — links the tarball to this commit
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      # A tag can be pushed from anywhere, including a stale checkout. If it
+      # disagrees with package.json, npm would publish a version nobody can
+      # correlate with the tag — stop before that happens.
+      - name: Check tag matches package.json version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$pkg" ]; then
+            echo "::error::tag v$tag does not match package.json version $pkg"
+            exit 1
+          fi
+          echo "Releasing $pkg"
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Test (renders every story)
+        run: npm test
+
+      # Same clean rebuild the CI workflow does — `npm ci` already ran `prepare`,
+      # but a release must not inherit a dist that a stale buildinfo produced.
+      - name: Build
+        run: rm -rf dist && npm run build
+
+      - name: Verify package contents
+        run: |
+          npm pack --dry-run
+          for f in dist/index.js dist/index.d.ts \
+                   dist/components/primitives/index.d.ts \
+                   dist/components/core/index.d.ts \
+                   dist/components/layouts/index.d.ts; do
+            test -f "$f" || { echo "::error::missing published entry point: $f"; exit 1; }
+          done
+
+      # `prepublishOnly` would rebuild here too; --ignore-scripts skips that
+      # rather than throwing away the dist the previous two steps just verified.
+      - name: Publish to npm
+        run: npm publish --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # The release body is the matching CHANGELOG section, so the notes people
+      # get by email are the same text that ships inside the tarball.
+      - name: Extract changelog section
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="$version" '
+            $0 ~ "^## \\[" v "\\]" { found = 1; next }
+            found && /^## \[/       { exit }
+            found                   { print }
+          ' CHANGELOG.md > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "No CHANGELOG entry for $version." > release-notes.md
+          fi
+          cat release-notes.md
+
+      - name: Create GitHub Release
+        run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file release-notes.md
+        env:
+          GH_TOKEN: ${{ github.token }}
