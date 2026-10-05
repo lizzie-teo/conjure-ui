@@ -209,6 +209,26 @@ the project's own stylesheet — see Step 04.
 
 ---
 
+## Before you have a brand
+
+If the flow still needs to be agreed before anyone picks a colour, the library ships a
+low-fidelity mode. Put `theme-wireframe` on a wrapper:
+
+```tsx
+<div className="theme-wireframe">
+  {/* the flow */}
+</div>
+```
+
+Everything drops to grey boxes — no colour, square corners, no shadows, imagery faded back. Build
+and review the structure there, then delete the class, or replace it with the `.theme-{client}`
+from Step 04, and the same screens come back fully branded. Nothing else changes.
+
+This is the one theme that ships in the package, so it is safe to rely on — unlike anything you
+add to `theme.css` yourself, which the next `npm install` overwrites.
+
+---
+
 ## Licence
 
 MIT © 2026 Lizzie Teo. Free to use, copy, modify and distribute in client work. Keep the MIT notice

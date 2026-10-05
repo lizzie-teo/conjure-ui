@@ -89,7 +89,7 @@ Tokens live in `app/theme.css` in three tiers:
 |------|------|-----------|
 | 1. Brand | Typeface, primary pair, background tint, radius, ring (~6 tokens) | Yes — this is what rebrands the library |
 | 2. Semantic | Surfaces derived from the brand palette | Only when the brand demands it |
-| 3. System | Shadows, Apple Pay, charts, layout internals | No |
+| 3. System | Shadows, Apple Pay, charts, layout internals | No — except `.theme-wireframe` |
 
 Consumers apply a brand three ways: a `.theme-{client}` class of their own, a `<ThemeProvider
 tokens={…}>` for runtime overrides, or by editing the `:root` and `.dark` values in `theme.css`
@@ -100,10 +100,19 @@ from npm it lives in `node_modules` and every upgrade overwrites it. Docs must n
 installing consumer to edit it — the guidance is a theme class in their own stylesheet, or
 `ThemeProvider`. `.docs/for-designers/ai-builder-white-label-setup.md` is the guide that says so.
 
-**`app/theme.css` ships no `.theme-{client}` classes.** The example client themes (`theme-travel`,
-`theme-retail`, …) live in `.storybook/themes.css`, are loaded only by Storybook, and are
-explicitly not part of the package. To add a demo theme, edit `.storybook/themes.css` — nothing
-else needs to change, since `preview.tsx` only toggles Light/Dark.
+**`app/theme.css` ships exactly one theme class: `.theme-wireframe`.** It is a real package
+surface, not a demo — a low-fidelity mode for prototyping a flow before it has a brand (greyscale,
+`--radius: 0`, shadows `none`, plus a `.theme-wireframe img` filter, since photography is the one
+thing no token reaches). It is also **the only sanctioned Tier 3 override in the library**; a
+wireframe with shadows is not a wireframe. Do not treat it as precedent for client themes, which
+stay in Tier 1.
+
+The *example client themes* (`theme-travel`, `theme-retail`, …) are different — they live in
+`.storybook/themes.css`, are loaded only by Storybook, and are explicitly not part of the package.
+To add a demo theme, edit `.storybook/themes.css`; to change the wireframe mode, edit
+`app/theme.css`. `preview.tsx` toggles four modes — Light, Dark, Wireframe, Wireframe Dark — via
+`withThemeByClassName`, which swaps one class but accepts a space-separated string, which is how
+the two axes combine.
 
 **The library loads no webfont.** `--font-sans` defaults to the system stack, and consumers load
 their brand face and override that one token — Inter is what the docs recommend they start from.

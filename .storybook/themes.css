@@ -7,6 +7,10 @@
    Each theme overrides only TIER 1 (brand) tokens. Six tokens is all it takes
    to fully rebrand: font, primary pair, background tint, radius, ring.
 
+   Not here: .theme-wireframe. That one is a real package surface and lives in
+   app/theme.css, because consumers are meant to use it. Add demo brands here;
+   change the wireframe mode there.
+
    The themes below that name Inter rely on it being loaded by preview-head.html
    — Storybook-only, exactly as a consumer would load their own brand font. With
    no theme class applied, stories render in the system stack, which is what the

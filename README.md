@@ -39,7 +39,7 @@ Tokens come in three tiers, documented in `app/theme.css`:
 | --- | --- | --- |
 | 1. Brand | Typeface, primary pair, background pair, radius | **Yes** — this is what rebrands the library |
 | 2. Semantic | Surfaces derived from the brand palette | Only when the brand demands it |
-| 3. System | Shadows, Apple Pay, charts, layout internals | No |
+| 3. System | Shadows, Apple Pay, charts, layout internals | No — one exception, below |
 
 A full rebrand touches **six Tier 1 tokens**: `--font-sans`, `--background`, `--foreground`,
 `--primary`, `--primary-foreground`, `--radius`.
@@ -65,6 +65,27 @@ shadcn project. It is also the vocabulary AI builders already generate.
 > **Define your theme class in your own stylesheet, not in `node_modules`.** `app/theme.css` ships
 > inside the package — anything you add to it there is wiped by the next `npm install`. The
 > upgrade-safe surfaces are a `.theme-{client}` class in your own CSS, or `<ThemeProvider>`.
+
+### Prototyping at low fidelity
+
+One theme ships with the package: `theme-wireframe`. It strips the palette to greyscale, squares
+the corners, flattens every shadow and fades imagery back to grey — so you can build a flow and
+argue about the structure before anyone has picked a colour.
+
+```tsx
+<div className="theme-wireframe">
+  {/* build the flow here */}
+</div>
+```
+
+Delete the class to see the same markup fully styled; swap it for your own `.theme-{client}` to see
+it branded. Nothing else changes — no prop, no import, no component swap. Add `dark` alongside it
+for the dark variant.
+
+This is the **only** theme that overrides Tier 3, and the reason is narrow: a wireframe with
+shadows is not a wireframe. Your own client themes should still stay in Tier 1. Two things a token
+override cannot reach, and which stay in colour by design: payment-network and Apple Pay brand
+marks, where the literal colour *is* the specification.
 
 ## Building with an AI builder
 

@@ -5,10 +5,16 @@ import './themes.css';
 
 const preview: Preview = {
   decorators: [
+    // The addon swaps a single class but accepts a space-separated string, which
+    // is how the two axes (light/dark, styled/wireframe) coexist in one toolbar.
+    // Wireframe ships in app/theme.css — unlike the client themes in themes.css,
+    // it is a real package surface, not a demo.
     withThemeByClassName({
       themes: {
         'Light': '',
         'Dark': 'dark',
+        'Wireframe': 'theme-wireframe',
+        'Wireframe Dark': 'dark theme-wireframe',
       },
       defaultTheme: 'Light',
     }),

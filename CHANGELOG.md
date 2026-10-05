@@ -20,6 +20,18 @@ Adding a component, adding an optional prop, and adding a Tier 3 token are **min
 
 ## [Unreleased]
 
+### Added
+
+- **`.theme-wireframe`** — a low-fidelity mode that ships with the package, for prototyping a flow
+  before it has a brand. Put `className="theme-wireframe"` on a wrapper and the palette drops to
+  greyscale, corners square, every shadow flattens and imagery fades back to grey; delete the class
+  to see the same markup fully styled, or swap it for your own `.theme-{client}`. Add `dark`
+  alongside it for the dark variant. No prop, import or component change.
+
+  This is the **only** theme that overrides Tier 3 tokens — a wireframe with shadows is not a
+  wireframe. It is not precedent: client themes still belong in Tier 1. Payment-network and Apple
+  Pay brand marks stay in colour, since there the literal colour is the specification.
+
 ## [0.2.0] — 2026-08-02
 
 First release published to npm. Everything before this was installed straight from the git

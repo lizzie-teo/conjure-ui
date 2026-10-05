@@ -216,6 +216,12 @@ Shadows increase opacity in dark mode — they need to work against dark surface
 
 ## What "Clean" Means in Practice
 
+This table describes **the default theme**, which is what every component is designed and reviewed
+against. The one deliberate inversion is `.theme-wireframe` (see `app/theme.css`): it is flat,
+shadowless and single-radius on purpose, because low-fidelity prototyping wants the opposite of
+clean. Judge it against its own intent, not this table — and do not read it as licence to flatten
+anything else.
+
 | Clean ✅ | Not clean ❌ |
 |----------|-------------|
 | Lots of whitespace between elements | Cramped stacking |
