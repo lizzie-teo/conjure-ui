@@ -15,7 +15,7 @@ Implements the innovative animation patterns defined in `.docs/guidelines/chat-a
 | `ChatInput` focus | `focus-within:ring-2` | Spec requires radial glow `::before`, not a ring |
 | `MessageBubble` | Generic `y+scale` entrance | Magnetic snap (user) + word-by-word (AI) — in progress separately |
 | `QuickReplies` | Stagger entrance, `overflow-x-auto` | No snap, no peek, no chip-to-card expansion |
-| `EntityAvatar` | Static, no animation | Missing breathe animation |
+| `Avatar` | Static, no animation | Missing breathe animation |
 | Everything else | — | Not started |
 
 ---
@@ -26,7 +26,7 @@ Implements the innovative animation patterns defined in `.docs/guidelines/chat-a
 Primitives (Tier 1)
   WaveformIndicator
   MorphingBlob
-  SkeletonBlock
+  Skeleton
 
 Core (Tier 2)
   ThinkingIndicator       ← uses WaveformIndicator + MorphingBlob + label cycle
@@ -35,9 +35,9 @@ Core (Tier 2)
   ChatInput (update)      ← add focus glow + send icon transition
 
 Layouts (Tier 3)
-  CardStrip               ← horizontal scroll strip
-  CardStack               ← fan/expand pattern
-  ChipToCard              ← chip expansion morphing
+  CardCarousel               ← horizontal scroll strip
+  StackedCards               ← fan/expand pattern
+  ExpandableChips              ← chip expansion morphing
 ```
 
 ---
@@ -82,13 +82,13 @@ interface MorphingBlobProps {
 
 ---
 
-### 1.3 `SkeletonBlock`
+### 1.3 `Skeleton`
 **Tier**: primitives  
-**File**: `components/primitives/SkeletonBlock/SkeletonBlock.tsx`
+**File**: `components/primitives/Skeleton/Skeleton.tsx`
 
 Props:
 ```tsx
-interface SkeletonBlockProps {
+interface SkeletonProps {
   shape: 'line' | 'heading' | 'code' | 'bullet-list'
   lines?: number           // for 'line' and 'bullet-list'
   className?: string
@@ -111,7 +111,7 @@ interface SkeletonBlockProps {
 Replaces / supersedes the existing `TypingIndicator`. Assembles:
 - `WaveformIndicator` (primary mode)
 - Label cycle ("Thinking…" → "Reading…" → "Writing…") via `AnimatePresence mode="wait"`
-- `SkeletonBlock` preview (shown after 600ms delay with no first token)
+- `Skeleton` preview (shown after 600ms delay with no first token)
 - `MorphingBlob` (optional, `variant="heavy"` for long-running ops)
 
 Props:
@@ -177,17 +177,17 @@ No new props — driven by input value state already tracked internally.
 
 ## Phase 3 — Carousel & Rich Content Layouts
 
-### 3.1 `CardStrip`
+### 3.1 `CardCarousel`
 **Tier**: core  
-**File**: `components/core/CardStrip/CardStrip.tsx`
+**File**: `components/core/CardCarousel/CardCarousel.tsx`
 
 ```tsx
-interface CardStripProps {
-  children: React.ReactNode   // expects CardStrip.Item children
+interface CardCarouselProps {
+  children: React.ReactNode   // expects CardCarousel.Item children
   className?: string
 }
 // Sub-component
-CardStrip.Item // shrink-0, snap-start, standard width
+CardCarousel.Item // shrink-0, snap-start, standard width
 ```
 
 - Horizontal overflow scroll, `snap-x snap-mandatory`
@@ -198,16 +198,16 @@ CardStrip.Item // shrink-0, snap-start, standard width
 
 ---
 
-### 3.2 `CardStack`
+### 3.2 `StackedCards`
 **Tier**: core  
-**File**: `components/core/CardStack/CardStack.tsx`
+**File**: `components/core/StackedCards/StackedCards.tsx`
 
 ```tsx
-interface CardStackProps {
-  children: React.ReactNode   // 3–5 CardStack.Item children
+interface StackedCardsProps {
+  children: React.ReactNode   // 3–5 StackedCards.Item children
   className?: string
 }
-CardStack.Item
+StackedCards.Item
 ```
 
 - Collapsed: stacked with 6px Y-offset + 1.5° rotation per card
@@ -220,12 +220,12 @@ CardStack.Item
 
 ---
 
-### 3.3 `ChipToCard`
+### 3.3 `ExpandableChips`
 **Tier**: core  
-**File**: `components/core/ChipToCard/ChipToCard.tsx`
+**File**: `components/core/ExpandableChips/ExpandableChips.tsx`
 
 ```tsx
-interface ChipToCardProps {
+interface ExpandableChipsProps {
   chips: { id: string; label: string; card: React.ReactNode }[]
   className?: string
 }
@@ -242,7 +242,7 @@ interface ChipToCardProps {
 ## Phase 4 — Ambient (build last)
 
 ### 4.1 Avatar Breathe
-Update to `EntityAvatar` or the AI avatar inside `MessageBubble`.
+Update to `Avatar` or the AI avatar inside `MessageBubble`.
 
 - `isGenerating` prop added to whatever component renders the AI avatar
 - Scale loop `1.0 → 1.025` while generating, stops immediately on first token
@@ -303,14 +303,14 @@ When the AI references an earlier message, that message briefly glows and a conn
 |----------|-----------|------|--------|--------|
 | 1 | `WaveformIndicator` | new primitive | low | pending |
 | 2 | `MorphingBlob` | new primitive | low | pending |
-| 3 | `SkeletonBlock` | new primitive | medium | pending |
+| 3 | `Skeleton` | new primitive | medium | pending |
 | 4 | `ThinkingIndicator` | new core | medium | pending |
 | 5 | `MessageBubble` animation variants | update core | medium | in progress (separate branch) |
 | 6 | `CopyButton` transform + ripple | update core sub | low | pending |
 | 7 | `ChatInput` focus glow | update core | low | pending |
-| 8 | `CardStrip` | new core | medium | pending |
-| 9 | `CardStack` | new core | high | pending |
-| 10 | `ChipToCard` | new core | high | pending |
+| 8 | `CardCarousel` | new core | medium | pending |
+| 9 | `StackedCards` | new core | high | pending |
+| 10 | `ExpandableChips` | new core | high | pending |
 | 11 | Avatar breathe | update primitive | low | pending |
 | 12 | Conversation age fade | update layout | medium | pending |
 | 13 | Thumbs up burst | update core sub | medium | pending |

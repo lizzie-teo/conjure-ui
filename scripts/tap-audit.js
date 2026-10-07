@@ -69,7 +69,7 @@ function sizeOf(classes) {
 
 const split = s => s.split(/\s+/).filter(Boolean)
 const scope = (cs, p) => cs.filter(c => c.startsWith(p)).map(c => c.slice(p.length))
-const bare = cs => cs.filter(c => !/^[\w-]+:/.test(c))
+const bare = cs => cs.filter(c => !/^@?[\w-]+:/.test(c))
 
 /** Every string literal anywhere inside a node — covers cn(), ternaries, &&. */
 function stringsIn(node) {
@@ -123,7 +123,10 @@ for (const file of files) {
           const sizeProp = sizeNode ? stringsIn(sizeNode)[0] : tag === 'Button' ? 'default' : null
 
           let base = sizeOf(bare(classes))
-          const md = sizeOf(scope(classes, 'md:'))
+          // `@md:` is the container breakpoint components scale on; `md:` survives
+          // only on viewport-anchored frames. A finger can drive either width.
+          const mdScope = scope(classes, '@md:').length ? '@md:' : 'md:'
+          const md = sizeOf(scope(classes, mdScope))
           const coarse = sizeOf(scope(classes, 'pointer-coarse:'))
 
           // `p-0` is not padding — it is the absence of it.
@@ -155,7 +158,7 @@ for (const file of files) {
             findings.push({
               file,
               line,
-              issue: `md:${md.cls} = ${tablet}px — a touch tablet is md:-wide (min ${COARSE_MIN})`,
+              issue: `${mdScope}${md.cls} = ${tablet}px — a touch tablet is ${mdScope}-wide (min ${COARSE_MIN})`,
             })
           } else if (tablet !== null && tablet < FINE_MIN) {
             findings.push({ file, line, issue: `${tablet}px is under the cursor minimum (${FINE_MIN})` })

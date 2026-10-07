@@ -21,7 +21,7 @@ export const Error: Story = { args: { state: 'error' } }
 export const AllStates: Story = {
   name: 'All states',
   render: () => (
-    <div className="flex items-center gap-10">
+    <div className="flex flex-wrap justify-center items-center gap-10">
       {(['idle', 'pending', 'success', 'error'] as const).map((state) => (
         <div key={state} className="flex flex-col items-center gap-3">
           <BiometricIndicator state={state} />

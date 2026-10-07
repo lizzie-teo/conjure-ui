@@ -33,7 +33,7 @@ export function CartItem({
   return (
     <div
       className={cn(
-        'flex items-start gap-3 p-4 md:p-5',
+        'flex items-start gap-3 @md:gap-4 p-4 @md:p-5',
         'bg-card border border-border rounded-xl shadow-[var(--shadow-card)]',
         className
       )}
@@ -42,15 +42,15 @@ export function CartItem({
       <img
         src={image}
         alt={name}
-        className="size-16 md:size-14 rounded-lg object-cover shrink-0"
+        className="size-16 @md:size-14 rounded-lg object-cover shrink-0"
       />
-      <div className="flex-1 min-w-0 flex flex-col gap-2 md:gap-3">
+      <div className="flex-1 min-w-0 flex flex-col gap-2 @md:gap-3">
         {/* Name + remove row */}
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <p className="text-sm md:text-base font-medium text-foreground truncate">{name}</p>
+            <p className="text-sm @md:text-base font-medium text-foreground truncate">{name}</p>
             {variant && (
-              <p className="text-xs md:text-sm text-muted-foreground mt-0.5">{variant}</p>
+              <p className="text-xs @md:text-sm text-muted-foreground mt-0.5">{variant}</p>
             )}
             <PriceDisplay amount={price * quantity} currency={currency} className="mt-1" />
           </div>
@@ -60,7 +60,7 @@ export function CartItem({
               size="icon-sm"
               aria-label={`Remove ${name}`}
               onClick={onRemove}
-              className="size-8 md:size-7 tap-target shrink-0 -mt-0.5 -mr-1 text-muted-foreground"
+              className="size-8 @md:size-7 tap-target shrink-0 -mt-0.5 -mr-1 text-muted-foreground"
             >
               <X className="size-4" />
             </Button>
@@ -71,7 +71,7 @@ export function CartItem({
           {onQuantityChange ? (
             <QuantityStepper value={quantity} onChange={onQuantityChange} />
           ) : (
-            <span className="text-xs md:text-sm text-muted-foreground">Qty: {quantity}</span>
+            <span className="text-xs @md:text-sm text-muted-foreground">Qty: {quantity}</span>
           )}
         </div>
       </div>

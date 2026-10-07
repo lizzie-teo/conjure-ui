@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { ThumbsUp, ThumbsDown } from 'lucide-react'
 import { cn } from '../../../lib/utils'
 import { Button } from '../../ui/button'
-import { EntityAvatar, type EntityAvatarProps, TimestampLabel } from '../../primitives'
+import { Avatar, type AvatarProps, Timestamp } from '../../primitives'
 import type { ComponentProps, ComponentPropsWithRef } from 'react'
 import type { MotionDivProps } from '../../../lib/prop-types'
 
@@ -36,7 +36,7 @@ interface ContentProps extends ComponentPropsWithRef<'div'> {
   words?: string[]
 }
 
-type TimestampSubProps = ComponentProps<typeof TimestampLabel>
+type TimestampSubProps = ComponentProps<typeof Timestamp>
 
 interface FeedbackRowProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   onThumbsUp?: () => void
@@ -76,7 +76,7 @@ function Content({ children, words, className, ...props }: ContentProps) {
   return (
     <div
       className={cn(
-        'max-w-[75%] md:max-w-sm rounded-2xl px-4 py-3 md:px-5 md:py-3.5 text-sm md:text-base leading-relaxed',
+        'max-w-[75%] @md:max-w-sm rounded-2xl px-4 py-3 @md:px-5 @md:py-3.5 text-sm @md:text-base leading-relaxed',
         isUser
           ? 'bg-primary text-primary-foreground'
           : 'bg-muted text-foreground shadow-[var(--shadow-bubble)]',
@@ -110,19 +110,19 @@ function Content({ children, words, className, ...props }: ContentProps) {
   )
 }
 
-function Avatar({ size = 'sm', ...props }: EntityAvatarProps) {
+function BubbleAvatar({ size = 'sm', ...props }: AvatarProps) {
   const { role, grouped, isGenerating } = useContext(BubbleContext)
 
   if (role === 'user') return null
   if (grouped) return null
 
-  return <EntityAvatar size={size} isGenerating={isGenerating} {...props} />
+  return <Avatar size={size} isGenerating={isGenerating} {...props} />
 }
 
-function Timestamp({ className, ...props }: TimestampSubProps) {
+function BubbleTimestamp({ className, ...props }: TimestampSubProps) {
   return (
-    <TimestampLabel
-      className={cn('text-xs mt-0.5 opacity-60', className)}
+    <Timestamp
+      className={cn('text-xs @md:text-sm mt-0.5 opacity-60', className)}
       {...props}
     />
   )
@@ -242,7 +242,7 @@ export function MessageBubble({
             : { duration: 0.2, ease: EASE_OUT }
         }
         className={cn(
-          'relative flex w-full gap-2 md:gap-3',
+          'relative flex w-full gap-2 @md:gap-3',
           isUser ? 'flex-row-reverse items-end' : 'flex-col items-start',
           className
         )}
@@ -267,6 +267,6 @@ export function MessageBubble({
 }
 
 MessageBubble.Content = Content
-MessageBubble.Avatar = Avatar
-MessageBubble.Timestamp = Timestamp
+MessageBubble.Avatar = BubbleAvatar
+MessageBubble.Timestamp = BubbleTimestamp
 MessageBubble.FeedbackRow = FeedbackRow

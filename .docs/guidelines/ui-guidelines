@@ -51,44 +51,94 @@ Industry starting points:
 
 ## Responsive Design
 
-**Mobile-first, always.** Default styles target mobile. Scale up with `md:` and `lg:`.
+**Components scale against their container, not the screen.** This is a chat
+library: on a laptop the chat panel is 400px wide while the screen is 1440px. A
+screen query (`md:`) would hand every card inside that panel its desktop padding
+and type, in a box no wider than a phone. So content is sized with Tailwind v4
+**container queries** — `@md:` instead of `md:` — which ask "how wide is the box
+I am in?" instead.
+
+**Mobile-first, always.** Default styles are the compact size. Scale up with `@md:`
+and `@3xl:`.
 
 ### Breakpoints
-| Token | Width | Use for |
-|-------|-------|---------|
-| default | < 768px | Mobile — design here first |
-| `md:` | 768px+ | Tablet — expand layout |
-| `lg:` | 1024px+ | Desktop — full layout |
-| `xl:` | 1280px+ | Wide desktop — max content width |
+| Variant | Container width | Use for |
+|---------|-----------------|---------|
+| default | < 448px | Phone, chat panel, narrow sheet — design here first |
+| `@md:` | 448px+ (28rem) | Roomy box — tablet, wide modal, consumer page column |
+| `@3xl:` | 768px+ (48rem) | Full-width page area — rare inside a component |
 
-### Spacing (Progressive Scaling — no big jumps)
-| Context | Mobile → md → lg |
-|---------|-----------------|
-| Page horizontal | `px-4 md:px-8 lg:px-12` |
-| Page vertical | `py-6 md:py-8 lg:py-12` |
-| Card padding | `p-4 md:p-6 lg:p-8` |
-| Section gaps | `gap-4 md:gap-6 lg:gap-8` |
-| Button groups | `gap-2 md:gap-3` |
+The two thresholds are Tailwind's stock container sizes. Do not redefine
+`--container-*` to move them: the same variables drive `max-w-md` etc.
 
-**Rule**: `px-4 md:px-8 lg:px-12` ✅ · `px-4 lg:px-32` ❌
-
-### Two axes, not one: viewport vs. input device
-
-The single most common mistake in this library was treating `md:` as "desktop".
-It is not. It is a **width** query, and width does not tell you whether a finger
-or a cursor is driving.
+### Three axes, not one
 
 | Axis | Query | Governs |
 |------|-------|---------|
-| **Viewport** | `md:` `lg:` `xl:` | Layout, density, spacing, type scale, column counts |
+| **Container** | `@md:` `@3xl:` | Type scale, padding, gaps, icon size, column counts — everything inside a component |
+| **Viewport** | `md:` `lg:` | Only frames anchored to the screen: a `fixed` sheet becoming a centred modal, `100dvh` heights, the drag handle that only a bottom sheet has |
 | **Input device** | `pointer-coarse:` `pointer-fine:` | Hit area — and nothing else |
 
-A 1024px iPad in landscape matches `md:` **and** is finger-operated. Sizing a
-control down at `md:` hands that user a 40px target. A 700px-wide browser window
-on a desktop matches the mobile branch and gets oversized controls for a mouse.
-Both are wrong, and neither is fixable with breakpoints.
+If the class would still make sense with the component dropped into a 360px
+sidebar on a 4K monitor, it is a container class. `md:` is the exception and
+needs a reason a reviewer can see.
 
-**Never use a breakpoint to decide a touch target.**
+### Who declares the container
+
+A container query asks the **nearest ancestor** marked `@container`. A component
+never queries itself, so its own root padding responds to the box *around* it.
+
+- **Layouts declare it.** `ChatWidget`'s root, `ModalSheet`'s panel and
+  `ApplePaySheet`'s sheet carry `@container`, so everything inside them scales
+  to the panel.
+- **Consumers declare it** on whatever area holds loose components:
+  `<main className="@container">`. With no container anywhere above, a component
+  stays at its compact size — a safe default, never a broken one.
+- **Storybook declares it** in `.storybook/preview.tsx`, so the viewport toolbar
+  and Chromatic's 375px / 1280px snapshots reach every story. A story's own
+  width wrapper (`max-w-sm`) must **not** add `@container` — it would pin the
+  component to its compact size at every viewport. Only a wrapper that stands in
+  for a chat panel (`ChatShell` in `RichContent.stories.tsx`) should.
+- **Components do not declare it** on their roots. A nested container would
+  silently change what every descendant measures against.
+  *Exception:* a self-sizing tile that lays out its own insides by its own width
+  (`StatCard`, with `@[8rem]:`-style queries). It may be its own container,
+  because nothing passed into it needs to scale to the page.
+
+Two traps:
+
+1. **A container must have a definite width.** `container-type: inline-size`
+   ignores its content when sizing, so a shrink-wrapped container (inline, a
+   flex item with no width, `w-fit`) collapses to 0. Put it only on block boxes
+   that fill their parent or have an explicit width.
+2. **`@md:` without an ancestor never matches.** That is why the compact size
+   must be a complete design on its own.
+
+### Spacing (Progressive Scaling — no big jumps)
+| Context | Compact → @md → @3xl |
+|---------|---------------------|
+| Card padding | `p-4 @md:p-6 @3xl:p-8` |
+| Section gaps | `gap-4 @md:gap-6 @3xl:gap-8` |
+| Inner gaps | `gap-2 @md:gap-3` |
+| Button groups | `gap-2 @md:gap-3` |
+
+**Rule**: `px-4 @md:px-6` ✅ · `px-4 @3xl:px-12` ❌
+
+### What does not scale
+
+Leave these fixed — a scaled version looks wrong, not bigger:
+
+- Hairlines and borders, status dots, progress bars, skeleton line heights
+- Third-party marks and native replicas (Apple Pay sheet type, payment logos)
+- Sizes a prop already chooses (`Avatar size="sm"`)
+- `components/ui/button.tsx` CVA sizes — call sites state their own height
+- Hit areas — those belong to `pointer-coarse:`, below
+
+### Icons
+
+Icons scale with the text beside them: `size-4 @md:size-5` next to body text,
+`size-3.5 @md:size-4` next to captions. Pass the size as a class, not as
+lucide's `size={18}` prop, so the `@md:` partner is possible.
 
 ### Minimum hit area (mandatory on every interactive element)
 
@@ -111,15 +161,15 @@ buttons, steppers, close buttons, anything whose box is the affordance.
 
 ```tsx
 // Full-width CTA — 48 on phone, 40 for a cursor, never under 44 for a finger
-<Button className="w-full h-12 md:h-10 pointer-coarse:min-h-11">Confirm</Button>
+<Button className="w-full h-12 @md:h-10 pointer-coarse:min-h-11">Confirm</Button>
 
 // Icon button
-<Button className="size-12 md:size-10 pointer-coarse:size-12" aria-label="Close" />
+<Button className="size-12 @md:size-10 pointer-coarse:size-12" aria-label="Close" />
 ```
 
 Prefer `min-h-11` over `h-11` in the coarse branch: `min-height` beats `height`
 regardless of which utility Tailwind emits first, so the rule can't lose a
-specificity race with `md:`.
+specificity race with `@md:`.
 
 **No — its size is the design.** Use `tap-target`, which expands the hit area
 with a centred pseudo-element while the visual box stays put. Switch tracks, tag
@@ -127,7 +177,7 @@ removes, inline icon affordances, message feedback buttons.
 
 ```tsx
 // A 14px remove affordance that still accepts a 44px finger
-<Button className="size-3.5 md:size-3 rounded-full p-0 tap-target" aria-label="Remove" />
+<Button className="size-3.5 @md:size-3 rounded-full p-0 tap-target" aria-label="Remove" />
 ```
 
 Two limits on `tap-target`, both of which will bite silently:
@@ -154,49 +204,54 @@ testable without a physical device.
 ### Typography (Progressive)
 | Element | Classes |
 |---------|---------|
-| Display / Hero | `text-3xl md:text-4xl font-semibold` |
-| H1 | `text-2xl md:text-3xl font-semibold` |
-| H2 | `text-xl md:text-2xl font-semibold` |
-| H3 | `text-base md:text-lg font-semibold` |
-| Body | `text-sm md:text-base` |
-| Caption | `text-xs md:text-sm` |
-| Amount hero | `text-3xl md:text-4xl font-semibold tabular-nums` |
+| Display / Hero | `text-3xl @md:text-4xl font-semibold` |
+| H1 | `text-2xl @md:text-3xl font-semibold` |
+| H2 | `text-xl @md:text-2xl font-semibold` |
+| H3 | `text-base @md:text-lg font-semibold` |
+| Body | `text-sm @md:text-base` |
+| Caption | `text-xs @md:text-sm` |
+| Amount hero | `text-3xl @md:text-4xl font-semibold tabular-nums` |
 
-> **Fluid alternative**: `text-[clamp(1.5rem,4vw,2.25rem)]` scales smoothly between breakpoints without jumps — use for splash/onboarding text only; components should use the table above for predictability.
+> **Fluid alternative**: `text-[clamp(1.5rem,6cqi,2.25rem)]` scales smoothly with the container (`cqi` = 1% of the container's width) — splash/onboarding text only; components use the table above for predictability.
 
-**Note on constrained components** (ModalSheet, ApplePaySheet, bottom drawers): these are always capped at `max-w-md` or `max-w-lg` regardless of viewport. Typography inside them may use a fixed size class (e.g. `text-[25px]` for branded native-style headers) — this is acceptable. All other dimensions must still use Tailwind classes, not inline styles.
+**Note on native-replica components** (ApplePaySheet): type that copies a platform's own sheet may use a fixed size class (e.g. `text-[25px]`) — the platform does not scale it either. All other dimensions must still use Tailwind classes, not inline styles.
 
 Content widths: `max-w-prose` (reading), `max-w-4xl` (forms), `max-w-7xl` (dashboard)
 
 ### Chat Window Sizing
-The chat window must feel native at every size — not a shrunken desktop widget on mobile:
+The chat window frame is the one place a viewport query is right — it decides
+whether the widget *is* the screen:
 
 ```tsx
-// Full screen on mobile, floating panel on larger screens
+// Full screen on mobile, floating panel on larger screens — viewport, because the frame is anchored to the screen
 <div className="
-  fixed inset-0                          // mobile: full screen
-  md:relative md:inset-auto             // tablet+: back to normal flow
-  md:w-[400px] lg:w-[440px]             // fixed width on desktop
-  h-[100dvh] md:h-[600px] lg:h-[680px] // dvh accounts for mobile browser chrome
+  @container                             // and everything inside scales to the panel
+  fixed inset-0
+  md:relative md:inset-auto
+  md:w-[400px] lg:w-[440px]
+  h-[100dvh] md:h-[600px] lg:h-[680px]
 ">
 ```
 
-Message bubbles: `max-w-[75%] md:max-w-sm` — constrain width to preserve readability.
+Message bubbles: `max-w-[75%] @md:max-w-sm` — constrain width to preserve readability.
 
 ### Layout Patterns
 ```tsx
-// Side-by-side on desktop, stacked on mobile
-<div className="flex flex-col md:flex-row gap-4 md:gap-6">
+// Side-by-side in a roomy box, stacked in a narrow one
+<div className="flex flex-col @md:flex-row gap-4 @md:gap-6">
 
-// Grid: 1 col mobile, 2 col tablet, 3 col desktop
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+// Grid: 1 col compact, 2 col roomy, 3 col full width
+<div className="grid grid-cols-1 @md:grid-cols-2 @3xl:grid-cols-3 gap-4 @md:gap-6">
 
-// Hide on mobile, show on desktop
-<div className="hidden md:block">
-
-// Show on mobile only
-<div className="md:hidden">
+// Hide in a narrow box
+<div className="hidden @md:block">
 ```
+
+### Verifying width
+
+- Storybook's viewport toolbar has Phone / Tablet / Desktop. Check all three.
+- Chromatic snapshots every story at 375px and 1280px, so a layout that breaks
+  on a phone shows up as a visual diff.
 
 ---
 
@@ -204,14 +259,14 @@ Message bubbles: `max-w-[75%] md:max-w-sm` — constrain width to preserve reada
 
 ### Button
 ```tsx
-<Button className="h-12 md:h-10 pointer-coarse:min-h-11" variant="default">Click Me</Button>
+<Button className="h-12 @md:h-10 pointer-coarse:min-h-11" variant="default">Click Me</Button>
 ```
 
 ### Form Input
 ```tsx
 <div className="space-y-2">
   <Label>Label</Label>
-  <Input className="h-12 md:h-10 pointer-coarse:min-h-11" />
+  <Input className="h-12 @md:h-10 pointer-coarse:min-h-11" />
 </div>
 ```
 
@@ -224,7 +279,7 @@ Message bubbles: `max-w-[75%] md:max-w-sm` — constrain width to preserve reada
 
 ### Card
 ```tsx
-<div className="bg-card border border-border rounded-lg p-4 md:p-6 lg:p-8">{children}</div>
+<div className="bg-card border border-border rounded-lg p-4 @md:p-6 @3xl:p-8">{children}</div>
 ```
 
 ---
@@ -285,14 +340,14 @@ All primitives accept `className`. Use it with token-based Tailwind classes when
 
 ### Extending sizes
 
-`EntityAvatar` exports `entityAvatarSizeClasses`. Add extra sizes the same way:
+`Avatar` exports `avatarSizeClasses`. Add extra sizes the same way:
 
 ```tsx
-import { entityAvatarBase, entityAvatarSizeClasses } from '@lizzie-teo/conjure-ui/primitives'
+import { avatarBase, avatarSizeClasses } from '@lizzie-teo/conjure-ui/primitives'
 
-const myAvatarVariants = cva(entityAvatarBase, {
+const myAvatarVariants = cva(avatarBase, {
   variants: {
-    size: { ...entityAvatarSizeClasses, xl: 'size-20 text-lg' },
+    size: { ...avatarSizeClasses, xl: 'size-20 text-lg' },
   },
   defaultVariants: { size: 'md' },
 })
@@ -366,10 +421,10 @@ const meta = {
 
 export const Default: Story = {
   render: (args) => (
-    <ActionStrip>
-      <ActionStrip.Primary>{args.primaryLabel}</ActionStrip.Primary>
-      <ActionStrip.Secondary>{args.secondaryLabel}</ActionStrip.Secondary>
-    </ActionStrip>
+    <ButtonGroup>
+      <ButtonGroup.Primary>{args.primaryLabel}</ButtonGroup.Primary>
+      <ButtonGroup.Secondary>{args.secondaryLabel}</ButtonGroup.Secondary>
+    </ButtonGroup>
   ),
 }
 ```
@@ -417,16 +472,17 @@ export const Default: Story = {
 - Raw `<button>` — always use shadcn `<Button>`
 - Paste Figma values directly (`#2563EB`, `bg-[#2563EB]`)
 - Hardcode colors, spacing, or stroke widths
-- Skip `md:` variants — every component must scale
-- Big breakpoint jumps (`px-4 lg:px-32`)
+- Skip `@md:` variants — every component must scale
+- Use `md:` inside a component — it measures the screen, not the box the component is in
+- Big breakpoint jumps (`px-4 @3xl:px-32`)
 - Build for desktop first, then try to shrink to mobile
-- `style={{ width: X, height: X }}` for dimensions — inline styles bypass Tailwind's responsive system entirely. Use `size-*`, `w-*`, `h-*` classes so `md:` variants remain available
-- `text-[18px]`, `text-[25px]` without an `md:` pair — use the typography table above or approve the exception explicitly (constrained native-style components only)
+- `style={{ width: X, height: X }}` for dimensions — inline styles bypass Tailwind's responsive system entirely. Use `size-*`, `w-*`, `h-*` classes so `@md:` variants remain available
+- `text-[18px]`, `text-[25px]` without an `@md:` pair — use the typography table above or approve the exception explicitly (native-replica components only)
 
 **✅ DO:**
 - Search repo before creating anything new
-- Progressive spacing: `p-4 md:p-6 lg:p-8`
-- Touch targets: `h-12 md:h-10 pointer-coarse:min-h-11` — a breakpoint never decides a hit area
+- Progressive spacing: `p-4 @md:p-6 @3xl:p-8`
+- Touch targets: `h-12 @md:h-10 pointer-coarse:min-h-11` — a breakpoint never decides a hit area
 - Use `100dvh` (not `100vh`) for full-screen mobile layouts
 - `ICON_STROKE_WIDTH` for icons >48px
 

@@ -71,7 +71,7 @@ function Field({
         'flex-1 resize-none bg-transparent text-base text-foreground',
         'placeholder:text-muted-foreground leading-relaxed',
         'outline-none border-0 ring-0 shadow-none',
-        'max-h-32 md:max-h-40 overflow-y-auto',
+        'max-h-32 @md:max-h-40 overflow-y-auto',
         'py-1.5',
         className
       )}
@@ -93,7 +93,7 @@ function Send({ className, 'aria-label': ariaLabel = 'Send message', ...props }:
       onClick={handleSend}
       disabled={!canSend}
       aria-label={ariaLabel}
-      className={cn('shrink-0 rounded-full size-11 md:size-10 pointer-coarse:size-11', className)}
+      className={cn('shrink-0 rounded-full size-11 @md:size-10 pointer-coarse:size-11', className)}
     >
       <AnimatePresence mode="wait" initial={false}>
         {canSend ? (
@@ -105,7 +105,7 @@ function Send({ className, 'aria-label': ariaLabel = 'Send message', ...props }:
             transition={{ duration: 0.15, ease: [0, 0, 0.2, 1] as [number, number, number, number] }}
             className="flex items-center justify-center"
           >
-            <ArrowUp className="size-4 md:size-5" />
+            <ArrowUp className="size-4 @md:size-5" />
           </motion.span>
         ) : (
           <motion.span
@@ -116,7 +116,7 @@ function Send({ className, 'aria-label': ariaLabel = 'Send message', ...props }:
             transition={{ duration: 0.15, ease: [0, 0, 0.2, 1] as [number, number, number, number] }}
             className="flex items-center justify-center"
           >
-            <Mic className="size-4 md:size-5" />
+            <Mic className="size-4 @md:size-5" />
           </motion.span>
         )}
       </AnimatePresence>
@@ -144,8 +144,8 @@ export function ChatInput({
     <ChatInputCtx.Provider value={{ value, setValue, handleSend, disabled }}>
       <div
         className={cn(
-          'flex items-end gap-2 md:gap-3 rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]',
-          'px-4 py-3 md:px-5 md:py-3.5',
+          'flex items-end gap-2 @md:gap-3 rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]',
+          'px-4 py-3 @md:px-5 @md:py-3.5',
           'transition-shadow duration-150 focus-within:ring-2 focus-within:ring-ring focus-within:shadow-[var(--shadow-elevated)]',
           className
         )}

@@ -22,7 +22,7 @@ export function Tag({ label, onRemove, className, ...props }: TagProps) {
       exit={{ opacity: 0, y: shouldReduce ? 0 : 4 }}
       transition={{ duration: 0.2, ease: [0, 0, 0.2, 1] }}
       className={cn(
-        'inline-flex items-center gap-1 rounded-full bg-secondary text-secondary-foreground px-2.5 py-0.5 text-xs md:text-sm',
+        'inline-flex items-center gap-1 rounded-full bg-secondary text-secondary-foreground px-2.5 py-0.5 text-xs @md:text-sm',
         className
       )}
       {...props}
@@ -34,7 +34,7 @@ export function Tag({ label, onRemove, className, ...props }: TagProps) {
           size="icon-xs"
           aria-label={`Remove ${label}`}
           onClick={onRemove}
-          className="size-3.5 md:size-3 rounded-full p-0 tap-target"
+          className="size-3.5 @md:size-3 rounded-full p-0 tap-target"
         >
           <X className="size-2.5" />
         </Button>

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { StatusBadge } from '@/components/primitives'
 import { PriceDisplay } from '@/components/primitives'
-import { ActionStrip } from '../ActionStrip/ActionStrip'
-import { DetailList } from '../DetailList/DetailList'
+import { ButtonGroup } from '../ButtonGroup/ButtonGroup'
+import { KeyValueList } from '../KeyValueList/KeyValueList'
 import { MediaCard } from './MediaCard'
 
 const meta = {
@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
-    <div className="max-w-xs">
+    <div className="max-w-xs @md:max-w-md">
       <MediaCard>
         <MediaCard.Media
           src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=200&fit=crop"
@@ -34,7 +34,7 @@ export const Default: Story = {
 export const Flight: Story = {
   name: 'Flight listing (travel)',
   render: () => (
-    <div className="max-w-xs">
+    <div className="max-w-xs @md:max-w-md">
       <MediaCard>
         <MediaCard.Media
           src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=200&fit=crop"
@@ -52,10 +52,10 @@ export const Flight: Story = {
             <PriceDisplay amount={899} currency="AUD" strikethrough={1199} />
           </MediaCard.Meta>
         </MediaCard.Body>
-        <ActionStrip>
-          <ActionStrip.Primary>Book now</ActionStrip.Primary>
-          <ActionStrip.Secondary>View details</ActionStrip.Secondary>
-        </ActionStrip>
+        <ButtonGroup>
+          <ButtonGroup.Primary>Book now</ButtonGroup.Primary>
+          <ButtonGroup.Secondary>View details</ButtonGroup.Secondary>
+        </ButtonGroup>
       </MediaCard>
     </div>
   ),
@@ -64,7 +64,7 @@ export const Flight: Story = {
 export const Medication: Story = {
   name: 'Medication listing (pharmacy)',
   render: () => (
-    <div className="max-w-xs">
+    <div className="max-w-xs @md:max-w-md">
       <MediaCard>
         <MediaCard.Media
           src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=200&fit=crop"
@@ -82,10 +82,10 @@ export const Medication: Story = {
             <PriceDisplay amount={12.99} currency="AUD" />
           </MediaCard.Meta>
         </MediaCard.Body>
-        <ActionStrip>
-          <ActionStrip.Primary>Add to cart</ActionStrip.Primary>
-          <ActionStrip.Secondary>Learn more</ActionStrip.Secondary>
-        </ActionStrip>
+        <ButtonGroup>
+          <ButtonGroup.Primary>Add to cart</ButtonGroup.Primary>
+          <ButtonGroup.Secondary>Learn more</ButtonGroup.Secondary>
+        </ButtonGroup>
       </MediaCard>
     </div>
   ),
@@ -112,10 +112,10 @@ function ProductCard() {
           <PriceDisplay amount={12.99} currency="AUD" />
         </MediaCard.Meta>
       </MediaCard.Body>
-      <ActionStrip>
-        <ActionStrip.Primary>Add to cart</ActionStrip.Primary>
-        <ActionStrip.Secondary>Learn more</ActionStrip.Secondary>
-      </ActionStrip>
+      <ButtonGroup>
+        <ButtonGroup.Primary>Add to cart</ButtonGroup.Primary>
+        <ButtonGroup.Secondary>Learn more</ButtonGroup.Secondary>
+      </ButtonGroup>
     </MediaCard>
   )
 }
@@ -133,12 +133,12 @@ export const Wireframe: Story = {
     },
   },
   render: () => (
-    <div className="flex flex-col gap-6 md:flex-row md:gap-8">
-      <div className="max-w-xs flex-1 space-y-3">
+    <div className="flex flex-col gap-6 @md:flex-row @md:gap-8">
+      <div className="max-w-xs @md:max-w-md flex-1 space-y-3">
         <p className="text-sm text-muted-foreground">Default</p>
         <ProductCard />
       </div>
-      <div className="theme-wireframe max-w-xs flex-1 space-y-3 bg-background">
+      <div className="theme-wireframe max-w-xs @md:max-w-md flex-1 space-y-3 bg-background">
         <p className="text-sm text-muted-foreground">.theme-wireframe</p>
         <ProductCard />
       </div>
@@ -149,7 +149,7 @@ export const Wireframe: Story = {
 export const NoImage: Story = {
   name: 'Without media',
   render: () => (
-    <div className="max-w-xs">
+    <div className="max-w-xs @md:max-w-md">
       <MediaCard>
         <MediaCard.Body>
           <div className="flex items-start justify-between gap-2">
@@ -159,19 +159,19 @@ export const NoImage: Story = {
             </MediaCard.Badge>
           </div>
           <MediaCard.Subtitle>Bupa · Family plan · Hospital + Extras</MediaCard.Subtitle>
-          <DetailList>
-            <DetailList.Row label="Hospital" value="Full cover" />
-            <DetailList.Row label="Excess" value="$500" />
-          </DetailList>
+          <KeyValueList>
+            <KeyValueList.Row label="Hospital" value="Full cover" />
+            <KeyValueList.Row label="Excess" value="$500" />
+          </KeyValueList>
           <MediaCard.Meta>
             <PriceDisplay amount={385} currency="AUD" />
             <span className="text-muted-foreground">/ month</span>
           </MediaCard.Meta>
         </MediaCard.Body>
-        <ActionStrip>
-          <ActionStrip.Primary>Select plan</ActionStrip.Primary>
-          <ActionStrip.Secondary>Compare</ActionStrip.Secondary>
-        </ActionStrip>
+        <ButtonGroup>
+          <ButtonGroup.Primary>Select plan</ButtonGroup.Primary>
+          <ButtonGroup.Secondary>Compare</ButtonGroup.Secondary>
+        </ButtonGroup>
       </MediaCard>
     </div>
   ),

@@ -38,7 +38,7 @@ export function BiometricIndicator({ state, className, ...props }: BiometricIndi
       role="img"
       aria-label={stateAriaLabels[state]}
       className={cn(
-        'relative inline-flex items-center justify-center size-20 md:size-16',
+        'relative inline-flex items-center justify-center size-20 @md:size-16',
         className
       )}
       {...props}
@@ -71,7 +71,7 @@ export function BiometricIndicator({ state, className, ...props }: BiometricIndi
             transition={{ duration: 0.2, ease: [0, 0, 0.2, 1] }}
             className="text-success"
           >
-            <Check className="size-8 md:size-7" strokeWidth={2.5} />
+            <Check className="size-8 @md:size-7" strokeWidth={2.5} />
           </motion.span>
         ) : state === 'error' ? (
           <motion.span
@@ -87,7 +87,7 @@ export function BiometricIndicator({ state, className, ...props }: BiometricIndi
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1], delay: 0.1 }}
               className="block"
             >
-              <X className="size-8 md:size-7" strokeWidth={2.5} />
+              <X className="size-8 @md:size-7" strokeWidth={2.5} />
             </motion.span>
           </motion.span>
         ) : (
@@ -99,7 +99,7 @@ export function BiometricIndicator({ state, className, ...props }: BiometricIndi
             transition={{ duration: 0.2, ease: [0, 0, 0.2, 1] }}
             className={stateIconClasses[state]}
           >
-            <Fingerprint className="size-8 md:size-7" />
+            <Fingerprint className="size-8 @md:size-7" />
           </motion.span>
         )}
       </AnimatePresence>

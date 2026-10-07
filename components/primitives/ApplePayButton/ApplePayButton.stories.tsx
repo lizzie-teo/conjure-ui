@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ApplePayButton } from './ApplePayButton'
 
 const wrapper = (Story: React.ComponentType) => (
-  <div className="w-[360px] p-4 bg-card border border-border rounded-xl">
+  <div className="w-full max-w-[360px] p-4 bg-card border border-border rounded-xl">
     <Story />
   </div>
 )
@@ -49,7 +49,7 @@ export const AllVariants: Story = {
   name: 'All label variants',
   decorators: [],
   render: () => (
-    <div className="flex flex-col gap-3 w-[360px] p-4">
+    <div className="flex flex-col gap-3 w-full max-w-[360px] p-4">
       {['Pay with', 'Buy with', 'Book with', 'Subscribe with', 'Donate with', 'Check out with', ''].map((label) => (
         <ApplePayButton key={label || 'mark-only'} label={label} onClick={() => {}} />
       ))}

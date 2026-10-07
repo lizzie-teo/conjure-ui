@@ -42,7 +42,7 @@ export const Togglable: Story = {
 export const InContext: Story = {
   name: 'In chat context',
   render: () => (
-    <div className="flex flex-col gap-3 p-4 max-w-sm bg-background rounded-xl border border-border">
+    <div className="flex flex-col gap-3 p-4 max-w-sm @md:max-w-md bg-background rounded-xl border border-border">
       <div className="text-xs text-muted-foreground">Assistant is typing…</div>
       <TypingIndicator />
     </div>

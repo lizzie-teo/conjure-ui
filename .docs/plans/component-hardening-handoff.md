@@ -66,7 +66,7 @@ export function StatusBadge({ label, variant, className, ...props }: StatusBadge
 ```tsx
 import type { MotionDivProps } from '../../../lib/prop-types'
 
-export interface AuthStatusProps extends Omit<MotionDivProps, 'children'> {
+export interface SignInStatusProps extends Omit<MotionDivProps, 'children'> {
   state: 'success' | 'error'
 }
 ```
@@ -87,12 +87,12 @@ element **will not typecheck**; this type is why.
    `className` is destructured out, so `cn()` still merges correctly.
    **Exception:** if the component owns an a11y contract on the root (`role`, `tabIndex`,
    keyboard handlers), spread **first** so a consumer prop can't silently break it — see
-   `PaymentMethodTile` for the worked example and its comment.
+   `PaymentMethodCard` for the worked example and its comment.
 3. **Custom `onChange`/`onSelect` collide with DOM handlers.** `Omit` the DOM one and add a doc
-   comment noting the override. Done in `QuantityStepper`, `SelectionGroup`, `QuickReplies`.
-4. **Merge `style` rather than clobber** when the component sets its own — see `SkeletonBlock`
+   comment noting the override. Done in `QuantityStepper`, `OptionGroup`, `QuickReplies`.
+4. **Merge `style` rather than clobber** when the component sets its own — see `Skeleton`
    (`style={{ ...shimmerStyle, ...style }}`) and `ApplePayButton`.
-5. **Multiple return branches need the spread on every root** — `SkeletonBlock` has four.
+5. **Multiple return branches need the spread on every root** — `Skeleton` has four.
 6. **`size` collides on `<img>`-rooted components** → `Omit<…, 'size'>` (`BankLogo`, `PaymentLogo`).
 7. **Lucide-icon roots** use `Omit<LucideProps, 'size'>`, not `ComponentPropsWithRef<'svg'>`
    (`DeliveryMethodIcon`).
@@ -106,16 +106,16 @@ element **will not typecheck**; this type is why.
     typed as the common `HTMLElement`, and each branch spreads through one documented cast.
     A single `Ref<A | B>` will not typecheck against either branch's ref slot.
 11. **More DOM collisions found in this pass**, all `Omit`-ed with a doc comment on the
-    replacement: `onSelect` (`CompareTable`, `DateSelectStep.Cell`, `TimeSlotStep.Chip`),
+    replacement: `onSelect` (`ComparisonTable`, `DateSelectStep.Cell`, `TimeSlotStep.Chip`),
     `onChange` (`RewardsStep.SubstitutionSelector`, `BranchSelectStep.CarBootForm`),
     `defaultValue` (`DeliveryMethodStep`), `title` (`ComparisonCard`, `RecipeCard`,
-    `RecipeCard.Header`, `ModalSheet`), `value` (`SelectionGroup.Option`),
+    `RecipeCard.Header`, `ModalSheet`), `value` (`OptionGroup.Option`),
     and **`slot`** (`TimeSlotStep.Chip`) — `slot` is a global HTML attribute and is easy to miss.
 12. **Component-typed roots take `ComponentProps<typeof X>`, not intrinsic props.** Where a
     sub-component's root is another library component rather than a DOM node
-    (`ActionStrip.Primary/.Secondary` → `Button`, `OrderReview.Totals` → `DetailList`,
+    (`ButtonGroup.Primary/.Secondary` → `Button`, `OrderReview.Totals` → `KeyValueList`,
     `DeliveryTracker.Steps` → `OrderStatusCard`, `BranchSelectStep.BranchList` →
-    `SelectionGroup`), forward to that component's own props. `ActionStrip.Primary/.Secondary`
+    `OptionGroup`), forward to that component's own props. `ButtonGroup.Primary/.Secondary`
     consequently widen `onClick` from `() => void` to a full `MouseEventHandler` — a superset,
     so existing call sites are unaffected.
 13. **Defaulted a11y attributes stay overridable.** Where a root sets an `aria-label` that a
@@ -136,11 +136,11 @@ real regression net.
 
 The first 11 core components were swept before the rule "sub-components are public API too" was
 settled, so their `Component.SubComponent` props were left untouched. They have since been done:
-`ActionStrip.Primary/.Secondary`, `CardStrip.Item`, `DetailList.Row`,
+`ButtonGroup.Primary/.Secondary`, `CardCarousel.Item`, `KeyValueList.Row`,
 `MediaCard.Media/.Body/.Title/.Subtitle/.Badge/.Meta`,
-`MessageBubble.Content/.Timestamp/.FeedbackRow`, `SelectionGroup.Option`,
-`SummaryPanel.Header/.Body`. Also dropped a redundant `className?: string` left on
-`AddressTileProps`.
+`MessageBubble.Content/.Timestamp/.FeedbackRow`, `OptionGroup.Option`,
+`ExpandableCard.Header/.Body`. Also dropped a redundant `className?: string` left on
+`AddressCardProps`.
 
 ### Deliberately skipped
 
@@ -151,7 +151,7 @@ Internal, non-exported helpers — not reachable as `Component.SubComponent` and
 - Decorative SVG helpers inside components: `ApplePaySheet`'s `AccountIcon` / `AddressIcon` /
   `AppleMark` / `InfoRow` / `SideButtonConfirm`, `ApplePayButton`'s `AppleMark`,
   `AvailabilityDot`'s status icons, `PaymentConfirmSheet`'s `SecureHeader` /
-  `ApplePayWaitingPrompt` / `AcceptedNetworksStrip`, `CompareTable`'s `AttributeValue`,
+  `ApplePayWaitingPrompt` / `AcceptedNetworksStrip`, `ComparisonTable`'s `AttributeValue`,
   `MakeupRecipeCard`'s `SwatchStrip` / `CollageHero` / `CarouselHero` (these three *do* forward
   props, because the public `MakeupRecipeCard.Hero` delegates to them)
 
@@ -202,11 +202,11 @@ Internal, non-exported helpers — not reachable as `Component.SubComponent` and
 
 Storybook's CSF parser treats **every named export** in a `.stories.tsx` as a story. Helper
 functions and fixtures were being rendered as stories with no args: `BankLogo`'s `LogoGrid` and
-`ChipToCard`'s `flightCard` crashed. Affected **9 files / 20 phantom exports** — the other 18 were
+`ExpandableChips`'s `flightCard` crashed. Affected **9 files / 20 phantom exports** — the other 18 were
 silently polluting the sidebar. All fixed with `excludeStories`, following the convention
 `ComparisonCard` already used. Test count 365 → 345 is exactly those 20 phantoms.
 
-`ChipToCard` also had 7 typecheck errors: `chips` is required but meta had no `args`, so
+`ExpandableChips` also had 7 typecheck errors: `chips` is required but meta had no `args`, so
 `StoryObj<typeof meta>` demanded `args` on every story. Added meta-level defaults; `Default` now
 consumes them, so its Controls panel works.
 
@@ -218,7 +218,7 @@ module-local.
 - `eslint.config.mjs` — ignore `dist/**` and `storybook-static/**`. They were producing ~450
   phantom errors in minified bundles (534 → 79 total).
 - `tsconfig.json` — exclude `dist`, `storybook-static`.
-- `ToastBanner` — one of the three raw `<button>` rule violations replaced with shadcn `Button`.
+- `Toast` — one of the three raw `<button>` rule violations replaced with shadcn `Button`.
 
 ---
 

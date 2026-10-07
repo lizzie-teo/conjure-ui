@@ -16,7 +16,7 @@ export function TypingIndicator({ className, ...props }: TypingIndicatorProps) {
       exit={{ opacity: 0, y: shouldReduce ? 0 : 4 }}
       transition={{ duration: 0.2, ease: [0, 0, 0.2, 1] as [number, number, number, number] }}
       className={cn(
-        'inline-flex items-center gap-1 rounded-2xl rounded-tl-sm bg-muted px-4 py-3 md:px-5',
+        'inline-flex items-center gap-1 rounded-2xl rounded-tl-sm bg-muted px-4 py-3 @md:px-5',
         className
       )}
       aria-label="Assistant is typing"
@@ -37,7 +37,7 @@ export function TypingIndicator({ className, ...props }: TypingIndicatorProps) {
             ease: shouldReduce ? 'linear' : ('easeInOut' as const),
             delay: i * 0.15,
           }}
-          className="size-1.5 md:size-2 rounded-full bg-muted-foreground"
+          className="size-1.5 @md:size-2 rounded-full bg-muted-foreground"
         />
       ))}
     </motion.div>

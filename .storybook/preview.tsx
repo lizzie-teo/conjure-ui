@@ -1,10 +1,22 @@
 import type { Preview } from '@storybook/nextjs-vite';
 import { withThemeByClassName } from '@storybook/addon-themes';
+import { cn } from '../lib/utils';
 import '../app/globals.css';
 import './themes.css';
 
 const preview: Preview = {
   decorators: [
+    // Components scale against the box they sit in (a container query), not the
+    // screen. A consumer gives them that box with `@container`; this wrapper is
+    // Storybook's stand-in, so the viewport toolbar and Chromatic's widths reach
+    // the components. Without it every story would render at its compact size.
+    // It must have a definite width — an inline-size container sizes to 0 when
+    // shrink-wrapped — so centred stories are centred inside it instead.
+    (Story, { parameters }) => (
+      <div className={cn('@container w-full', parameters.layout === 'centered' && 'flex justify-center')}>
+        <Story />
+      </div>
+    ),
     // The addon swaps a single class but accepts a space-separated string, which
     // is how the two axes (light/dark, styled/wireframe) coexist in one toolbar.
     // Wireframe ships in app/theme.css — unlike the client themes in themes.css,
@@ -33,6 +45,21 @@ const preview: Preview = {
     },
     a11y: {
       test: 'todo',
+    },
+    viewport: {
+      options: {
+        phone: { name: 'Phone', styles: { width: '375px', height: '812px' }, type: 'mobile' },
+        tablet: { name: 'Tablet', styles: { width: '768px', height: '1024px' }, type: 'tablet' },
+        desktop: { name: 'Desktop', styles: { width: '1280px', height: '800px' }, type: 'desktop' },
+      },
+    },
+    // Two widths per story: one each side of the container breakpoint. Doubles
+    // the snapshot count, which is the price of seeing a layout break on a phone.
+    chromatic: {
+      modes: {
+        phone: { viewport: 375 },
+        desktop: { viewport: 1280 },
+      },
     },
   },
 };

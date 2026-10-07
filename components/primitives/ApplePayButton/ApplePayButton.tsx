@@ -32,7 +32,7 @@ export function ApplePayButton({
     <Button
       aria-label={label ? `${label} Apple Pay` : 'Apple Pay'}
       className={cn(
-        'h-12 md:h-11 w-full active:opacity-90',
+        'h-12 @md:h-11 w-full active:opacity-90',
         // Remove shadcn's default gap so we can control spacing precisely
         'gap-0',
         className,

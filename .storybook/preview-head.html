@@ -12,3 +12,14 @@
   rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
 />
+
+<!--
+  Storybook's centred layout shrink-wraps #storybook-root. The container wrapper
+  in preview.tsx would then size to 0, so give the root the full width and let
+  the wrapper do the centring.
+-->
+<style>
+  .sb-show-main.sb-main-centered #storybook-root {
+    width: 100%;
+  }
+</style>

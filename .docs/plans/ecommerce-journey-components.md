@@ -11,19 +11,19 @@ Covers every component needed to support a full agent-assisted commerce flow: di
 ```
 Discovery          Cart           Order Review     Auth (Passkey)
 ──────────         ────           ────────────     ──────────────
-MediaCard     →    CartItem   →   OrderReview  →   AuthPrompt
-CardStrip          CartSummary    AddressTile       BiometricIndicator
-QuickReplies       QuantityStepper                  AuthStatus
-CompareTable  (new)
+MediaCard     →    CartItem   →   OrderReview  →   SignInPrompt
+CardCarousel          CartSummary    AddressCard       BiometricIndicator
+QuickReplies       QuantityStepper                  SignInStatus
+ComparisonTable  (new)
                                  Payment           Fulfilment
                                  ───────           ──────────
-                                 PaymentMethodTile  OrderStatusCard
-                                 PaymentConfirmSheet ReceiptSummary
+                                 PaymentMethodCard  OrderStatusCard
+                                 PaymentConfirmSheet Receipt
                                                     DeliveryTracker
 
 Cross-journey (used everywhere)
 ────────────────────────────────
-ToastBanner   EmptyState   ModalSheet
+Toast   EmptyState   ModalSheet
 ```
 
 ---
@@ -33,20 +33,20 @@ ToastBanner   EmptyState   ModalSheet
 | Component | What exists | Journey step |
 |---|---|---|
 | `MediaCard` | Image, title, price, CTA | Discovery |
-| `CardStrip` | Horizontal scroll strip | Discovery |
-| `CardStack` | Fan/expand pattern | Discovery |
-| `ChipToCard` | Chip → expanded card morph | Discovery |
+| `CardCarousel` | Horizontal scroll strip | Discovery |
+| `StackedCards` | Fan/expand pattern | Discovery |
+| `ExpandableChips` | Chip → expanded card morph | Discovery |
 | `QuickReplies` | Pill suggestion row | Discovery / everywhere |
-| `SelectionGroup` | Single/multi option picker | Variant selection |
+| `OptionGroup` | Single/multi option picker | Variant selection |
 | `PriceDisplay` | Formatted price with currency | Discovery / cart / payment |
 | `StatusBadge` | State label | Fulfilment |
-| `ProgressStep` | Step rail | Fulfilment |
-| `SummaryPanel` | Generic key/value summary | Partial order review |
-| `DetailList` | Label-value list | Partial order review |
+| `StepIndicator` | Step rail | Fulfilment |
+| `ExpandableCard` | Generic key/value summary | Partial order review |
+| `KeyValueList` | Label-value list | Partial order review |
 | `MessageBubble` | Chat bubble | Everywhere |
 | `ChatInput` | Message composer | Everywhere |
 | `TypingIndicator` | Agent thinking state | Everywhere |
-| `EntityAvatar` | Avatar with fallback | Everywhere |
+| `Avatar` | Avatar with fallback | Everywhere |
 
 ---
 
@@ -55,22 +55,22 @@ ToastBanner   EmptyState   ModalSheet
 ```
 Primitives (Tier 1)
   QuantityStepper
-  AddressTile
+  AddressCard
   BiometricIndicator
-  PaymentMethodTile
-  ToastBanner
+  PaymentMethodCard
+  Toast
   EmptyState
 
 Core (Tier 2)
   CartItem              ← uses QuantityStepper + PriceDisplay + MediaCard thumbnail
   CartSummary           ← uses PriceDisplay + Tag
-  OrderReview           ← uses AddressTile + DetailList + PriceDisplay + CartItem (read-only)
-  AuthPrompt            ← uses BiometricIndicator + MessageBubble surface
-  AuthStatus            ← uses StatusBadge + BiometricIndicator
-  PaymentConfirmSheet   ← uses PaymentMethodTile + PriceDisplay + Button
-  CompareTable          ← uses PriceDisplay + StatusBadge + Tag
-  OrderStatusCard       ← uses ProgressStep + StatusBadge + TimestampLabel
-  ReceiptSummary        ← uses DetailList + PriceDisplay + StatusBadge
+  OrderReview           ← uses AddressCard + KeyValueList + PriceDisplay + CartItem (read-only)
+  SignInPrompt            ← uses BiometricIndicator + MessageBubble surface
+  SignInStatus            ← uses StatusBadge + BiometricIndicator
+  PaymentConfirmSheet   ← uses PaymentMethodCard + PriceDisplay + Button
+  ComparisonTable          ← uses PriceDisplay + StatusBadge + Tag
+  OrderStatusCard       ← uses StepIndicator + StatusBadge + Timestamp
+  Receipt        ← uses KeyValueList + PriceDisplay + StatusBadge
 
 Layouts (Tier 3)
   ModalSheet            ← wraps Core content for cart / auth / payment surfaces
@@ -188,12 +188,12 @@ Sub-components: `ModalSheet.Header`, `ModalSheet.Body`, `ModalSheet.Footer`
 
 ## Phase 3 — Order Review
 
-### 3.1 `AddressTile`
+### 3.1 `AddressCard`
 **Tier**: primitives
-**File**: `components/primitives/AddressTile/AddressTile.tsx`
+**File**: `components/primitives/AddressCard/AddressCard.tsx`
 
 ```tsx
-interface AddressTileProps {
+interface AddressCardProps {
   name: string
   line1: string
   line2?: string
@@ -217,7 +217,7 @@ interface AddressTileProps {
 ```tsx
 interface OrderReviewProps {
   items: CartItemProps[]       // same shape as CartItem, rendered read-only
-  shippingAddress: AddressTileProps
+  shippingAddress: AddressCardProps
   subtotal: number
   shipping: number
   total: number
@@ -229,7 +229,7 @@ interface OrderReviewProps {
 
 Sub-components: `OrderReview.Section`, `OrderReview.Totals`
 
-- Read-only `CartItem` list, then `AddressTile`, then totals (`DetailList`)
+- Read-only `CartItem` list, then `AddressCard`, then totals (`KeyValueList`)
 - "Confirm & authenticate" CTA — full-width, triggers `onConfirm`
 - Stories: single item, multiple items, free shipping (shipping=0)
 
@@ -259,12 +259,12 @@ interface BiometricIndicatorProps {
 
 ---
 
-### 4.2 `AuthPrompt`
+### 4.2 `SignInPrompt`
 **Tier**: core
-**File**: `components/core/AuthPrompt/AuthPrompt.tsx`
+**File**: `components/core/SignInPrompt/SignInPrompt.tsx`
 
 ```tsx
-interface AuthPromptProps {
+interface SignInPromptProps {
   state: 'idle' | 'pending' | 'success' | 'error'
   onAuthenticate: () => void
   onRetry?: () => void         // shown only on error
@@ -283,12 +283,12 @@ interface AuthPromptProps {
 
 ---
 
-### 4.3 `AuthStatus`
+### 4.3 `SignInStatus`
 **Tier**: core
-**File**: `components/core/AuthStatus/AuthStatus.tsx`
+**File**: `components/core/SignInStatus/SignInStatus.tsx`
 
 ```tsx
-interface AuthStatusProps {
+interface SignInStatusProps {
   state: 'success' | 'error'
   message?: string
   className?: string
@@ -305,12 +305,12 @@ interface AuthStatusProps {
 
 ## Phase 5 — Payment
 
-### 5.1 `PaymentMethodTile`
+### 5.1 `PaymentMethodCard`
 **Tier**: primitives
-**File**: `components/primitives/PaymentMethodTile/PaymentMethodTile.tsx`
+**File**: `components/primitives/PaymentMethodCard/PaymentMethodCard.tsx`
 
 ```tsx
-interface PaymentMethodTileProps {
+interface PaymentMethodCardProps {
   type: 'card' | 'apple-pay' | 'google-pay' | 'bank'
   label: string          // e.g. "•••• 4242" or "Apple Pay"
   selected?: boolean
@@ -334,7 +334,7 @@ interface PaymentMethodTileProps {
 interface PaymentConfirmSheetProps {
   total: number
   currency?: string
-  paymentMethod: PaymentMethodTileProps
+  paymentMethod: PaymentMethodCardProps
   onConfirm: () => void        // fires passkey → payment
   onChangeMethod?: () => void
   loading?: boolean
@@ -342,7 +342,7 @@ interface PaymentConfirmSheetProps {
 }
 ```
 
-- `PaymentMethodTile` (selected, read-only) + total (`PriceDisplay` large) + "Pay now" button
+- `PaymentMethodCard` (selected, read-only) + total (`PriceDisplay` large) + "Pay now" button
 - `loading`: button shows spinner, all inputs disabled
 - "Change" link next to tile calls `onChangeMethod`
 - Stories: default, loading, without change option
@@ -370,18 +370,18 @@ interface OrderStatusCardProps {
 }
 ```
 
-- `ProgressStep` rail (vertical) + `StatusBadge` on active step + `TimestampLabel` per completed step
+- `StepIndicator` rail (vertical) + `StatusBadge` on active step + `Timestamp` per completed step
 - ETA displayed prominently above the rail when provided
 - Stories: placed, in transit, out for delivery, delivered
 
 ---
 
-### 6.2 `ReceiptSummary`
+### 6.2 `Receipt`
 **Tier**: core
-**File**: `components/core/ReceiptSummary/ReceiptSummary.tsx`
+**File**: `components/core/Receipt/Receipt.tsx`
 
 ```tsx
-interface ReceiptSummaryProps {
+interface ReceiptProps {
   orderId: string
   items: { name: string; quantity: number; price: number }[]
   subtotal: number
@@ -394,7 +394,7 @@ interface ReceiptSummaryProps {
 ```
 
 - Order ID + paid timestamp at top
-- Items as compact `DetailList` rows
+- Items as compact `KeyValueList` rows
 - Totals section at bottom
 - `StatusBadge` showing "Payment confirmed" in success state
 - Stories: single item, multiple items, free shipping
@@ -425,12 +425,12 @@ Sub-components: `DeliveryTracker.Map`, `DeliveryTracker.Steps`
 
 ## Phase 7 — Cross-Journey Utilities (build any time, unblock others)
 
-### 7.1 `ToastBanner`
+### 7.1 `Toast`
 **Tier**: primitives
-**File**: `components/primitives/ToastBanner/ToastBanner.tsx`
+**File**: `components/primitives/Toast/Toast.tsx`
 
 ```tsx
-interface ToastBannerProps {
+interface ToastProps {
   message: string
   variant?: 'info' | 'success' | 'warning' | 'error'   // default 'info'
   duration?: number       // ms before auto-dismiss, 0 = no auto-dismiss
@@ -469,9 +469,9 @@ interface EmptyStateProps {
 
 ---
 
-### 7.3 `CompareTable`
+### 7.3 `ComparisonTable`
 **Tier**: core
-**File**: `components/core/CompareTable/CompareTable.tsx`
+**File**: `components/core/ComparisonTable/ComparisonTable.tsx`
 
 ```tsx
 interface CompareColumn {
@@ -483,7 +483,7 @@ interface CompareColumn {
   attributes: Record<string, string | boolean>  // key → value or checkmark
 }
 
-interface CompareTableProps {
+interface ComparisonTableProps {
   columns: CompareColumn[]     // 2–4 products
   attributeLabels: Record<string, string>  // key → display label
   onSelect?: (id: string) => void
@@ -507,19 +507,19 @@ interface CompareTableProps {
 | 2 | `CartItem` | core | Cart | medium |
 | 3 | `CartSummary` | core | Cart | medium |
 | 4 | `ModalSheet` | layout | Modal | medium |
-| 5 | `AddressTile` | primitive | Order Review | low |
+| 5 | `AddressCard` | primitive | Order Review | low |
 | 6 | `OrderReview` | core | Order Review | medium |
 | 7 | `BiometricIndicator` | primitive | Auth | medium |
-| 8 | `AuthPrompt` | core | Auth | medium |
-| 9 | `AuthStatus` | core | Auth | low |
-| 10 | `PaymentMethodTile` | primitive | Payment | low |
+| 8 | `SignInPrompt` | core | Auth | medium |
+| 9 | `SignInStatus` | core | Auth | low |
+| 10 | `PaymentMethodCard` | primitive | Payment | low |
 | 11 | `PaymentConfirmSheet` | core | Payment | medium |
 | 12 | `OrderStatusCard` | core | Fulfilment | medium |
-| 13 | `ReceiptSummary` | core | Fulfilment | medium |
+| 13 | `Receipt` | core | Fulfilment | medium |
 | 14 | `DeliveryTracker` | layout | Fulfilment | medium |
-| 15 | `ToastBanner` | primitive | Cross-journey | medium |
+| 15 | `Toast` | primitive | Cross-journey | medium |
 | 16 | `EmptyState` | primitive | Cross-journey | low |
-| 17 | `CompareTable` | core | Cross-journey | high |
+| 17 | `ComparisonTable` | core | Cross-journey | high |
 
 ---
 

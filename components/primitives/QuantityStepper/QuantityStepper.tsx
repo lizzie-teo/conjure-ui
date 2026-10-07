@@ -40,14 +40,14 @@ export function QuantityStepper({
         aria-label="Decrease quantity"
         disabled={disabled || atMin}
         onClick={() => onChange(value - 1)}
-        className="size-12 md:size-10 pointer-coarse:size-12 rounded-md shrink-0"
+        className="size-12 @md:size-10 pointer-coarse:size-12 rounded-md shrink-0"
       >
         <Minus className="size-3.5" />
       </Button>
       <span
         aria-live="polite"
         aria-atomic="true"
-        className="min-w-[2rem] text-center text-sm md:text-base font-medium text-foreground select-none"
+        className="min-w-[2rem] text-center text-sm @md:text-base font-medium text-foreground select-none"
       >
         {value}
       </span>
@@ -57,7 +57,7 @@ export function QuantityStepper({
         aria-label="Increase quantity"
         disabled={disabled || atMax}
         onClick={() => onChange(value + 1)}
-        className="size-12 md:size-10 pointer-coarse:size-12 rounded-md shrink-0"
+        className="size-12 @md:size-10 pointer-coarse:size-12 rounded-md shrink-0"
       >
         <Plus className="size-3.5" />
       </Button>

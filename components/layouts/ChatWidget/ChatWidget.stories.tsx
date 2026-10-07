@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ChatWidget } from './ChatWidget'
 import { THREAD_REF_MOCK } from './mockData'
-import { CompareTable } from '../../core/CompareTable/CompareTable'
-import { DetailList } from '../../core/DetailList/DetailList'
-import { RecipeCard } from '../../core/BundleCard/bindings'
+import { ComparisonTable } from '../../core/ComparisonTable/ComparisonTable'
+import { KeyValueList } from '../../core/KeyValueList/KeyValueList'
+import { RecipeCard } from '../../core/CollectionCard/bindings'
 
 const meta = {
   title: 'Layouts/ChatWidget',
@@ -11,7 +11,7 @@ const meta = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className="w-[380px] md:w-[420px] h-[600px]">
+      <div className="@container w-full max-w-[380px] md:max-w-[420px] h-[600px]">
         <Story />
       </div>
     ),
@@ -58,7 +58,7 @@ export const ThreadReferenceGlow: Story = {
 }
 
 export const RichContentCompareTable: Story = {
-  name: 'Rich content — CompareTable (insurance)',
+  name: 'Rich content — ComparisonTable (insurance)',
   args: {
     mockData: {
       botName: 'Insurance Assistant',
@@ -71,7 +71,7 @@ export const RichContentCompareTable: Story = {
           role: 'bot',
           text: "Based on your car's value, Comprehensive saves you money in most claim scenarios. Here's the breakdown:",
           richContent: (
-            <CompareTable
+            <ComparisonTable
               columns={[
                 {
                   id: 'comp',
@@ -117,7 +117,7 @@ export const RichContentCompareTable: Story = {
 }
 
 export const RichContentDetailList: Story = {
-  name: 'Rich content — DetailList (recipe ingredients)',
+  name: 'Rich content — KeyValueList (recipe ingredients)',
   args: {
     mockData: {
       botName: 'Recipe Assistant',
@@ -128,16 +128,16 @@ export const RichContentDetailList: Story = {
           text: 'Here are the ingredients:',
           richContent: (
             <div className="rounded-[var(--radius)] border border-border bg-card shadow-[var(--shadow-card)] overflow-hidden">
-              <DetailList>
-                <DetailList.Row label="Spaghetti" value="400 g" />
-                <DetailList.Row label="Pancetta or guanciale" value="200 g" />
-                <DetailList.Row label="Eggs (whole)" value="2" />
-                <DetailList.Row label="Egg yolks" value="4" />
-                <DetailList.Row label="Pecorino Romano, grated" value="80 g" />
-                <DetailList.Row label="Parmesan, grated" value="40 g" />
-                <DetailList.Row label="Black pepper, freshly ground" value="to taste" />
-                <DetailList.Row label="Salt (pasta water)" value="generous pinch" />
-              </DetailList>
+              <KeyValueList>
+                <KeyValueList.Row label="Spaghetti" value="400 g" />
+                <KeyValueList.Row label="Pancetta or guanciale" value="200 g" />
+                <KeyValueList.Row label="Eggs (whole)" value="2" />
+                <KeyValueList.Row label="Egg yolks" value="4" />
+                <KeyValueList.Row label="Pecorino Romano, grated" value="80 g" />
+                <KeyValueList.Row label="Parmesan, grated" value="40 g" />
+                <KeyValueList.Row label="Black pepper, freshly ground" value="to taste" />
+                <KeyValueList.Row label="Salt (pasta water)" value="generous pinch" />
+              </KeyValueList>
             </div>
           ),
           quickReplies: ['Add all to cart', 'Show steps', 'Adjust servings'],
@@ -151,7 +151,7 @@ export const RichContentRecipeCard: Story = {
   name: 'Rich content — RecipeCard (grocery)',
   decorators: [
     (Story) => (
-      <div className="w-[380px] md:w-[420px] h-[780px]">
+      <div className="@container w-full max-w-[380px] md:max-w-[420px] h-[780px]">
         <Story />
       </div>
     ),

@@ -3,9 +3,9 @@
 import { Button } from '../../ui/button'
 import { CartItem } from '../CartItem/CartItem'
 import type { CartItemProps } from '../CartItem/CartItem'
-import { DetailList } from '../DetailList/DetailList'
-import { AddressTile } from '../../primitives/AddressTile/AddressTile'
-import type { AddressTileProps } from '../../primitives/AddressTile/AddressTile'
+import { KeyValueList } from '../KeyValueList/KeyValueList'
+import { AddressCard } from '../../primitives/AddressCard/AddressCard'
+import type { AddressCardProps } from '../../primitives/AddressCard/AddressCard'
 import { PriceDisplay } from '../../primitives/PriceDisplay/PriceDisplay'
 import { cn } from '../../../lib/utils'
 import type { ComponentProps, ComponentPropsWithRef } from 'react'
@@ -16,7 +16,7 @@ interface SectionProps extends ComponentPropsWithRef<'div'> {
   title: string
 }
 
-interface TotalsProps extends Omit<ComponentProps<typeof DetailList>, 'children'> {
+interface TotalsProps extends Omit<ComponentProps<typeof KeyValueList>, 'children'> {
   subtotal: number
   shipping: number
   total: number
@@ -27,8 +27,8 @@ interface TotalsProps extends Omit<ComponentProps<typeof DetailList>, 'children'
 
 function Section({ title, children, className, ...props }: SectionProps) {
   return (
-    <div className={cn('space-y-2 md:space-y-3', className)} {...props}>
-      <h3 className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wide px-4 md:px-5">
+    <div className={cn('space-y-2 @md:space-y-3', className)} {...props}>
+      <h3 className="text-xs @md:text-sm font-semibold text-muted-foreground uppercase tracking-wide px-4 @md:px-5">
         {title}
       </h3>
       {children}
@@ -38,32 +38,32 @@ function Section({ title, children, className, ...props }: SectionProps) {
 
 function Totals({ subtotal, shipping, total, currency, ...props }: TotalsProps) {
   return (
-    <DetailList {...props}>
-      <DetailList.Row
+    <KeyValueList {...props}>
+      <KeyValueList.Row
         label="Subtotal"
         value={<PriceDisplay amount={subtotal} currency={currency} />}
       />
-      <DetailList.Row
+      <KeyValueList.Row
         label="Shipping"
         value={
           shipping === 0 ? (
-            <span className="text-xs md:text-sm font-medium text-success">Free</span>
+            <span className="text-xs @md:text-sm font-medium text-success">Free</span>
           ) : (
             <PriceDisplay amount={shipping} currency={currency} />
           )
         }
       />
-      <DetailList.Row
+      <KeyValueList.Row
         label="Total"
         value={
           <PriceDisplay
             amount={total}
             currency={currency}
-            className="[&_span:last-child]:text-sm [&_span:last-child]:md:text-base [&_span:last-child]:font-semibold"
+            className="[&_span:last-child]:text-sm @md:[&_span:last-child]:text-base [&_span:last-child]:font-semibold"
           />
         }
       />
-    </DetailList>
+    </KeyValueList>
   )
 }
 
@@ -71,7 +71,7 @@ function Totals({ subtotal, shipping, total, currency, ...props }: TotalsProps) 
 
 export interface OrderReviewProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
   items: CartItemProps[]
-  shippingAddress: AddressTileProps
+  shippingAddress: AddressCardProps
   subtotal: number
   shipping: number
   total: number
@@ -94,13 +94,13 @@ export function OrderReview({
     <div
       className={cn(
         'bg-card border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden',
-        'flex flex-col gap-5 md:gap-6 py-5 md:py-6',
+        'flex flex-col gap-5 @md:gap-6 py-5 @md:py-6',
         className
       )}
       {...props}
     >
       <Section title="Items">
-        <div className="flex flex-col gap-2 md:gap-3 px-4 md:px-5">
+        <div className="flex flex-col gap-2 @md:gap-3 px-4 @md:px-5">
           {items.map((item, i) => (
             <CartItem
               key={i}
@@ -114,8 +114,8 @@ export function OrderReview({
       </Section>
 
       <Section title="Ship to">
-        <div className="px-4 md:px-5">
-          <AddressTile {...shippingAddress} />
+        <div className="px-4 @md:px-5">
+          <AddressCard {...shippingAddress} />
         </div>
       </Section>
 
@@ -128,8 +128,8 @@ export function OrderReview({
         />
       </Section>
 
-      <div className="px-4 md:px-5">
-        <Button onClick={onConfirm} className="w-full h-12 md:h-10 pointer-coarse:min-h-11">
+      <div className="px-4 @md:px-5">
+        <Button onClick={onConfirm} className="w-full h-12 @md:h-10 pointer-coarse:min-h-11">
           Confirm &amp; authenticate
         </Button>
       </div>

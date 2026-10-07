@@ -17,14 +17,14 @@ function MapSlot({ children, className, ...props }: MapSlotProps) {
   return (
     <div
       className={cn(
-        'h-40 md:h-56 w-full overflow-hidden rounded-t-xl',
+        'h-40 @md:h-56 w-full overflow-hidden rounded-t-xl',
         className
       )}
       {...props}
     >
       {children ?? (
         <div className="h-full w-full bg-muted flex items-center justify-center">
-          <span className="text-xs md:text-sm text-muted-foreground select-none">
+          <span className="text-xs @md:text-sm text-muted-foreground select-none">
             Map unavailable
           </span>
         </div>

@@ -32,6 +32,10 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # Every control must clear 44px under a finger and 24px under a cursor.
+      - name: Touch-target audit
+        run: node scripts/tap-audit.js
+
       # The story suite runs in a real Chromium via Playwright.
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium

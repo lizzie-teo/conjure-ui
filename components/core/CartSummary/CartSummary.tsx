@@ -34,13 +34,13 @@ function LineItem({ name, quantity, price, currency, className, ...props }: Line
   return (
     <div
       className={cn(
-        'flex items-center justify-between gap-3 py-2.5 md:py-3',
+        'flex items-center justify-between gap-3 py-2.5 @md:py-3',
         'border-b border-border last:border-0',
         className
       )}
       {...props}
     >
-      <span className="text-xs md:text-sm text-foreground truncate min-w-0">
+      <span className="text-xs @md:text-sm text-foreground truncate min-w-0">
         {name}
         {quantity > 1 && (
           <span className="text-muted-foreground ml-1">× {quantity}</span>
@@ -54,27 +54,27 @@ function LineItem({ name, quantity, price, currency, className, ...props }: Line
 function Total({ subtotal, discount, total, currency, className, ...props }: TotalProps) {
   return (
     <div
-      className={cn('border-t border-border px-4 md:px-5 py-3 md:py-4 space-y-2', className)}
+      className={cn('border-t border-border px-4 @md:px-5 py-3 @md:py-4 space-y-2', className)}
       {...props}
     >
       <div className="flex items-center justify-between">
-        <span className="text-xs md:text-sm text-muted-foreground">Subtotal</span>
+        <span className="text-xs @md:text-sm text-muted-foreground">Subtotal</span>
         <PriceDisplay amount={subtotal} currency={currency} />
       </div>
       {discount !== undefined && discount > 0 && (
         <div className="flex items-center justify-between">
-          <span className="text-xs md:text-sm text-muted-foreground">Discount</span>
-          <span className="text-xs md:text-sm font-medium text-success">
+          <span className="text-xs @md:text-sm text-muted-foreground">Discount</span>
+          <span className="text-xs @md:text-sm font-medium text-success">
             −{new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(discount)}
           </span>
         </div>
       )}
       <div className="flex items-center justify-between pt-2 border-t border-border">
-        <span className="text-sm md:text-base font-semibold text-foreground">Total</span>
+        <span className="text-sm @md:text-base font-semibold text-foreground">Total</span>
         <PriceDisplay
           amount={total}
           currency={currency}
-          className="text-sm md:text-base [&_span:last-child]:font-semibold"
+          className="text-sm @md:text-base [&_span:last-child]:font-semibold"
         />
       </div>
     </div>
@@ -87,12 +87,12 @@ function PromoField({ onApply, appliedCode, className, ...props }: PromoFieldPro
   return (
     <div className={cn('space-y-2', className)} {...props}>
       {appliedCode && (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 @md:gap-3">
           <Tag label={appliedCode} />
-          <span className="text-xs text-muted-foreground">applied</span>
+          <span className="text-xs @md:text-sm text-muted-foreground">applied</span>
         </div>
       )}
-      <div className="flex gap-2">
+      <div className="flex gap-2 @md:gap-3">
         <input
           type="text"
           value={code}
@@ -106,8 +106,8 @@ function PromoField({ onApply, appliedCode, className, ...props }: PromoFieldPro
           placeholder="Promo code"
           aria-label="Promo code"
           className={cn(
-            'flex-1 h-12 md:h-10 pointer-coarse:min-h-11 rounded-md border border-border bg-background',
-            'px-3 text-sm text-foreground placeholder:text-muted-foreground',
+            'flex-1 h-12 @md:h-10 pointer-coarse:min-h-11 rounded-md border border-border bg-background',
+            'px-3 @md:px-4 text-sm @md:text-base text-foreground placeholder:text-muted-foreground',
             'outline-none focus:ring-2 focus:ring-ring focus:border-ring',
             'transition-shadow duration-150'
           )}
@@ -121,7 +121,7 @@ function PromoField({ onApply, appliedCode, className, ...props }: PromoFieldPro
             }
           }}
           disabled={!code.trim()}
-          className="h-12 md:h-10 pointer-coarse:min-h-11 px-4 shrink-0"
+          className="h-12 @md:h-10 pointer-coarse:min-h-11 px-4 shrink-0"
         >
           Apply
         </Button>
@@ -163,7 +163,7 @@ export function CartSummary({
       {...props}
     >
       {items.length > 0 ? (
-        <div className="px-4 md:px-5 pt-3 md:pt-4">
+        <div className="px-4 @md:px-5 pt-3 @md:pt-4">
           {items.map((item, i) => (
             <LineItem
               key={i}
@@ -175,7 +175,7 @@ export function CartSummary({
           ))}
         </div>
       ) : (
-        <div className="px-4 md:px-5 pt-4 pb-2 text-sm text-muted-foreground text-center">
+        <div className="px-4 @md:px-5 pt-4 pb-2 text-sm @md:text-base text-muted-foreground text-center">
           Your cart is empty
         </div>
       )}
@@ -183,13 +183,13 @@ export function CartSummary({
       <CartSummary.Total subtotal={subtotal} discount={discount} total={total} currency={currency} />
 
       {onPromoApply && (
-        <div className="px-4 md:px-5 pb-3 md:pb-4">
+        <div className="px-4 @md:px-5 pb-3 @md:pb-4">
           <CartSummary.PromoField onApply={onPromoApply} appliedCode={promoCode} />
         </div>
       )}
 
-      <div className="px-4 md:px-5 pb-4 md:pb-5">
-        <Button onClick={onCheckout} className="w-full h-12 md:h-10 pointer-coarse:min-h-11">
+      <div className="px-4 @md:px-5 pb-4 @md:pb-5">
+        <Button onClick={onCheckout} className="w-full h-12 @md:h-10 pointer-coarse:min-h-11">
           Proceed to review
         </Button>
       </div>

@@ -20,7 +20,7 @@ function Media({ src, alt, className, ...props }: MediaProps) {
       <img
         src={src}
         alt={alt}
-        className="w-full h-40 md:h-48 object-cover"
+        className="w-full h-40 @md:h-48 object-cover"
       />
     </div>
   )
@@ -28,7 +28,7 @@ function Media({ src, alt, className, ...props }: MediaProps) {
 
 function Body({ children, className, ...props }: DivSlotProps) {
   return (
-    <div className={cn('p-4 md:p-5 flex flex-col gap-2', className)} {...props}>
+    <div className={cn('p-4 @md:p-5 flex flex-col gap-2 @md:gap-3', className)} {...props}>
       {children}
     </div>
   )
@@ -37,7 +37,7 @@ function Body({ children, className, ...props }: DivSlotProps) {
 function Title({ children, className, ...props }: ComponentPropsWithRef<'h3'>) {
   return (
     <h3
-      className={cn('font-semibold text-sm md:text-base text-foreground leading-snug', className)}
+      className={cn('font-heading font-semibold text-sm @md:text-base text-foreground leading-snug', className)}
       {...props}
     >
       {children}
@@ -47,7 +47,7 @@ function Title({ children, className, ...props }: ComponentPropsWithRef<'h3'>) {
 
 function Subtitle({ children, className, ...props }: ComponentPropsWithRef<'p'>) {
   return (
-    <p className={cn('text-xs md:text-sm text-muted-foreground', className)} {...props}>
+    <p className={cn('text-xs @md:text-sm text-muted-foreground', className)} {...props}>
       {children}
     </p>
   )
@@ -59,7 +59,7 @@ function Badge({ children, className, ...props }: DivSlotProps) {
 
 function Meta({ children, className, ...props }: DivSlotProps) {
   return (
-    <div className={cn('flex items-center gap-1.5 text-xs md:text-sm', className)} {...props}>
+    <div className={cn('flex items-center gap-1.5 text-xs @md:text-sm', className)} {...props}>
       {children}
     </div>
   )

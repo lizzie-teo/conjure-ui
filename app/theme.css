@@ -2,10 +2,12 @@
    DESIGN TOKENS  —  three tiers, override only what your brand requires.
 
    TIER 1  BRAND      Typeface, action color, shape, background tint.
-                      These ~6 tokens define a brand. Override in .theme-{client}.
+                      These ~6 tokens define a brand. Override in .theme-{client},
+                      and again in .dark .theme-{client} for dark mode.
 
-   TIER 2  SEMANTIC   Surfaces that adapt to the brand palette.
-                      Correct defaults ship here — override only when brand demands.
+   TIER 2  SEMANTIC   Surfaces mixed from Tier 1 (see "Derived tokens"), so
+                      they follow the brand on their own. Override only when
+                      the brand demands a specific value.
 
    TIER 3  SYSTEM     Library internals: shadows, Apple Pay, charts, layout.
                       Do not override in client themes. The one exception is the
@@ -32,6 +34,9 @@
   --font-size: 16px;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  /* --font-heading (titles, sheet headers) follows --font-sans unless set —
+     see "Derived tokens". */
 
   /* Page surface — cool off-white; tint toward brand hue for stronger identity */
   --background: oklch(0.97 0.007 248);
@@ -46,19 +51,10 @@
 
   /* ── TIER 2: SEMANTIC ─────────────────────────────────────────────────── */
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.14 0.010 258);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.14 0.010 258);
-
-  --secondary: oklch(0.96 0.006 248);
-  --secondary-foreground: oklch(0.14 0.010 258);
-
-  --muted: oklch(0.94 0.008 248);
-  --muted-foreground: oklch(0.50 0.010 258);
-
-  --accent: oklch(0.96 0.006 248);
-  --accent-foreground: oklch(0.14 0.010 258);
+  /* Surfaces, borders, the focus ring and the sidebar are DERIVED from Tier 1 —
+     see "Derived tokens" below. Set any of them in a theme only to break from
+     the derivation. The status colours here are not derived: they mean the
+     same thing in every brand. */
 
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.98 0 0);
@@ -67,21 +63,10 @@
   --warning: oklch(0.72 0.16 75);
   --warning-foreground: oklch(0.14 0.010 258);
 
-  --border: oklch(0.90 0.007 248);
-  --input: oklch(0.90 0.007 248);
-  --input-background: oklch(0.96 0.006 248);
-  --switch-background: oklch(0.78 0.008 248);
-  /* Focus ring — set to match primary hue in client themes */
-  --ring: oklch(0.40 0 0);
-
-  --sidebar: oklch(0.96 0.007 248);
-  --sidebar-foreground: oklch(0.14 0.010 258);
-  --sidebar-primary: oklch(0.13 0 0);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.93 0.008 248);
-  --sidebar-accent-foreground: oklch(0.14 0.010 258);
-  --sidebar-border: oklch(0.90 0.007 248);
-  --sidebar-ring: oklch(0.40 0 0);
+  /* Type and spacing come from Tailwind and are CSS variables too, so a theme
+     can override them: --text-xs … --text-4xl (each with a --text-*--line-height),
+     --tracking-tight, --leading-snug, and --spacing (the base unit — every
+     p-4, gap-2, size-6 is a multiple of it). Defaults are Tailwind's. */
 
   /* ── TIER 3: SYSTEM ───────────────────────────────────────────────────── */
 
@@ -135,36 +120,13 @@
   --primary: oklch(0.93 0 0);
   --primary-foreground: oklch(0.13 0 0);
 
-  /* TIER 2 */
-  --card: oklch(0.18 0.010 258);
-  --card-foreground: oklch(0.97 0.004 248);
-  --popover: oklch(0.18 0.010 258);
-  --popover-foreground: oklch(0.97 0.004 248);
-  --secondary: oklch(0.23 0.010 258);
-  --secondary-foreground: oklch(0.97 0.004 248);
-  --muted: oklch(0.23 0.010 258);
-  --muted-foreground: oklch(0.62 0.012 258);
-  --accent: oklch(0.23 0.010 258);
-  --accent-foreground: oklch(0.97 0.004 248);
+  /* TIER 2 — status colours only; the rest is derived */
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.98 0 0);
   --success: oklch(0.63 0.15 150);
   --success-foreground: oklch(0.13 0.010 258);
   --warning: oklch(0.80 0.16 75);
   --warning-foreground: oklch(0.13 0.010 258);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 14%);
-  --input-background: oklch(0.20 0.010 258);
-  --switch-background: oklch(0.35 0.010 258);
-  --ring: oklch(0.65 0 0);
-  --sidebar: oklch(0.18 0.010 258);
-  --sidebar-foreground: oklch(0.97 0.004 248);
-  --sidebar-primary: oklch(0.93 0 0);
-  --sidebar-primary-foreground: oklch(0.13 0 0);
-  --sidebar-accent: oklch(0.23 0.010 258);
-  --sidebar-accent-foreground: oklch(0.97 0.004 248);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.65 0 0);
 
   /* TIER 3 */
   --apple-pay-surface: oklch(0.12 0.010 258);
@@ -179,6 +141,77 @@
   --chart-3: oklch(0.62 0.14 140);
   --chart-4: oklch(0.70 0.14 60);
   --chart-5: oklch(0.65 0.16 25);
+}
+
+/* ── Derived tokens ───────────────────────────────────────────────────────────
+   Tier 2 surfaces are mixed from Tier 1, so a theme that sets only
+   --background, --foreground and --primary gets panels, borders, hover
+   states and a focus ring in its own hue. A warm cream --background gives
+   warm cream panels, not the default cool grey.
+
+   The mix strengths differ by mode — a step of 1.5% toward the text colour is
+   visible on a light page, a dark page needs about 12% — so they live in
+   :root and .dark as plain percentages. Library internals; do not override.
+
+   WHY THE SELECTOR LIST. A custom property that uses var() is worked out on
+   the element that declares it, then inherited as a finished colour. Declared
+   on :root alone, --card would be mixed from the DEFAULT --background, and a
+   .theme-acme further down that changes --background would not move it. So the
+   mix is declared again on every element that can change Tier 1: the root,
+   .dark, any class containing "theme-", and ThemeProvider's wrapper. Name a
+   theme class anything else and its surfaces will not follow.
+
+   :where() keeps the specificity at zero, so any theme class that sets a
+   Tier 2 token outright — .theme-wireframe does — beats the derivation. */
+
+:root {
+  --mix-subtle: 1.5%;   /* secondary, accent, input fill, sidebar */
+  --mix-muted: 4%;      /* muted, sidebar accent */
+  --mix-line: 8%;       /* border, input outline */
+  --mix-track: 23%;     /* switch track */
+  --mix-card: 100%;     /* card lift toward white — light cards are white */
+}
+
+.dark {
+  --mix-subtle: 12%;
+  --mix-muted: 12%;
+  --mix-line: 12%;
+  --mix-track: 26%;
+  --mix-card: 6%;
+}
+
+:where(:root, .dark, [class*="theme-"], [data-conjure-theme]) {
+  --font-heading: var(--font-sans);
+
+  --card: color-mix(in oklch, oklch(1 0 0) var(--mix-card), var(--background));
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+
+  --secondary: color-mix(in oklch, var(--foreground) var(--mix-subtle), var(--background));
+  --secondary-foreground: var(--foreground);
+
+  --muted: color-mix(in oklch, var(--foreground) var(--mix-muted), var(--background));
+  --muted-foreground: color-mix(in oklch, var(--foreground) 57%, var(--background));
+
+  /* Hover and selected — tinted from --primary, so it carries the brand hue */
+  --accent: color-mix(in oklch, var(--primary) var(--mix-subtle), var(--background));
+  --accent-foreground: var(--foreground);
+
+  --border: color-mix(in oklch, var(--foreground) var(--mix-line), var(--background));
+  --input: var(--border);
+  --input-background: var(--secondary);
+  --switch-background: color-mix(in oklch, var(--foreground) var(--mix-track), var(--background));
+  --ring: color-mix(in oklch, var(--primary) 70%, var(--background));
+
+  --sidebar: var(--secondary);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--muted);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
 }
 
 /* ── Wireframe ────────────────────────────────────────────────────────────────

@@ -21,7 +21,7 @@ export const COMMON_NETWORKS = [
 ]
 
 const wrapper = (Story: React.ComponentType) => (
-  <div className="w-[360px] md:w-[400px] border border-border rounded-[calc(var(--radius)+4px)] bg-card shadow-[var(--shadow-elevated)] overflow-hidden">
+  <div className="w-full max-w-[360px] @md:max-w-[400px] border border-border rounded-[calc(var(--radius)+4px)] bg-card shadow-[var(--shadow-elevated)] overflow-hidden">
     <Story />
   </div>
 )
@@ -288,7 +288,7 @@ export const AllStates: Story = {
   name: 'All states',
   decorators: [],
   render: () => (
-    <div className="flex flex-col gap-6 w-[360px] py-4">
+    <div className="flex flex-col gap-6 w-full max-w-[360px] py-4">
       {[
         {
           label: 'Apple Pay — idle',

@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button'
 import {
   StatusBadge,
   PriceDisplay,
-  EntityAvatar,
-  TimestampLabel,
+  Avatar,
+  Timestamp,
   Tag,
-  ProgressStep,
+  StepIndicator,
 } from '@/components/primitives'
 
 const ago = (ms: number) => new Date(Date.now() - ms).toISOString()
@@ -42,21 +42,21 @@ export function PrimitivesSection() {
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-base md:text-lg font-medium text-foreground">EntityAvatar</h3>
+        <h3 className="text-base md:text-lg font-medium text-foreground">Avatar</h3>
         <div className="flex items-center gap-4">
-          <EntityAvatar fallback="Qantas Airways" size="sm" />
-          <EntityAvatar fallback="Qantas Airways" size="md" />
-          <EntityAvatar fallback="Qantas Airways" size="lg" />
+          <Avatar fallback="Qantas Airways" size="sm" />
+          <Avatar fallback="Qantas Airways" size="md" />
+          <Avatar fallback="Qantas Airways" size="lg" />
         </div>
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-base md:text-lg font-medium text-foreground">TimestampLabel</h3>
+        <h3 className="text-base md:text-lg font-medium text-foreground">Timestamp</h3>
         <div className="flex flex-wrap gap-6">
-          <TimestampLabel datetime={ago(20_000)} />
-          <TimestampLabel datetime={ago(8 * 60_000)} />
-          <TimestampLabel datetime={ago(3 * 3_600_000)} />
-          <TimestampLabel datetime={ago(4 * 86_400_000)} />
+          <Timestamp datetime={ago(20_000)} />
+          <Timestamp datetime={ago(8 * 60_000)} />
+          <Timestamp datetime={ago(3 * 3_600_000)} />
+          <Timestamp datetime={ago(4 * 86_400_000)} />
         </div>
       </div>
 
@@ -85,11 +85,11 @@ export function PrimitivesSection() {
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-base md:text-lg font-medium text-foreground">ProgressStep</h3>
+        <h3 className="text-base md:text-lg font-medium text-foreground">StepIndicator</h3>
         <div className="flex items-start gap-8">
-          <ProgressStep status="complete" label="Search" />
-          <ProgressStep status="active" label="Book" />
-          <ProgressStep status="pending" label="Confirm" />
+          <StepIndicator status="complete" label="Search" />
+          <StepIndicator status="active" label="Book" />
+          <StepIndicator status="pending" label="Confirm" />
         </div>
       </div>
     </section>

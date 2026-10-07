@@ -4,7 +4,7 @@
     "figmaFileName": "ai-chat-shad-cn",
     "figmaFileUrl": "https://www.figma.com/design/lmiDZ6eXQ0p7RPeL1XLAlz/ai-chat-shad-cn",
     "lastUpdated": "2026-08-02",
-    "note": "Tier 1 (20 primitives), Tier 2 (25 core), Tier 3 (3 layouts). Library consolidated 2026-08-02: vertical cards collapsed into BundleCard, delivery flow collapsed into SlotPicker. All image-capable components have Has Image/Has Media variants.",
+    "note": "Tier 1 (20 primitives), Tier 2 (25 core), Tier 3 (3 layouts). Library consolidated 2026-08-02: vertical cards collapsed into CollectionCard, delivery flow collapsed into TimeSlotPicker. All image-capable components have Has Image/Has Media variants.",
     "description": "Sync state between codebase components and the Figma design file. Update status + nodeId after every Figma build."
   },
   "tokens": {
@@ -42,7 +42,7 @@
       ],
       "props": []
     },
-    "ProgressStep": {
+    "StepIndicator": {
       "status": "synced",
       "figmaPage": "Primitives",
       "figmaPageId": "4016:1562",
@@ -90,7 +90,7 @@
         "Has Strikethrough (BOOLEAN)"
       ]
     },
-    "TimestampLabel": {
+    "Timestamp": {
       "status": "synced",
       "figmaPage": "Primitives",
       "figmaPageId": "4016:1562",
@@ -136,7 +136,7 @@
         "Count (TEXT)"
       ]
     },
-    "EntityAvatar": {
+    "Avatar": {
       "status": "synced",
       "figmaPage": "Primitives",
       "figmaPageId": "4016:1562",
@@ -154,7 +154,7 @@
         "Initials (TEXT)"
       ]
     },
-    "SkeletonBlock": {
+    "Skeleton": {
       "status": "synced",
       "figmaPage": "Primitives",
       "figmaPageId": "4016:1562",
@@ -168,7 +168,7 @@
       ],
       "props": []
     },
-    "AddressTile": {
+    "AddressCard": {
       "status": "synced",
       "figmaPage": "Primitives",
       "figmaPageId": "4016:1562",
@@ -188,7 +188,7 @@
       "status": "skipped",
       "reason": "asset/logo \u2014 not a styled component"
     },
-    "PaymentMethodTile": {
+    "PaymentMethodCard": {
       "status": "synced",
       "figmaPage": "Primitives",
       "figmaPageId": "4016:1562",
@@ -256,7 +256,7 @@
         "Has Action (BOOLEAN)"
       ]
     },
-    "ToastBanner": {
+    "Toast": {
       "status": "synced",
       "figmaPage": "Primitives",
       "figmaPageId": "4016:1562",
@@ -271,6 +271,66 @@
       "props": [
         "Message (TEXT)"
       ]
+    },
+    "StatCard": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Label + amount box. Variants: Default / Highlight, Has Badge, Or More (+). Tone: Default / Inverse (on primary)."
+    },
+    "StepList": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Numbered steps: primary number circle, title, optional description."
+    },
+    "FeatureList": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Check icon + text rows for included items. Tone: Default / Inverse (on primary)."
+    },
+    "SegmentedControl": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Radiogroup of 2-4 segments with a sliding selected pill. Variants: Text / Icon only / Icon + text, Full width."
+    },
+    "Tabs": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Underlined tab row with Tabs.Panel. Props: Chevron (None / Start / End). States: Selected / Unselected."
+    },
+    "ProgressBar": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Label row + 8px track with primary fill. Has Label (BOOLEAN)."
+    },
+    "SectionHeader": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Title + optional right-hand \"View all\" link or link-styled Button."
+    },
+    "SearchBar": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Muted search box: search icon, input, optional mic icon button."
+    },
+    "BarChart": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Time-series bars (months/weeks). Selected bar is bg-primary, rest bg-primary/20; selected value shown large above as Amount xl with caption. Tap or arrow keys to select. Optional dashed reference line (average/budget)."
+    },
+    "Amount": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Money as a price tag: large whole units, currency symbol and cents small and raised. Sizes sm/md/lg/xl, tones default/primary/inherit."
+    },
+    "FavoriteButton": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Heart toggle (aria-pressed). Appearances: onImage (white outline over photo) / surface (round card button). Spring pop on save."
+    },
+    "SearchButton": {
+      "status": "pending",
+      "figmaPage": "Primitives",
+      "notes": "Pill button \"Start your search\" that opens a search screen; rounded-full card with shadow."
     }
   },
   "core": {
@@ -341,7 +401,7 @@
         "Has Media (BOOLEAN)"
       ]
     },
-    "DetailList": {
+    "KeyValueList": {
       "status": "synced",
       "figmaPage": "AI Chat \u2014 Core",
       "figmaPageId": "4063:1391",
@@ -350,7 +410,7 @@
       "variants": [],
       "props": []
     },
-    "SelectionGroup": {
+    "OptionGroup": {
       "status": "synced",
       "figmaPage": "AI Chat \u2014 Core",
       "figmaPageId": "4063:1391",
@@ -362,7 +422,7 @@
       ],
       "props": []
     },
-    "CardStack": {
+    "StackedCards": {
       "status": "synced",
       "figmaPage": "AI Chat \u2014 Core",
       "figmaPageId": "4063:1391",
@@ -374,7 +434,7 @@
       ],
       "props": []
     },
-    "CardStrip": {
+    "CardCarousel": {
       "status": "synced",
       "figmaPage": "AI Chat \u2014 Core",
       "figmaPageId": "4063:1391",
@@ -383,7 +443,7 @@
       "variants": [],
       "props": []
     },
-    "SummaryPanel": {
+    "ExpandableCard": {
       "status": "synced",
       "figmaPage": "AI Chat \u2014 Core",
       "figmaPageId": "4063:1391",
@@ -392,7 +452,7 @@
       "variants": [],
       "props": []
     },
-    "ActionStrip": {
+    "ButtonGroup": {
       "status": "synced",
       "figmaPage": "AI Chat \u2014 Core",
       "figmaPageId": "4063:1391",
@@ -401,7 +461,7 @@
       "variants": [],
       "props": []
     },
-    "AuthPrompt": {
+    "SignInPrompt": {
       "status": "synced",
       "figmaPage": "AI Chat \u2014 Core",
       "figmaPageId": "4063:1391",
@@ -415,7 +475,7 @@
       ],
       "props": []
     },
-    "AuthStatus": {
+    "SignInStatus": {
       "status": "synced",
       "figmaPage": "AI Chat \u2014 Core",
       "figmaPageId": "4063:1391",
@@ -479,7 +539,7 @@
       "variants": [],
       "props": []
     },
-    "ChipToCard": {
+    "ExpandableChips": {
       "status": "synced",
       "figmaPage": "AI Chat \u2014 Core",
       "figmaPageId": "4063:1391",
@@ -500,7 +560,7 @@
         "Total (TEXT)"
       ]
     },
-    "CompareTable": {
+    "ComparisonTable": {
       "status": "synced",
       "figmaPage": "AI Chat \u2014 Core",
       "figmaPageId": "4063:1391",
@@ -527,7 +587,7 @@
       ],
       "props": []
     },
-    "ReceiptSummary": {
+    "Receipt": {
       "status": "synced",
       "figmaPage": "AI Chat \u2014 Core",
       "figmaPageId": "4063:1391",
@@ -541,15 +601,70 @@
         "Has Image (BOOLEAN)"
       ]
     },
-    "BundleCard": {
+    "CollectionCard": {
       "status": "pending",
       "figmaPage": "Components",
       "notes": "Structural card behind RecipeCard / LookCard / ShopList bindings. Variants should cover selectable vs navigable rows, hero present/absent, and the swap disclosure."
     },
-    "SlotPicker": {
+    "TimeSlotPicker": {
       "status": "pending",
       "figmaPage": "Components",
       "notes": "Replaces ScheduleStep + DateSelectStep + TimeSlotStep. Variants: no date chosen, date chosen, priced vs free slots."
+    },
+    "PromoCard": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Hero promo card on bg-primary: photo fading into primary, title, inverse FeatureList, two inverse ValueTiles, inverse CTA. Variants: with/without Pricing."
+    },
+    "MediaListItem": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Offer row: square image, StatusBadge tag, title (stretched link), description, meta, chevron."
+    },
+    "PromoBanner": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Pale bg-primary/8 panel: large text-primary title (stretched link), description, image right."
+    },
+    "AccountCard": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Header (name + balance) over footer (card art, card detail, View link)."
+    },
+    "Timeline": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Time-ordered stops only (months, milestones). Current stop solid dot with soft halo, earlier stops hollow. Each stop card: title, amount + caption, optional 2-col partner tiles."
+    },
+    "WeekCalendar": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Header (optional list/calendar switch), Week strip as radiogroup: weekday, date, up to 3 offer dots, today ring, prev/next week buttons. Consumer content below."
+    },
+    "CategoryBreakdown": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Ranked category list: optional icon disc, label + meta, Amount, share bar with %, chevron when linked. Replaces vertical bars for categories."
+    },
+    "ListingCard": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Photo-led card: rounded photo (square/portrait/landscape) with corner overlays (Pill, FavoriteButton), 2-line title (stretched link), meta line. Also used for category tiles."
+    },
+    "CountdownCard": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Reminder card: title (stretched link), meta with chevron, tear-off calendar tile counting down days."
+    },
+    "PriceCalendar": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Month grid with nightly price under each date. Range selection drawn as one continuous bg-primary bar; booked/blocked stretches as labelled bars; past days muted with struck price; first-night-only shows an inset ring."
+    },
+    "YearCalendar": {
+      "status": "pending",
+      "figmaPage": "Components",
+      "notes": "Year grid of month tiles: short month name, total (Amount sm), dot mini-calendar with booked runs as bars, today ringed. Tile opens the month."
     }
   },
   "layouts": {
@@ -593,6 +708,21 @@
       "props": [
         "Has Map (BOOLEAN)"
       ]
+    },
+    "BottomNav": {
+      "status": "pending",
+      "figmaPage": "Layouts",
+      "notes": "Bottom tab bar, up to 5 icon + label items, sliding bg-primary/10 pill on the current item."
+    },
+    "CheckoutBar": {
+      "status": "pending",
+      "figmaPage": "Layouts",
+      "notes": "Floating pill bar: price summary left, rounded primary action right. Safe-area aware."
+    },
+    "DetailHeader": {
+      "status": "pending",
+      "figmaPage": "Layouts",
+      "notes": "Detail page top: full-bleed photo with floating round actions, content sheet overlapping the photo, avatar straddling the seam, centred title/description/meta."
     }
   },
   "figmaNative": {

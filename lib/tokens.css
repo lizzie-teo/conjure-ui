@@ -1,114 +1,98 @@
 /*
   Design Token Reference — @lizzie-teo/conjure-ui
   ================================================
-  Override any of these CSS custom properties inside a ThemeProvider
-  to apply your client's brand. All components in this package
-  read exclusively from these variables — no hardcoded colours.
+  Comments only. The live values are in app/theme.css — read that for
+  defaults. Every component reads from these variables; none holds a
+  colour of its own.
 
-  Usage (via ThemeProvider):
-    <ThemeProvider tokens={{
-      '--primary': '#004f2d',
-      '--primary-foreground': '#ffffff',
-      '--radius': '0.25rem',
-    }}>
-      <ChatWindow ... />
-    </ThemeProvider>
+  Usage (plain CSS — the upgrade-safe default):
 
-  Usage (plain CSS):
-    .my-brand {
-      --primary: #004f2d;
-      --radius: 0.25rem;
+    .theme-acme {                         ← the class name must start with
+      --background: oklch(0.97 0.02 80);     "theme-", or the Tier 2
+      --foreground: oklch(0.20 0.03 60);     surfaces will not re-derive
+      --primary: oklch(0.45 0.12 45);
+      --primary-foreground: oklch(0.98 0 0);
+      --radius: 0.5rem;
+    }
+    .dark .theme-acme,                    ← dark mode needs its own colours
+    .dark.theme-acme {
+      --background: oklch(0.18 0.02 60);
+      --foreground: oklch(0.94 0.02 80);
+      --primary: oklch(0.75 0.12 60);
+      --primary-foreground: oklch(0.18 0.02 60);
     }
 
-  All values use oklch() by default. You may substitute any valid
-  CSS color (hex, rgb, hsl, oklch) when overriding.
+  Usage (ThemeProvider, for values known only at runtime):
+
+    <ThemeProvider
+      tokens={{ '--primary': 'oklch(0.45 0.12 45)', '--radius': '0.5rem' }}
+      darkTokens={{ '--primary': 'oklch(0.75 0.12 60)' }}
+    >
+      <ChatWidget … />
+    </ThemeProvider>
+
+    `tokens` colours apply in light mode only; shape and type tokens apply in
+    both. Dark mode is on when the `dark` prop is set OR any ancestor has
+    class="dark".
+
+  Any CSS colour works (hex, rgb, hsl, oklch). oklch is recommended: the
+  derived surfaces are mixed in oklch, so it keeps hue shifts predictable.
 */
 
-/* ── Colour tokens ─────────────────────────────────────────────── */
+/* ── Tier 1: brand — set these ─────────────────────────────────── */
 
-/* Page / surface backgrounds */
-/* --background          oklch(1 0 0)           White — main page surface */
-/* --foreground          oklch(0.145 0 0)        Near-black — default text */
+/* --background          Page surface. Tint it toward the brand hue; every     */
+/*                       panel, border and hover state follows it.             */
+/* --foreground          Body text                                             */
+/* --primary             Buttons, links, active states, user chat bubbles      */
+/* --primary-foreground  Text on --primary                                     */
+/* --radius              Base corner radius — 0 sharp, 1rem round             */
+/* --font-sans           Every piece of text (system stack by default)         */
 
-/* Card / panel */
-/* --card                oklch(1 0 0)            Card background */
-/* --card-foreground     oklch(0.145 0 0)        Card text */
+/* ── Tier 2: semantic — derived, override only to break from it ───────────── */
 
-/* Popover / dropdown */
-/* --popover             oklch(1 0 0)            Popover background */
-/* --popover-foreground  oklch(0.145 0 0)        Popover text */
+/* Mixed from Tier 1 in app/theme.css ("Derived tokens"):                      */
+/* --card, --popover              white in light, a lift off --background in dark */
+/* --secondary                    a faint step from --background toward text    */
+/* --muted                        a stronger step — placeholders, disabled      */
+/* --muted-foreground             secondary text, 57% of the way to --foreground */
+/* --accent                       hover / selected, tinted from --primary       */
+/* --border, --input              dividers, card edges, input outlines          */
+/* --input-background             input fill                                    */
+/* --switch-background            switch track                                  */
+/* --ring                         focus ring, from --primary                    */
+/* --sidebar, --sidebar-*         follow the tokens above                       */
+/* --font-heading                 titles and sheet headers; = --font-sans       */
+/* Every *-foreground pairs with its surface and defaults to --foreground.     */
 
-/* Brand primary — buttons, user chat bubbles, key CTAs */
-/* --primary             oklch(0.205 0 0)        Dark neutral — override with brand colour */
-/* --primary-foreground  oklch(0.985 0 0)        Text on primary backgrounds */
+/* Fixed, not derived — they mean the same thing in every brand:               */
+/* --destructive  errors, delete       --destructive-foreground                */
+/* --success      confirmed, in stock  --success-foreground                    */
+/* --warning      low stock, caution   --warning-foreground                    */
 
-/* Secondary — softer actions, secondary buttons */
-/* --secondary           oklch(0.97 0 0)         Light grey */
-/* --secondary-foreground oklch(0.205 0 0)       Dark text on secondary */
+/* ── Type and spacing ──────────────────────────────────────────── */
 
-/* Muted — assistant chat bubbles, placeholder areas, disabled states */
-/* --muted               oklch(0.97 0 0)         Subtle background */
-/* --muted-foreground    oklch(0.556 0 0)        Subdued text (assistant messages, captions) */
+/* These are Tailwind's own variables, and the components' text-*, font-*,     */
+/* p-*, gap-* classes read them, so a theme class can override them:           */
+/* --font-weight-normal / -medium / -semibold   400 / 500 / 600                */
+/* --text-xs … --text-4xl                       sizes, each with a matching    */
+/*                                              --text-*--line-height          */
+/* --leading-snug, --leading-tight              line heights                   */
+/* --tracking-tight, --tracking-wide            letter spacing                 */
+/* --spacing                                    base unit (0.25rem); p-4 is 4× */
+/* Change --spacing with care: it scales every gap and padding at once.        */
 
-/* Accent — hover states, highlights */
-/* --accent              oklch(0.97 0 0)         Hover surface */
-/* --accent-foreground   oklch(0.205 0 0)        Text on accent */
+/* The library loads NO webfont. Load your brand face yourself (self-hosted,   */
+/* or your framework's font loader), then set --font-sans and, if titles use a */
+/* different face, --font-heading. Inter is the suggested starting point.      */
 
-/* Destructive — errors, allergy warnings, delete actions, cart badge */
-/* --destructive         oklch(0.577 0.245 27.325) Red */
+/* ── Shape ─────────────────────────────────────────────────────── */
 
-/* Form / input chrome */
-/* --border              oklch(0.922 0 0)        Dividers, card borders */
-/* --input               oklch(0.922 0 0)        Input field border */
-/* --ring                oklch(0.708 0 0)        Focus ring */
+/* --radius-sm … --radius-4xl are multiples of --radius (0.6× to 2.6×).        */
+/* Set --radius only; the scale follows.                                       */
 
-/* ── Shape tokens ──────────────────────────────────────────────── */
+/* ── Tier 3: system — do not override ──────────────────────────── */
 
-/* Base border radius — all components scale from this single value */
-/* --radius              0.75rem                 Override to 0 for sharp, 1.5rem for very rounded */
-/*   Derived automatically — do not override these directly:        */
-/*   --radius-sm  = radius * 0.6   (~7px)   small badges, tiny chips   */
-/*   --radius-md  = radius * 0.8   (~10px)  inputs, small buttons      */
-/*   --radius-lg  = radius         (12px)   standard buttons, badges   */
-/*   --radius-xl  = radius * 1.4   (~17px)  cards, panels              */
-/*   --radius-2xl = radius * 1.8   (~22px)  large cards, modals        */
-/*   --radius-3xl = radius * 2.2   (~26px)  floating chat window       */
-
-/* ── Typography tokens ─────────────────────────────────────────── */
-
-/* Font families — set via CSS variable to avoid loading two font stacks */
-/* --font-sans           system stack            Override with your brand font */
-/* --font-mono           monospace               Used in code/dosage displays   */
-
-/* The library loads NO webfont. It ships the system stack so that installing   */
-/* conjure-ui costs zero font bytes and makes no third-party request. You load  */
-/* your brand font, then override the one token:                               */
-/*                                                                              */
-/*   .theme-acme { --font-sans: 'Acme Grotesk', ui-sans-serif, system-ui; }     */
-/*                                                                              */
-/* No brand font yet? Inter is the recommended starting point — variable (one   */
-/* file covers 100–900), drawn for UI text at 12–16px, and it has real tabular  */
-/* figures, which matters for the price and table components:                   */
-/*                                                                              */
-/*   .prices { font-variant-numeric: tabular-nums; }                            */
-/*                                                                              */
-/* Self-host it (@fontsource-variable/inter) or use your framework's font       */
-/* loader — next/font/google in Next, so the file is served from your origin    */
-/* rather than hotlinked from Google.                                           */
-
-/* ── Shadow tokens ─────────────────────────────────────────────── */
-
-/* Cool-tinted, diffuse elevation — never dark or warm            */
-/* --shadow-sm       Subtle lift — input focus, small floaters    */
-/* --shadow-card     Standard card / panel elevation              */
-/* --shadow-bubble   Chat message bubble                          */
-/* --shadow-elevated Modals, dropdowns, popovers                  */
-/*                                                                 */
-/* Usage — use CSS var() syntax in Tailwind:                      */
-/*   shadow-[var(--shadow-card)]                                   */
-/* Never use Tailwind's shadow-lg/shadow-xl — too dark and warm.  */
-
-/* ── Dark mode ─────────────────────────────────────────────────── */
-/* All tokens above have dark-mode counterparts defined in globals.css under .dark {}  */
-/* Dark mode activates when an ancestor element has class="dark".                       */
-/* ThemeProvider accepts a `dark` prop to apply the .dark class automatically.          */
+/* --shadow-sm, --shadow-card, --shadow-bubble, --shadow-elevated              */
+/* --chart-1 … --chart-5, --apple-pay-*, --tap-target-min, --mix-*             */
+/* The one sanctioned exception is the shipped .theme-wireframe.               */

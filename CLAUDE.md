@@ -20,8 +20,10 @@ npm run build        # library build → dist/
 
 Always develop and test components in Storybook. `npm run dev` is Vite, **not** Next.
 
-`app/` no longer holds a site. The Next marketing pages were retired in favour of the case study at
-`lizzieteo.com/work/conjure-ui`, which links to the published Storybook. What remains under `app/`
+`app/` no longer holds a site. The Next marketing pages were retired in favour of a case study on the
+portfolio (`~/Development/portfolio`, brief at `.docs/case-studies/conjure-ui.md`; not live yet),
+which links to the published Storybook. The package is not on npm — docs give
+`npm install github:lizzie-teo/conjure-ui` until it is. What remains under `app/`
 is the two CSS files that ship in the package, plus `api/chat/route.ts` — an Anthropic-backed chat
 endpoint kept for local experimentation and the only reason `npm run next` / `build:next` still
 exist. Nothing in `demo/` or Storybook calls it.
@@ -31,7 +33,7 @@ exist. Nothing in `demo/` or Storybook calls it.
 ```
 components/
   primitives/         # Tier 1 — zero-dep, token-styled atoms (StatusBadge, PriceDisplay, etc.)
-  core/               # Tier 2 — compound components, documented as "Components" (MediaCard, DetailList, etc.)
+  core/               # Tier 2 — compound components, documented as "Components" (MediaCard, KeyValueList, etc.)
   layouts/            # Tier 3 — structural skeletons with named slots (ChatWidget, ModalSheet, etc.)
   ui/                 # Button only — do not add to this folder (plain React button, no external deps)
   ThemeProvider.tsx   # Runtime CSS variable injection
@@ -127,6 +129,15 @@ gets the tokens and none of the utilities — every component renders unstyled. 
 than a bare `../dist` so a missing dist during local dev is a no-op instead of a build error.
 `npm run test:consumer` fails if it ever goes missing.
 
+**Tier 2 is derived, and the derivation is scoped.** Surfaces are `color-mix()`es of
+`--background`, `--foreground` and `--primary`, with per-mode strengths in `--mix-*` (set on `:root`
+and `.dark`). A custom property that uses `var()` resolves where it is declared and inherits as a
+finished colour, so the mix is re-declared on `:where(:root, .dark, [class*="theme-"],
+[data-conjure-theme])`. That is why theme classes must start with `theme-`, and why `:where()`
+keeps it at zero specificity — any theme that sets a Tier 2 value outright, like
+`.theme-wireframe`, still wins. `ThemeProvider` writes a scoped `<style>` rather than inline styles,
+so its light colours stop at `.dark` and `darkTokens` take over.
+
 Token names follow the shadcn/ui convention, so a theme authored against that vocabulary drops in
 without renaming. Otherwise leave `app/globals.css` alone — it is shared infrastructure.
 
@@ -215,7 +226,7 @@ Storybook needs no base-path config because `build-storybook` emits relative ass
 smoke tests — the story renders, nothing throws. 19 of them are interaction tests written with
 `play()`, covering the behaviour worth pinning: stepper bounds, radio/checkbox `aria-checked`,
 collapsible `aria-expanded` (by mouse *and* keyboard), Enter vs Shift+Enter in the composer, the
-modal's focus trap, `BundleCard`'s swap-and-select, and `SlotPicker` clearing the slot when the
+modal's focus trap, `CollectionCard`'s swap-and-select, and `TimeSlotPicker` clearing the slot when the
 date changes.
 
 Prefer asserting through **roles and ARIA state** rather than class names — that is what the
@@ -255,11 +266,14 @@ the other — a Chromatic diff does not block the deploy.
 **Chromatic is the only thing here that can see a visual regression.** `npm test` proves every story
 renders without throwing; it cannot see that a renamed token restyled all 47 components. That is the
 breaking change this library is most exposed to (see *Releasing*), and a green story suite says
-nothing about it. Chromatic screenshots all 287 stories per build and diffs them against the last
-approved baseline — baseline set 2 Aug 2026, build 1.
+nothing about it. Chromatic screenshots all 287 stories at two widths — 375px and 1280px, set as
+`chromatic.modes` in `.storybook/preview.tsx` — so 574 snapshots per full build, and diffs them
+against the last approved baseline. The phone width is what catches a layout that only breaks
+small. Adding the modes started fresh baselines for both widths; the first build after it needs
+approving.
 
 `onlyChanged: true` (TurboSnap) is set to keep that off the free snapshot allowance, but **Chromatic
-withholds TurboSnap until an account has 10 CI builds**, so early builds cost the full 287 regardless
+withholds TurboSnap until an account has 10 CI builds**, so early builds cost the full 574 regardless
 and the warning in the log is a gate, not a fault. Shared config — `theme.css`, `globals.css`,
 `.storybook/*` — forces a full run even after it unlocks, which is correct: that is exactly the edit
 that changes everything at once.
@@ -276,7 +290,7 @@ brand portal and place them in `public/payment-logos/`. See
    design value goes through a CSS custom property.
    *Sole exception:* third-party brand marks, where the literal colour **is** the specification
    and tokenising it would misrepresent the brand — Google's `#4285F4`, the Apple card gradients,
-   Apple Pay greys. Confined to SVG fills in `Apple-objects/` and `PaymentMethodTile`. Never
+   Apple Pay greys. Confined to SVG fills in `Apple-objects/` and `PaymentMethodCard`. Never
    extend this to layout, spacing, or your own palette.
 2. **shadcn `Button` for anything button-like** — never raw `<button className="…">`. Import from
    `@/components/ui/button`.
@@ -285,12 +299,18 @@ brand portal and place them in `public/payment-logos/`. See
    went with the delivery flow); the first one needed should be extracted as a `Switch`
    primitive rather than hand-rolled again.
    A control is also never nested inside another control — no `Button` inside a `role="button"`
-   root. Where a card doubles as one control (`CardStack`, `SummaryPanel.Header`), the root drops
+   root. Where a card doubles as one control (`StackedCards`, `ExpandableCard.Header`), the root drops
    its button role once expanded, or the inner affordance is a plain `aria-hidden` marker.
-3. **Responsive at every breakpoint** — `md:` variants are mandatory on all sizes and spacing.
-   `p-4 md:p-6 lg:p-8` on every container. **Hit area is a separate axis** — size it
-   with `pointer-coarse:`, never `md:`; the canonical CTA is
-   `h-12 md:h-10 pointer-coarse:min-h-11`. Verify with `node scripts/tap-audit.js`.
+3. **Responsive to the container, not the screen** — components scale type, padding, gaps and
+   icons with Tailwind container queries: `@md:` (box ≥ 448px) and `@3xl:` (≥ 768px), e.g.
+   `p-4 @md:p-6`. A chat panel on a laptop is phone-width, so `md:` (screen width) would make
+   cards inside it too big. `md:` survives only on frames anchored to the screen (`ModalSheet` /
+   `ApplePaySheet` switching bottom sheet ↔ centred modal). `@container` is declared by
+   `ChatWidget`, `ModalSheet`, `ApplePaySheet`, the Storybook wrapper, and consumers — never on a
+   component root, and only on a box with a definite width (a shrink-wrapped container collapses
+   to 0). **Hit area is a separate axis** — size it with `pointer-coarse:`, never a width query;
+   the canonical CTA is `h-12 @md:h-10 pointer-coarse:min-h-11`. Verify with
+   `node scripts/tap-audit.js` (runs in CI). Full rules: `.docs/guidelines/ui-guidelines`.
 4. **No new dependencies without asking** — published library; every added dep becomes a
    consumer's dep too. Runtime deps are currently just `class-variance-authority`, `clsx`,
    `lucide-react`, `motion`, `tailwind-merge`. React is a peer dependency.
@@ -298,7 +318,7 @@ brand portal and place them in `public/payment-logos/`. See
    `components/core/`, Layouts in `components/layouts/`. Each gets its own subfolder with
    `ComponentName.tsx` + `ComponentName.stories.tsx`.
 6. **Compound component API** — Components and Layouts expose sub-components as static properties
-   (`MediaCard.Title`, `BundleCard.ItemList`, etc.). Sub-components live in the same file as the parent.
+   (`MediaCard.Title`, `CollectionCard.ItemList`, etc.). Sub-components live in the same file as the parent.
 7. **Every component needs a `.stories.tsx`** — Storybook is the contract for consumers.
    *Exception:* `primitives/Apple-objects/` and the logo/asset folders, which are platform assets
    rather than styled components (the figma-drift script classifies them the same way).
@@ -308,6 +328,35 @@ brand portal and place them in `public/payment-logos/`. See
    `lib/merge-refs.ts` when the component holds its own root ref. React 19: `ref` is a plain prop,
    never `forwardRef`. Spread **last** normally; spread **first** when the root owns an a11y or
    controlled-state contract a consumer prop must not silently break.
+
+## Which skill to load
+
+Load the matching skill before writing code. No need to ask first; say in one line which skill and why.
+The repo rules above and the `.docs/guidelines/` files always outrank a skill.
+
+| Work | Load |
+|------|------|
+| New component, look not settled yet | `frontend-design:frontend-design`, then `design-taste-frontend` for direction |
+| Polish an existing component (states, feel, details) | `emil-design-eng` — ask it a concrete question; loaded bare it only replies with an ad |
+| Audit existing components for generic AI patterns | `redesign-existing-projects` — use as a checklist, report findings, do not apply its fixes wholesale |
+| Add or build an animation | `animate`, plus `#motion` |
+| Drag, swipe, sheets, springs, momentum (`ModalSheet` etc.) | `apple-design` |
+| Review motion in a diff | `review-animations` (user-only: suggest `/review-animations`) |
+| "What could animate here?" | `find-animation-opportunities` |
+| Whole-library motion audit | `improve-animations` |
+| Name a motion effect | `animation-vocabulary` |
+| Several divergent versions to compare | `prototype` (user-only: suggest `/prototype`) |
+| Considering a new dependency | `pick-ui-library` (user-only) — and rule 4 still applies: ask first |
+
+Skill advice to ignore here (it was written for landing pages, not a white-label library):
+
+- **Fonts.** The library loads no webfont. Ignore every font pick and `next/font` instruction.
+- **Hardcoded values.** Ignore any hex, font stack or fixed radius; map it to a token (rule 1).
+- **Page rules.** Hero, eyebrow, section and landing-page rules do not apply to components.
+- **Libraries.** Never add GSAP or any package a skill suggests; animation is `motion/react` only.
+- **`transform` rewrites.** Do not rewrite `animate={{ x }}` to a `transform` string where `x`/`y`
+  is driven by a `MotionValue`, `useTransform` or layout animation; it breaks them.
+- **`ask-sonner`** is inert: Sonner is not a dependency.
 
 ## #ui
 

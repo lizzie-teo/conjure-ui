@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { PaymentSuccess } from './PaymentSuccess'
 
 const wrapper = (Story: React.ComponentType) => (
-  <div className="w-[360px] md:w-[400px] border border-border rounded-[calc(var(--radius)+4px)] bg-card shadow-[var(--shadow-elevated)] overflow-hidden">
+  <div className="w-full max-w-[360px] @md:max-w-[400px] border border-border rounded-[calc(var(--radius)+4px)] bg-card shadow-[var(--shadow-elevated)] overflow-hidden">
     <Story />
   </div>
 )
@@ -128,7 +128,7 @@ export const AllIndustries: Story = {
   name: 'All industries',
   decorators: [],
   render: () => (
-    <div className="flex flex-col gap-6 w-[360px] py-4">
+    <div className="flex flex-col gap-6 w-full max-w-[360px] py-4">
       {[
         {
           label: 'Supermarket',

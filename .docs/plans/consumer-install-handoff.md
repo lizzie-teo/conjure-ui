@@ -53,7 +53,7 @@ Wired into `.github/workflows/ci.yml` as the final step, after the existing entr
    TS2834/TS2835. Source is written for `moduleResolution: "bundler"` and tsc emits those paths
    verbatim; it cannot add extensions itself. → `scripts/fix-dts-extensions.mjs` rewrites all 131
    relative specifiers post-build, resolving each against disk so directory specifiers like
-   `'./BundleCard'` become `'./BundleCard/index.js'` rather than a broken `.js` suffix.
+   `'./CollectionCard'` become `'./CollectionCard/index.js'` rather than a broken `.js` suffix.
 
 `npm run build` is now: vite → tsc → `fix-dts-extensions.mjs` → `write-dist-package-type.mjs`.
 Neither post-processing step is optional; both are covered by the smoke test.

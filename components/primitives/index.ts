@@ -4,26 +4,26 @@ export type { StatusBadgeProps } from './StatusBadge/StatusBadge'
 export { PriceDisplay } from './PriceDisplay/PriceDisplay'
 export type { PriceDisplayProps } from './PriceDisplay/PriceDisplay'
 
-export { EntityAvatar, entityAvatarBase, entityAvatarSizeClasses } from './EntityAvatar/EntityAvatar'
-export type { EntityAvatarProps } from './EntityAvatar/EntityAvatar'
+export { Avatar, avatarBase, avatarSizeClasses } from './Avatar/Avatar'
+export type { AvatarProps } from './Avatar/Avatar'
 
-export { TimestampLabel } from './TimestampLabel/TimestampLabel'
-export type { TimestampLabelProps } from './TimestampLabel/TimestampLabel'
+export { Timestamp } from './Timestamp/Timestamp'
+export type { TimestampProps } from './Timestamp/Timestamp'
 
 export { Tag } from './Tag/Tag'
 export type { TagProps } from './Tag/Tag'
 
-export { ProgressStep, progressStepDotBase, progressStepStatusClasses } from './ProgressStep/ProgressStep'
-export type { ProgressStepProps } from './ProgressStep/ProgressStep'
+export { StepIndicator, stepIndicatorDotBase, stepIndicatorStatusClasses } from './StepIndicator/StepIndicator'
+export type { StepIndicatorProps } from './StepIndicator/StepIndicator'
 
-export { SkeletonBlock } from './SkeletonBlock/SkeletonBlock'
-export type { SkeletonBlockProps } from './SkeletonBlock/SkeletonBlock'
+export { Skeleton } from './Skeleton/Skeleton'
+export type { SkeletonProps } from './Skeleton/Skeleton'
 
 export { QuantityStepper } from './QuantityStepper/QuantityStepper'
 export type { QuantityStepperProps } from './QuantityStepper/QuantityStepper'
 
-export { AddressTile } from './AddressTile/AddressTile'
-export type { AddressTileProps } from './AddressTile/AddressTile'
+export { AddressCard } from './AddressCard/AddressCard'
+export type { AddressCardProps } from './AddressCard/AddressCard'
 
 export { BiometricIndicator } from './BiometricIndicator/BiometricIndicator'
 export type { BiometricIndicatorProps } from './BiometricIndicator/BiometricIndicator'
@@ -44,11 +44,47 @@ export { AvailabilityDot, availabilityColorClasses, availabilityLabelColorClasse
 export type { AvailabilityDotProps, AvailabilityLevel } from './AvailabilityDot/AvailabilityDot'
 
 
-export { PaymentMethodTile } from './PaymentMethodTile/PaymentMethodTile'
-export type { PaymentMethodTileProps } from './PaymentMethodTile/PaymentMethodTile'
+export { PaymentMethodCard } from './PaymentMethodCard/PaymentMethodCard'
+export type { PaymentMethodCardProps } from './PaymentMethodCard/PaymentMethodCard'
 
-export { ToastBanner, ToastBannerGroup } from './ToastBanner/ToastBanner'
-export type { ToastBannerProps } from './ToastBanner/ToastBanner'
+export { Toast, ToastGroup } from './Toast/Toast'
+export type { ToastProps } from './Toast/Toast'
 
 export { EmptyState } from './EmptyState/EmptyState'
 export type { EmptyStateProps } from './EmptyState/EmptyState'
+
+export { StatCard, statCardBase, statCardVariantClasses, statCardToneClasses } from './StatCard/StatCard'
+export type { StatCardProps } from './StatCard/StatCard'
+
+export { StepList } from './StepList/StepList'
+export type { StepListProps, StepListItem } from './StepList/StepList'
+
+export { FeatureList } from './FeatureList/FeatureList'
+export type { FeatureListProps } from './FeatureList/FeatureList'
+
+export { SegmentedControl } from './SegmentedControl/SegmentedControl'
+export type { SegmentedControlProps, SegmentedControlOption } from './SegmentedControl/SegmentedControl'
+
+export { Tabs } from './Tabs/Tabs'
+export type { TabsProps, TabsItem, TabsPanelProps } from './Tabs/Tabs'
+
+export { ProgressBar } from './ProgressBar/ProgressBar'
+export type { ProgressBarProps } from './ProgressBar/ProgressBar'
+
+export { SectionHeader } from './SectionHeader/SectionHeader'
+export type { SectionHeaderProps } from './SectionHeader/SectionHeader'
+
+export { SearchBar } from './SearchBar/SearchBar'
+export type { SearchBarProps } from './SearchBar/SearchBar'
+
+export { BarChart } from './BarChart/BarChart'
+export type { BarChartProps, BarChartDatum } from './BarChart/BarChart'
+
+export { CurrencyAmount, currencyAmountBase, currencyAmountSizeClasses, currencyAmountToneClasses } from './CurrencyAmount/CurrencyAmount'
+export type { CurrencyAmountProps } from './CurrencyAmount/CurrencyAmount'
+
+export { FavoriteButton } from './FavoriteButton/FavoriteButton'
+export type { FavoriteButtonProps } from './FavoriteButton/FavoriteButton'
+
+export { SearchButton } from './SearchButton/SearchButton'
+export type { SearchButtonProps } from './SearchButton/SearchButton'

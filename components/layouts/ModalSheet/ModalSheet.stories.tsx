@@ -58,7 +58,7 @@ export const Default: Story = {
   render: () => (
     <Toggle title="Your cart" description="Review items before checkout" size="md" label="Open cart">
       <ModalSheet.Body>
-        <p className="text-sm md:text-base text-foreground">
+        <p className="text-sm @md:text-base text-foreground">
           Cart contents go here. This is the default medium size.
         </p>
       </ModalSheet.Body>
@@ -76,7 +76,7 @@ export const Small: Story = {
         </p>
       </ModalSheet.Body>
       <ModalSheet.Footer>
-        <Button className="w-full h-12 md:h-10">Confirm</Button>
+        <Button className="w-full h-12 @md:h-10 pointer-coarse:min-h-11">Confirm</Button>
       </ModalSheet.Footer>
     </Toggle>
   ),
@@ -87,7 +87,7 @@ export const Large: Story = {
   render: () => (
     <Toggle title="Order review" size="lg" label="Open lg">
       <ModalSheet.Body>
-        <p className="text-sm md:text-base text-foreground">
+        <p className="text-sm @md:text-base text-foreground">
           Large sheet — 600px max-width. Ideal for order review, full product detail.
         </p>
       </ModalSheet.Body>
@@ -101,7 +101,7 @@ export const WithFooter: Story = {
     <Toggle title="Payment" description="Complete your purchase" size="md" label="Open with footer">
       <ModalSheet.Body>
         <div className="space-y-3">
-          <p className="text-sm md:text-base text-foreground">
+          <p className="text-sm @md:text-base text-foreground">
             Select your payment method and confirm below.
           </p>
           <div className="h-16 rounded-xl bg-muted" />
@@ -109,7 +109,7 @@ export const WithFooter: Story = {
         </div>
       </ModalSheet.Body>
       <ModalSheet.Footer>
-        <Button className="w-full h-12 md:h-10">Pay now</Button>
+        <Button className="w-full h-12 @md:h-10 pointer-coarse:min-h-11">Pay now</Button>
       </ModalSheet.Footer>
     </Toggle>
   ),
@@ -120,7 +120,7 @@ export const WithoutTitle: Story = {
   render: () => (
     <Toggle size="md" label="Open (no title)">
       <ModalSheet.Body>
-        <p className="text-sm md:text-base text-foreground pt-8 md:pt-2">
+        <p className="text-sm @md:text-base text-foreground pt-8 md:pt-2">
           No title prop — close button still appears in the top-right. Consumer can
           place <code>ModalSheet.Header</code> for a custom heading.
         </p>
@@ -134,8 +134,8 @@ export const CustomHeader: Story = {
   render: () => (
     <Toggle size="md" label="Open (custom header)">
       <ModalSheet.Header>
-        <p className="text-base md:text-lg font-semibold text-foreground pr-10">Authentication</p>
-        <p className="text-xs md:text-sm text-muted-foreground mt-0.5">
+        <p className="text-base @md:text-lg font-semibold text-foreground pr-10">Authentication</p>
+        <p className="text-xs @md:text-sm text-muted-foreground mt-0.5">
           Verify your identity to continue
         </p>
       </ModalSheet.Header>
@@ -164,7 +164,7 @@ export const LongContent: Story = {
         </div>
       </ModalSheet.Body>
       <ModalSheet.Footer>
-        <Button className="w-full h-12 md:h-10">Accept & continue</Button>
+        <Button className="w-full h-12 @md:h-10 pointer-coarse:min-h-11">Accept & continue</Button>
       </ModalSheet.Footer>
     </Toggle>
   ),

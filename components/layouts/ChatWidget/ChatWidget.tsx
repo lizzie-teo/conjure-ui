@@ -7,8 +7,8 @@ import { MessageBubble } from '../../core/MessageBubble/MessageBubble'
 import { ChatInput } from '../../core/ChatInput/ChatInput'
 import { QuickReplies } from '../../core/QuickReplies/QuickReplies'
 import { MediaCard } from '../../core/MediaCard/MediaCard'
-import { ActionStrip } from '../../core/ActionStrip/ActionStrip'
-import { EntityAvatar } from '../../primitives/EntityAvatar/EntityAvatar'
+import { ButtonGroup } from '../../core/ButtonGroup/ButtonGroup'
+import { Avatar } from '../../primitives/Avatar/Avatar'
 import { StatusBadge } from '../../primitives/StatusBadge/StatusBadge'
 import { PriceDisplay } from '../../primitives/PriceDisplay/PriceDisplay'
 import { type MockData, type MockProduct, type MockMessage, VERTICAL_MOCK } from './mockData'
@@ -121,21 +121,24 @@ export function ChatWidget({
   return (
     <div
       className={cn(
-        'flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-[var(--shadow-card)]',
+        // `@container`: everything inside scales to the panel, not the screen.
+        // `w-full` because a container ignores its content when sizing — left
+        // to shrink-wrap in a flex row, it would collapse to 0.
+        '@container w-full flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-[var(--shadow-card)]',
         className
       )}
       {...props}
     >
-      <div className="flex items-center gap-3 px-4 md:px-5 py-3 md:py-4 border-b border-border bg-card shrink-0">
-        <EntityAvatar fallback={data.botName ?? 'Assistant'} src={data.avatar} size="sm" />
-        <span className="text-sm md:text-base font-medium text-foreground">
+      <div className="flex items-center gap-3 @md:gap-4 px-4 @md:px-5 py-3 @md:py-4 border-b border-border bg-card shrink-0">
+        <Avatar fallback={data.botName ?? 'Assistant'} src={data.avatar} size="sm" />
+        <span className="text-sm @md:text-base font-medium text-foreground">
           {data.botName ?? 'Assistant'}
         </span>
       </div>
 
       <div
         ref={scrollContainerRef}
-        className="relative flex-1 overflow-y-auto min-h-0 px-4 md:px-5 py-4 md:py-5 flex flex-col gap-3 md:gap-4"
+        className="relative flex-1 overflow-y-auto min-h-0 px-4 @md:px-5 py-4 @md:py-5 flex flex-col gap-3 @md:gap-4"
       >
         {/* SVG thread reference line */}
         <AnimatePresence>
@@ -177,7 +180,7 @@ export function ChatWidget({
             <div
               key={i}
               ref={msg.id ? (el) => setMessageRef(msg.id!, el) : undefined}
-              className="flex flex-col gap-2 transition-opacity duration-200 hover:opacity-100"
+              className="flex flex-col gap-2 @md:gap-3 transition-opacity duration-200 hover:opacity-100"
               style={{ opacity: ageOpacity }}
             >
               <MessageBubble
@@ -194,9 +197,9 @@ export function ChatWidget({
               )}
 
               {msg.products && (
-                <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-none">
+                <div className="flex gap-3 @md:gap-4 overflow-x-auto pb-1 scrollbar-none">
                   {msg.products.map((product, pi) => (
-                    <div key={pi} className="w-52 md:w-60 shrink-0">
+                    <div key={pi} className="w-52 @md:w-60 shrink-0">
                       <MediaCard>
                         {product.image && (
                           <MediaCard.Media src={product.image} alt={product.name} />
@@ -218,18 +221,18 @@ export function ChatWidget({
                           </MediaCard.Meta>
                         </MediaCard.Body>
                         {(product.primaryAction || product.secondaryAction) && (
-                          <ActionStrip>
+                          <ButtonGroup>
                             {product.primaryAction && (
-                              <ActionStrip.Primary onClick={() => onAddToCart?.(product)}>
+                              <ButtonGroup.Primary onClick={() => onAddToCart?.(product)}>
                                 {product.primaryAction}
-                              </ActionStrip.Primary>
+                              </ButtonGroup.Primary>
                             )}
                             {product.secondaryAction && (
-                              <ActionStrip.Secondary onClick={() => onSuggestSubstitution?.(product)}>
+                              <ButtonGroup.Secondary onClick={() => onSuggestSubstitution?.(product)}>
                                 {product.secondaryAction}
-                              </ActionStrip.Secondary>
+                              </ButtonGroup.Secondary>
                             )}
-                          </ActionStrip>
+                          </ButtonGroup>
                         )}
                       </MediaCard>
                     </div>
@@ -255,7 +258,7 @@ export function ChatWidget({
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="border-t border-border px-4 md:px-5 py-3 md:py-4 shrink-0">
+      <div className="border-t border-border px-4 @md:px-5 py-3 @md:py-4 shrink-0">
         <ChatInput onSend={() => {}}>
           <ChatInput.Field />
           <ChatInput.Send />

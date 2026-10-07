@@ -83,7 +83,7 @@ export function AvailabilityDot({
       */}
       <Icon className={cn('size-2.5', availabilityColorClasses[level])} />
       {showLabel && (
-        <span className={cn('text-xs', availabilityLabelColorClasses[level])}>
+        <span className={cn('text-xs @md:text-sm', availabilityLabelColorClasses[level])}>
           {availabilityLabels[level]}
         </span>
       )}

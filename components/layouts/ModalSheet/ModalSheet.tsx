@@ -59,7 +59,7 @@ function Header({ children, className, ...props }: SubProps) {
   return (
     <div
       className={cn(
-        'shrink-0 px-4 md:px-6 pt-4 md:pt-5 pb-3 md:pb-4 border-b border-border',
+        'shrink-0 px-4 @md:px-6 pt-4 @md:pt-5 pb-3 @md:pb-4 border-b border-border',
         className,
       )}
       {...props}
@@ -73,7 +73,7 @@ function Body({ children, className, ...props }: SubProps) {
   return (
     <div
       className={cn(
-        'flex-1 min-h-0 overflow-y-auto px-4 md:px-6 py-4 md:py-5',
+        'flex-1 min-h-0 overflow-y-auto px-4 @md:px-6 py-4 @md:py-5',
         className,
       )}
       {...props}
@@ -87,7 +87,7 @@ function Footer({ children, className, ...props }: SubProps) {
   return (
     <div
       className={cn(
-        'shrink-0 px-4 md:px-6 py-4 md:py-5 border-t border-border',
+        'shrink-0 px-4 @md:px-6 py-4 @md:py-5 border-t border-border',
         className,
       )}
       {...props}
@@ -235,7 +235,9 @@ export function ModalSheet({
             aria-labelledby={title ? titleId : undefined}
             aria-describedby={description ? descId : undefined}
             className={cn(
-              'fixed z-50 flex flex-col bg-card border border-border',
+              // `@container`: content scales to the panel's width, so a phone-wide
+              // sheet and a 448px modal on a desktop both read as compact.
+              '@container fixed z-50 flex flex-col bg-card border border-border',
               'shadow-[var(--shadow-elevated)]',
               // Mobile: anchored to bottom, slides up
               'inset-x-0 bottom-0 rounded-t-2xl max-h-[90dvh]',
@@ -264,17 +266,17 @@ export function ModalSheet({
               size="icon"
               aria-label="Close"
               onClick={onClose}
-              className="absolute top-2 md:top-3 right-2 md:right-3 z-10 size-12 md:size-10 pointer-coarse:size-12"
+              className="absolute top-2 md:top-3 right-2 md:right-3 z-10 size-12 @md:size-10 pointer-coarse:size-12"
             >
               <X size={18} />
             </Button>
 
             {/* Built-in title header */}
             {title && (
-              <div className="shrink-0 px-4 md:px-6 pt-4 md:pt-5 pb-3 md:pb-4 pr-14 border-b border-border">
+              <div className="shrink-0 px-4 @md:px-6 pt-4 @md:pt-5 pb-3 @md:pb-4 pr-14 border-b border-border">
                 <h2
                   id={titleId}
-                  className="text-base md:text-lg font-semibold text-foreground"
+                  className="font-heading text-base @md:text-lg font-semibold text-foreground"
                 >
                   {title}
                 </h2>

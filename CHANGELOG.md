@@ -20,7 +20,108 @@ Adding a component, adding an optional prop, and adding a Tier 3 token are **min
 
 ## [Unreleased]
 
+### Changed — breaking
+
+- **Components renamed to the words people use when they ask for them.** A prompt like "add a
+  search bar" or "show a timeline" now matches an export by name, so an AI builder — or a person
+  reading the index — picks the right part first time. Old names are **removed, not aliased**: the
+  package has not been published to npm, so there is no released version to keep compatible with.
+  Update imports, JSX and type names with this table. Sub-components keep their names
+  (`CollectionCard.ItemList`, `ExpandableCard.Header`, …). Types and helpers follow their component
+  (`AvatarProps`, `avatarSizeClasses`, `statCardBase`, `currencyAmountBase`), and the
+  `BundleCard` data types became `CollectionItem`, `CollectionAlternative`, `CollectionBadge`,
+  `CollectionAction`, `CollectionActionContext`, `CollectionMultiplier` and so on.
+
+  | Old | New |
+  |---|---|
+  | `EntityAvatar` | `Avatar` |
+  | `TimestampLabel` | `Timestamp` |
+  | `SkeletonBlock` | `Skeleton` |
+  | `ToastBanner / ToastBannerGroup` | `Toast / ToastGroup` |
+  | `AddressTile` | `AddressCard` |
+  | `PaymentMethodTile` | `PaymentMethodCard` |
+  | `ValueTile` | `StatCard` |
+  | `CheckList` | `FeatureList` |
+  | `ProgressStep` | `StepIndicator` |
+  | `SearchField` | `SearchBar` |
+  | `SearchTrigger` | `SearchButton` |
+  | `Amount` | `CurrencyAmount` |
+  | `DetailList` | `KeyValueList` |
+  | `ActionStrip` | `ButtonGroup` |
+  | `SummaryPanel` | `ExpandableCard` |
+  | `SelectionGroup` | `OptionGroup` |
+  | `CardStrip` | `CardCarousel` |
+  | `CardStack` | `StackedCards` |
+  | `ChipToCard` | `ExpandableChips` |
+  | `AuthPrompt` | `SignInPrompt` |
+  | `AuthStatus` | `SignInStatus` |
+  | `ReceiptSummary` | `Receipt` |
+  | `CompareTable` | `ComparisonTable` |
+  | `BundleCard` | `CollectionCard` |
+  | `SlotPicker` | `TimeSlotPicker` |
+  | `OfferListItem` | `MediaListItem` |
+  | `AccountRow` | `AccountCard` |
+  | `SavingsTimeline` | `Timeline` |
+  | `OfferCalendar` | `WeekCalendar` |
+  | `YearOverview` | `YearCalendar` |
+  | `BookingBar` | `CheckoutBar` |
+  | `DetailHero` | `DetailHeader` |
+
+### Changed
+
+- **Components scale to their container, not the screen.** Type, padding, gaps and icons used
+  `md:` (screen ≥ 768px); they now use container queries — `@md:` (the box they sit in ≥ 448px).
+  A card inside a 400px chat panel on a laptop used to take its desktop size; it now stays compact.
+  `ChatWidget`, `ModalSheet` and `ApplePaySheet` declare the container for their own content.
+  **Visible change for loose components:** with no `@container` ancestor they stay at the compact
+  size on every screen. Add `@container` to the area that holds them. `ChatWidget` now also sets
+  `w-full` on its root, since a container left to shrink-wrap collapses to 0 — pass a width class
+  to override. Sheet frames (bottom sheet ↔ centred modal) still switch on the screen width.
+
+- **Tier 2 surfaces now derive from Tier 1.** `--card`, `--popover`, `--secondary`, `--muted`,
+  `--muted-foreground`, `--accent`, `--border`, `--input`, `--input-background`,
+  `--switch-background`, `--ring` and the `--sidebar-*` tokens are mixed from `--background`,
+  `--foreground` and `--primary` instead of holding fixed cool greys. A theme that sets only Tier 1
+  now gets panels, borders and hover states in its own hue. Defaults look the same to within a
+  step of lightness; dark-mode borders are now opaque rather than 10% white. Every token name is
+  unchanged, and a theme that sets a Tier 2 token outright still wins.
+  **Re-derivation needs a class starting with `theme-`** (or `ThemeProvider`). A brand class with
+  another name still sets Tier 1, but its surfaces stay on the default palette.
+- **`ThemeProvider` handles dark mode.** Tokens were inline styles, which beat `.dark`, so a brand's
+  light colours stayed on in dark mode. Colours in `tokens` now apply in light mode only; the new
+  `darkTokens` prop sets dark-mode colours. Radius, font, text, leading, tracking and spacing tokens
+  apply in both. Dark mode is detected from the `dark` prop or any `.dark` ancestor. It now also
+  takes a `ref` and forwards rest props to its wrapper.
+  **Breaking for anyone passing colours to `ThemeProvider` in dark mode:** move them to `darkTokens`.
+
 ### Added
+
+- **`--font-heading`** — a separate face for card titles, sheet headers and empty-state headings
+  (`MediaCard.Title`, `BundleCard`, `ModalSheet`, `EmptyState`, `SummaryPanel`). Defaults to
+  `--font-sans`, so nothing changes until it is set.
+- **`--font-weight-semibold`** declared beside `-normal` and `-medium`, and the type and spacing
+  variables Tailwind provides (`--text-*`, `--leading-*`, `--tracking-*`, `--spacing`) documented
+  as overridable in `app/theme.css` and `lib/tokens.css`.
+
+- **`ValueTile`** — a label over a large amount ("Value $200", "You pay $150"), in `default` or
+  `highlight`, with an optional `badge` pill on the top edge ("Best value") and `orMore` for an
+  estimated floor ("$300+"). Two side by side make a value-vs-price or monthly-vs-yearly pair.
+  `tone="inverse"` for tiles on a `bg-primary` surface.
+- **`StepList`** — numbered steps, each a title with an optional description, for "how it works"
+  and "how to redeem" sections.
+- **`CheckList`** — check-marked rows for "what's included" lists, with `tone="inverse"` for a
+  `bg-primary` surface.
+- **`PromoCard`** — a hero promotion on the brand colour: a photo fading into `--primary`, a title,
+  a check list, an optional pair of `ValueTile`s and a call to action. Compound —
+  `PromoCard.Media`, `.Body`, `.Title`, `.Features`, `.Pricing`, `.Action`.
+- **`SegmentedControl`** — two to four options in a pill track, one selected, with a sliding
+  highlight. A `radiogroup`: arrow keys move the selection. `iconOnly` keeps labels as
+  `aria-label`s.
+- **`Tabs`** — an underlined tab row with `Tabs.Panel` for the content. Arrow keys, Home and End
+  move between tabs; a row too long for its container scrolls sideways. Each tab may carry a
+  `chevron` at its start or end.
+- **`ProgressBar`** — a label, a readable value ("$120 of $200") and a track whose fill slides to
+  the new value. Exposes `role="progressbar"` with `aria-valuetext`.
 
 - **`.theme-wireframe`** — a low-fidelity mode that ships with the package, for prototyping a flow
   before it has a brand. Put `className="theme-wireframe"` on a wrapper and the palette drops to

@@ -10,7 +10,7 @@
  * them and none of the types resolve. tsc cannot add the extensions itself —
  * it only preserves what the source wrote — so they are added here.
  *
- * Directory specifiers ('./BundleCard') become './BundleCard/index.js', which is
+ * Directory specifiers ('./CollectionCard') become './CollectionCard/index.js', which is
  * why each one is resolved against disk rather than blindly suffixed.
  */
 import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs'

@@ -25,10 +25,10 @@ components/
   primitives/
     StatusBadge/
     PriceDisplay/
-    EntityAvatar/
-    TimestampLabel/
+    Avatar/
+    Timestamp/
     Tag/
-    ProgressStep/
+    StepIndicator/
     index.ts
   core/
     MessageBubble/         ← chat shell
@@ -36,17 +36,17 @@ components/
     ChatInput/             ← chat shell (extracted from ChatWindow)
     QuickReplies/          ← rich response (NOT shell chrome)
     MediaCard/             ← rich response
-    DetailList/            ← rich response
-    ActionStrip/           ← rich response
-    SummaryPanel/          ← rich response
-    SelectionGroup/        ← rich response
+    KeyValueList/            ← rich response
+    ButtonGroup/           ← rich response
+    ExpandableCard/          ← rich response
+    OptionGroup/        ← rich response
     index.ts
   layouts/
     ChatWindow/            ← organism: header slot + MessageFeed + ChatInput
     MessageFeed/           ← scrollable MessageRow list
-    ListingLayout/         ← MediaCard + DetailList + ActionStrip
-    CompareLayout/         ← SelectionGroup × 2 + ActionStrip
-    ConfirmationLayout/    ← SummaryPanel + PriceDisplay + ActionStrip
+    ListingLayout/         ← MediaCard + KeyValueList + ButtonGroup
+    CompareLayout/         ← OptionGroup × 2 + ButtonGroup
+    ConfirmationLayout/    ← ExpandableCard + PriceDisplay + ButtonGroup
     index.ts
   ui/                      ← shadcn primitives (Button), unchanged
 playbook/
@@ -80,16 +80,16 @@ All Components and Layouts use the compound component pattern — sub-components
     <MediaCard>...</MediaCard>
   </ListingLayout.Header>
   <ListingLayout.Body>
-    <DetailList>
-      <DetailList.Row label="Departs" value="06:45" />
-      <DetailList.Row label="Duration" value="9h 45m" />
-    </DetailList>
+    <KeyValueList>
+      <KeyValueList.Row label="Departs" value="06:45" />
+      <KeyValueList.Row label="Duration" value="9h 45m" />
+    </KeyValueList>
   </ListingLayout.Body>
   <ListingLayout.Footer>
-    <ActionStrip>
-      <ActionStrip.Primary>Book now</ActionStrip.Primary>
-      <ActionStrip.Secondary>View details</ActionStrip.Secondary>
-    </ActionStrip>
+    <ButtonGroup>
+      <ButtonGroup.Primary>Book now</ButtonGroup.Primary>
+      <ButtonGroup.Secondary>View details</ButtonGroup.Secondary>
+    </ButtonGroup>
   </ListingLayout.Footer>
 </ListingLayout>
 ```
@@ -102,10 +102,10 @@ All Components and Layouts use the compound component pattern — sub-components
 |---|---|---|
 | `StatusBadge` | `label`, `variant: default\|success\|warning\|error\|info` | Any state label |
 | `PriceDisplay` | `amount`, `currency`, `strikethrough?` | Price with optional original |
-| `EntityAvatar` | `src?`, `fallback`, `size` | Brand logo, airline, store, person |
-| `TimestampLabel` | `datetime` (ISO string) | Relative or absolute time |
+| `Avatar` | `src?`, `fallback`, `size` | Brand logo, airline, store, person |
+| `Timestamp` | `datetime` (ISO string) | Relative or absolute time |
 | `Tag` | `label`, `onRemove?` | Category, filter, or label chip |
-| `ProgressStep` | `status: pending\|active\|complete` | Single step, usable standalone |
+| `StepIndicator` | `status: pending\|active\|complete` | Single step, usable standalone |
 
 ---
 
@@ -123,10 +123,10 @@ All Components and Layouts use the compound component pattern — sub-components
 | Component | Sub-components | Notes |
 |---|---|---|
 | `MediaCard` | `Media`, `Title`, `Subtitle`, `Badge`, `Meta` | New |
-| `DetailList` | `Row` | New. Key-value pairs |
-| `ActionStrip` | `Primary`, `Secondary` | New. 1–3 CTAs |
-| `SummaryPanel` | `Header`, `Body` | New. Optional collapse toggle |
-| `SelectionGroup` | `Option` | New. Radio or checkbox, controlled/uncontrolled |
+| `KeyValueList` | `Row` | New. Key-value pairs |
+| `ButtonGroup` | `Primary`, `Secondary` | New. 1–3 CTAs |
+| `ExpandableCard` | `Header`, `Body` | New. Optional collapse toggle |
+| `OptionGroup` | `Option` | New. Radio or checkbox, controlled/uncontrolled |
 
 ---
 
@@ -163,15 +163,15 @@ Migration map:
 | Old | New |
 |---|---|
 | `FlightCard`, `HotelCard`, `MedicationCard`, `InsurancePlanCard`, `SpecialOfferCard` | `ListingLayout` |
-| `DosageInfo`, `CoverageDetail`, `ItinerarySummary` | `DetailList` |
+| `DosageInfo`, `CoverageDetail`, `ItinerarySummary` | `KeyValueList` |
 | `ComparisonTable` | `CompareLayout` |
-| `SummaryCard`, `GlossaryPanel` | `SummaryPanel` |
-| `AllergyWarning` | `StatusBadge` + `SummaryPanel` |
-| `ClaimStep` | `ProgressStep` + `DetailList` |
+| `SummaryCard`, `GlossaryPanel` | `ExpandableCard` |
+| `AllergyWarning` | `StatusBadge` + `ExpandableCard` |
+| `ClaimStep` | `StepIndicator` + `KeyValueList` |
 | `OnboardingScreen`, `OnboardingStep` | `ConfirmationLayout` |
-| `EducationalCard`, `VideoCard` | `MediaCard` + `DetailList` |
-| `CategoryBrowser` | `SelectionGroup` |
-| `ShoppingListItem` | `DetailList.Row` + `Tag` |
+| `EducationalCard`, `VideoCard` | `MediaCard` + `KeyValueList` |
+| `CategoryBrowser` | `OptionGroup` |
+| `ShoppingListItem` | `KeyValueList.Row` + `Tag` |
 | `CartBadge`, `CartDrawer`, `CartItem` | Keep — commerce utilities, not chat responses |
 
 ---
@@ -233,10 +233,10 @@ The rule still applies: custom variants must use CSS custom properties, not hard
 | Component | Exported primitives |
 |---|---|
 | `StatusBadge` | `statusBadgeBase`, `statusBadgeVariantClasses` |
-| `EntityAvatar` | `entityAvatarBase`, `entityAvatarSizeClasses` |
-| `ProgressStep` | `progressStepDotBase`, `progressStepStatusClasses` |
+| `Avatar` | `avatarBase`, `avatarSizeClasses` |
+| `StepIndicator` | `stepIndicatorDotBase`, `stepIndicatorStatusClasses` |
 | `PriceDisplay` | `className` prop only — no structured variants |
-| `TimestampLabel` | `className` prop only — no structured variants |
+| `Timestamp` | `className` prop only — no structured variants |
 | `Tag` | `className` prop only — no structured variants |
 
 ### Override layout or structure (className)

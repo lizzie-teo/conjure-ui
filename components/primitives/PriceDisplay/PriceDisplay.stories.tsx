@@ -25,3 +25,8 @@ export const USD: Story = {
 export const GBP: Story = {
   args: { amount: 89.5, currency: 'GBP', strikethrough: 120 },
 }
+
+export const FromPerUnit: Story = {
+  name: 'From, per unit',
+  args: { amount: 50, currency: 'AUD', locale: 'en-AU', prefix: 'From', unit: 'guest' },
+}

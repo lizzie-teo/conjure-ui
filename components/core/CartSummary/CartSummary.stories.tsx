@@ -29,7 +29,7 @@ const SAMPLE_ITEMS = [
 export const NoPromo: Story = {
   name: 'No promo',
   render: () => (
-    <div className="max-w-xs">
+    <div className="max-w-xs @md:max-w-md">
       <CartSummary
         items={SAMPLE_ITEMS}
         currency="USD"
@@ -52,7 +52,7 @@ export const WithPromoApplied: Story = {
       }
 
       return (
-        <div className="max-w-xs">
+        <div className="max-w-xs @md:max-w-md">
           <CartSummary
             items={SAMPLE_ITEMS}
             currency="USD"
@@ -71,7 +71,7 @@ export const WithPromoApplied: Story = {
 export const ZeroItems: Story = {
   name: 'Empty cart',
   render: () => (
-    <div className="max-w-xs">
+    <div className="max-w-xs @md:max-w-md">
       <CartSummary
         items={[]}
         currency="USD"
@@ -84,7 +84,7 @@ export const ZeroItems: Story = {
 export const MultipleItems: Story = {
   name: 'Multiple items',
   render: () => (
-    <div className="max-w-xs">
+    <div className="max-w-xs @md:max-w-md">
       <CartSummary
         items={[
           { name: 'Premium Leather Watch', price: 299, quantity: 1 },
@@ -104,8 +104,8 @@ export const MultipleItems: Story = {
 export const SubComponents: Story = {
   name: 'Sub-components (LineItem · PromoField · Total)',
   render: () => (
-    <div className="max-w-xs space-y-4">
-      <div className="bg-card border border-border rounded-xl shadow-[var(--shadow-card)] px-4 md:px-5 py-3 md:py-4">
+    <div className="max-w-xs @md:max-w-md space-y-4">
+      <div className="bg-card border border-border rounded-xl shadow-[var(--shadow-card)] px-4 @md:px-5 py-3 @md:py-4">
         <CartSummary.LineItem name="Premium Leather Watch" quantity={1} price={299} currency="USD" />
         <CartSummary.LineItem name="Classic Sneakers" quantity={2} price={120} currency="USD" />
       </div>

@@ -33,7 +33,7 @@ Shared atoms already in this file:
 | Any icon | `Icons` | `Icon` (INSTANCE_SWAP) |
 | Tag chip | `Primitives` → Tag | — |
 | Biometric ring | `Primitives` → BiometricIndicator | — |
-| Step dot | `Primitives` → ProgressStep | — |
+| Step dot | `Primitives` → StepIndicator | — |
 
 When a core component needs a send button, a dismiss button, or any icon — find it on the source page and `component.createInstance()`. Never `figma.createComponent()` a button from scratch inside a molecule.
 

@@ -6,11 +6,11 @@ import { cn } from '../../../lib/utils'
 import { ConfirmIcon } from '../../primitives/Apple-objects/ConfirmIcon'
 import { Button } from '../../ui/button'
 import { ApplePayButton } from '../../primitives/ApplePayButton/ApplePayButton'
-import { DetailList } from '../DetailList/DetailList'
+import { KeyValueList } from '../KeyValueList/KeyValueList'
 import {
-  PaymentMethodTile,
-  type PaymentMethodTileProps,
-} from '../../primitives/PaymentMethodTile/PaymentMethodTile'
+  PaymentMethodCard,
+  type PaymentMethodCardProps,
+} from '../../primitives/PaymentMethodCard/PaymentMethodCard'
 import type { MotionDivProps } from '../../../lib/prop-types'
 
 // ---------------------------------------------------------------------------
@@ -31,7 +31,7 @@ export interface PaymentConfirmSheetProps extends Omit<MotionDivProps, 'children
   total: number
   currency?: string
   /** The active payment method shown in the confirmation row. */
-  paymentMethod: PaymentMethodTileProps & { networkLogoSrc?: string }
+  paymentMethod: PaymentMethodCardProps & { networkLogoSrc?: string }
   /** Optional one-line description shown below the amount (e.g. merchant name, order summary). */
   description?: string
   /**
@@ -65,9 +65,9 @@ function formatAmount(amount: number, currency: string): string {
 
 function SecureHeader() {
   return (
-    <div className="flex items-center gap-1.5 px-4 md:px-5 pt-3.5 pb-3 border-b border-border">
-      <Lock className="size-3 shrink-0 text-muted-foreground" aria-hidden />
-      <span className="text-xs text-muted-foreground">Secure checkout</span>
+    <div className="flex items-center gap-1.5 px-4 @md:px-5 pt-3.5 pb-3 border-b border-border">
+      <Lock className="size-3 @md:size-3.5 shrink-0 text-muted-foreground" aria-hidden />
+      <span className="text-xs @md:text-sm text-muted-foreground">Secure checkout</span>
     </div>
   )
 }
@@ -78,7 +78,7 @@ function ApplePayWaitingPrompt() {
     <div
       role="status"
       aria-live="polite"
-      className="flex flex-col items-center gap-2.5 py-4 md:py-3"
+      className="flex flex-col items-center gap-2.5 py-4 @md:py-3"
     >
       <motion.div
         aria-hidden
@@ -87,7 +87,7 @@ function ApplePayWaitingPrompt() {
       >
         <ConfirmIcon />
       </motion.div>
-      <p className="text-xs md:text-sm font-medium text-foreground text-center">
+      <p className="text-xs @md:text-sm font-medium text-foreground text-center">
         Confirm with Side Button
       </p>
     </div>
@@ -168,15 +168,15 @@ export function PaymentConfirmSheet({
       <SecureHeader />
 
       {/* Amount hero */}
-      <div className="flex flex-col items-center gap-1 px-4 md:px-5 py-6 md:py-7">
+      <div className="flex flex-col items-center gap-1 px-4 @md:px-5 py-6 @md:py-7">
         <p
           aria-label={`Total: ${amountLabel}`}
-          className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground tabular-nums"
+          className="text-3xl @md:text-4xl font-semibold tracking-tight text-foreground tabular-nums"
         >
           {amountLabel}
         </p>
         {description && (
-          <p className="text-xs md:text-sm text-muted-foreground text-center mt-0.5">
+          <p className="text-xs @md:text-sm text-muted-foreground text-center mt-0.5">
             {description}
           </p>
         )}
@@ -185,22 +185,22 @@ export function PaymentConfirmSheet({
       {/* Optional summary rows — flight details, policy info, item count, etc. */}
       {summaryRows && summaryRows.length > 0 && (
         <>
-          <div className="mx-4 md:mx-5 border-t border-border" />
-          <DetailList>
+          <div className="mx-4 @md:mx-5 border-t border-border" />
+          <KeyValueList>
             {summaryRows.map((row, i) => (
-              <DetailList.Row key={i} label={row.label} value={row.value} />
+              <KeyValueList.Row key={i} label={row.label} value={row.value} />
             ))}
-          </DetailList>
+          </KeyValueList>
         </>
       )}
 
       {/* Divider */}
-      <div className="mx-4 md:mx-5 border-t border-border" />
+      <div className="mx-4 @md:mx-5 border-t border-border" />
 
       {/* Payment method row */}
-      <div className="flex items-center gap-2 px-3 md:px-4 py-3 md:py-3.5">
+      <div className="flex items-center gap-2 @md:gap-3 px-3 @md:px-4 py-3 @md:py-3.5">
         <div className="flex-1 min-w-0">
-          <PaymentMethodTile
+          <PaymentMethodCard
             type={paymentMethod.type}
             label={paymentMethod.label}
             networkLogoSrc={paymentMethod.networkLogoSrc}
@@ -213,7 +213,7 @@ export function PaymentConfirmSheet({
             size="sm"
             onClick={onChangeMethod}
             disabled={loading}
-            className="shrink-0 h-12 md:h-10 pointer-coarse:min-h-11 px-3 text-xs md:text-sm text-muted-foreground hover:text-foreground"
+            className="shrink-0 h-12 @md:h-10 pointer-coarse:min-h-11 px-3 text-xs @md:text-sm text-muted-foreground hover:text-foreground"
           >
             Change
           </Button>
@@ -221,10 +221,10 @@ export function PaymentConfirmSheet({
       </div>
 
       {/* Divider */}
-      <div className="mx-4 md:mx-5 border-t border-border" />
+      <div className="mx-4 @md:mx-5 border-t border-border" />
 
       {/* CTA area */}
-      <div className="flex flex-col gap-3 px-4 md:px-5 py-4 md:py-5">
+      <div className="flex flex-col gap-3 @md:gap-4 px-4 @md:px-5 py-4 @md:py-5">
         <AnimatePresence mode="wait">
           {isApplePay && loading ? (
             <motion.div
@@ -260,7 +260,7 @@ export function PaymentConfirmSheet({
             >
               <Button
                 variant="outline"
-                className="h-12 md:h-11 w-full rounded-[calc(var(--radius)+2px)]"
+                className="h-12 @md:h-11 w-full rounded-[calc(var(--radius)+2px)]"
                 onClick={onConfirm}
                 disabled={loading}
                 aria-label="Pay with Google Pay"
@@ -289,7 +289,7 @@ export function PaymentConfirmSheet({
               transition={{ duration: 0.2, ease: [0, 0, 0.2, 1] }}
             >
               <Button
-                className="h-12 md:h-11 w-full"
+                className="h-12 @md:h-11 w-full"
                 onClick={onConfirm}
                 disabled={loading}
               >

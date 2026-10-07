@@ -128,7 +128,7 @@ When building a molecule in Figma, **never recreate an atom** — use an instanc
 | Any input field | `Input` page |
 | Any icon | `Icons` page |
 | Tag chip | `Primitives` → Tag |
-| Step dot | `Primitives` → ProgressStep |
+| Step dot | `Primitives` → StepIndicator |
 | Biometric ring | `Primitives` → BiometricIndicator |
 | Status badge | `Primitives` → StatusBadge *(pending)* |
 

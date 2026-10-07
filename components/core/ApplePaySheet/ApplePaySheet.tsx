@@ -168,7 +168,7 @@ function SideButtonConfirm({
       >
         <ConfirmIcon />
       </motion.div>
-      <span className="text-xs md:text-sm font-medium text-foreground">
+      <span className="text-xs @md:text-sm font-medium text-foreground">
         {loading ? 'Confirming…' : 'Confirm with Side Button'}
       </span>
     </Button>
@@ -286,7 +286,8 @@ export function ApplePaySheet({
             aria-labelledby={titleId}
             style={{ fontFamily: 'var(--font-apple)', ...style }}
             className={cn(
-              'fixed inset-x-0 bottom-0 z-50',
+              // `@container`: content scales to the sheet, not the screen.
+              '@container fixed inset-x-0 bottom-0 z-50',
               'flex flex-col',
               // Frosted glass — maps Figma rgba(250,250,250,0.7) + backdrop-blur to library tokens
               'bg-card/80 backdrop-blur-2xl',
@@ -379,7 +380,7 @@ export function ApplePaySheet({
                 }}
               />
 
-              <div className="flex flex-col gap-3 px-4 pt-2 pb-6 md:pb-8 bg-card">
+              <div className="flex flex-col gap-3 px-4 pt-2 pb-6 @md:pb-8 bg-card">
                 {/* Merchant + amount */}
                 <div className="flex items-end justify-between">
                   <div className="flex flex-col">

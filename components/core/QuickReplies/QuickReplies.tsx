@@ -37,7 +37,7 @@ export function QuickReplies({ options, onSelect, className, ...props }: QuickRe
       initial="hidden"
       animate="show"
       className={cn(
-        'flex gap-2 overflow-x-auto pb-1 scrollbar-none',
+        'flex gap-2 @md:gap-3 overflow-x-auto pb-1 scrollbar-none',
         className
       )}
       role="group"
@@ -54,7 +54,7 @@ export function QuickReplies({ options, onSelect, className, ...props }: QuickRe
             variant="outline"
             size="sm"
             onClick={() => onSelect(option)}
-            className="rounded-full whitespace-nowrap h-11 md:h-8 pointer-coarse:min-h-11"
+            className="rounded-full whitespace-nowrap h-11 @md:h-8 pointer-coarse:min-h-11"
           >
             {option}
           </Button>

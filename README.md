@@ -3,13 +3,16 @@
 White-label AI chat components for React — 45 components across three tiers, built so a client
 rebrand is a token edit rather than a fork.
 
-**[Browse every component →](https://lizzie-teo.github.io/conjure-ui/)** · [Case study](https://lizzieteo.com/work/conjure-ui) · [npm](https://www.npmjs.com/package/@lizzie-teo/conjure-ui)
+**[Browse every component →](https://lizzie-teo.github.io/conjure-ui/)** · [Source](https://github.com/lizzie-teo/conjure-ui)
 
 ## Install
 
 ```bash
-npm install @lizzie-teo/conjure-ui
+npm install github:lizzie-teo/conjure-ui
 ```
+
+The package is not on the npm registry yet, so it installs straight from GitHub. It builds itself on
+install, and you still import it as `@lizzie-teo/conjure-ui`.
 
 React 19 is a peer dependency. The only runtime dependencies are
 `class-variance-authority`, `clsx`, `lucide-react`, `motion`, and `tailwind-merge`.
@@ -27,6 +30,21 @@ import { ChatWidget } from '@lizzie-teo/conjure-ui/layouts'
 
 Everything is also available from the root entry point (`@lizzie-teo/conjure-ui`); the tier
 entry points exist so you can pull in one layer without the others.
+
+### Sizing to the space
+
+Components scale their type, padding and icons to the **box they sit in**, not the screen — so a
+card in a 400px chat panel stays compact on a 1440px laptop. Mark the area that holds loose
+components with Tailwind's `@container` class:
+
+```tsx
+<main className="@container">
+  <MediaCard>…</MediaCard>
+</main>
+```
+
+`ChatWidget` and `ModalSheet` do this for their own content. Without a container above them,
+components stay at their compact size.
 
 ## Theming
 
@@ -53,10 +71,23 @@ A full rebrand touches **six Tier 1 tokens**: `--font-sans`, `--background`, `--
   --primary-foreground: oklch(0.99 0 0);
   --radius: 0.5rem;
 }
+
+/* Dark mode needs its own colours — the rest derives */
+.dark .theme-acme,
+.dark.theme-acme {
+  --background: oklch(0.16 0.02 260);
+  --foreground: oklch(0.96 0.01 250);
+  --primary: oklch(0.72 0.15 255);
+  --primary-foreground: oklch(0.15 0.02 260);
+}
 ```
 
-Apply the class anywhere above your components, or use `<ThemeProvider tokens={…}>` to set the same
-variables at runtime.
+Apply the class anywhere above your components. Cards, muted panels, borders, hover states and the
+focus ring are mixed from those few colours, so they pick up the brand hue on their own — as long
+as the class name starts with `theme-`, which is where the library re-derives them.
+
+For values known only at runtime, use `<ThemeProvider tokens={…} darkTokens={…}>`. `tokens` colours
+apply in light mode, `darkTokens` in dark, and radius and font tokens in both.
 
 Token names follow the shadcn/ui convention, which is deliberate: a theme authored against that
 vocabulary drops in with no renaming, and the names are already familiar to anyone who has themed a
@@ -98,7 +129,7 @@ Paste this in, with your client's brand colours:
 ```text
 Add the @lizzie-teo/conjure-ui component library to this project and brand it for [CLIENT].
 
-1. npm install @lizzie-teo/conjure-ui
+1. npm install github:lizzie-teo/conjure-ui
 2. Import '@lizzie-teo/conjure-ui/styles' once at the app entry point.
 3. Read the type declarations in node_modules/@lizzie-teo/conjure-ui/dist to see
    what components exist. Import from /primitives, /core, or /layouts.
@@ -119,17 +150,17 @@ Client brand colours:
 [`.docs/for-designers/ai-builder-white-label-setup.md`](./.docs/for-designers/ai-builder-white-label-setup.md)
 covers the rest: pulling a client's palette off their live site, mapping it onto the full semantic
 token set, and the notes specific to each tool — including the surfaces that cannot install from npm
-at all, like Claude Artifacts and Paper.
+at all, like Claude Design, Claude Artifacts and Paper.
 
 ## Staying up to date
 
-Every release is tagged, published to npm, and written up in [`CHANGELOG.md`](./CHANGELOG.md) —
-which also ships inside the package, so an agent can read what changed from `node_modules` without
-leaving the project.
+Changes are written up in [`CHANGELOG.md`](./CHANGELOG.md), which also ships inside the package, so
+an agent can read what changed from `node_modules` without leaving the project.
+
+To pull the latest version from GitHub, run the install again:
 
 ```bash
-npm outdated @lizzie-teo/conjure-ui   # is there a newer version?
-npm install @lizzie-teo/conjure-ui@latest
+npm install github:lizzie-teo/conjure-ui
 ```
 
 To be told rather than to check:

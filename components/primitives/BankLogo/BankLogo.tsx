@@ -10,9 +10,9 @@ export interface BankLogoProps extends Omit<ComponentPropsWithRef<'img'>, 'size'
 }
 
 const sizes = {
-  sm: 'size-6 md:size-5',
-  md: 'size-9 md:size-8',
-  lg: 'size-12 md:size-11',
+  sm: 'size-6 @md:size-5',
+  md: 'size-9 @md:size-8',
+  lg: 'size-12 @md:size-11',
 }
 
 export function BankLogo({ src, alt, size = 'md', className, ...props }: BankLogoProps) {

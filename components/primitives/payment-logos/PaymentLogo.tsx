@@ -10,9 +10,9 @@ export interface PaymentLogoProps extends Omit<ComponentPropsWithRef<'img'>, 'si
 }
 
 const sizes = {
-  sm: 'h-5 md:h-4',
-  md: 'h-8 md:h-7',
-  lg: 'h-10 md:h-9',
+  sm: 'h-5 @md:h-4',
+  md: 'h-8 @md:h-7',
+  lg: 'h-10 @md:h-9',
 }
 
 export function PaymentLogo({ src, alt, size = 'md', className, ...props }: PaymentLogoProps) {

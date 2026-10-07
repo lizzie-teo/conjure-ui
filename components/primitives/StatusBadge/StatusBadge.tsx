@@ -2,7 +2,7 @@ import type { ComponentPropsWithRef } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '../../../lib/utils'
 
-export const statusBadgeBase = 'inline-flex items-center rounded-full px-2 py-0.5 text-xs md:text-sm font-medium'
+export const statusBadgeBase = 'inline-flex items-center rounded-full px-2 py-0.5 text-xs @md:text-sm font-medium'
 
 export const statusBadgeVariantClasses = {
   default: 'bg-muted text-muted-foreground',
