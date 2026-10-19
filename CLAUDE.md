@@ -45,6 +45,7 @@ app/                  # Only the shipped CSS + a local-only API route. No site.
 lib/
   tokens.css          # Token reference docs (comments only — consumers read this)
   theme-config.ts     # Design constants (ICON_STROKE_WIDTH)
+  motion.ts           # Motion tokens (duration, ease, spring, stagger) + reveal presets + useErrorShake
   prop-types.ts       # MotionElementProps — HTML props safe to spread onto motion.* roots
   merge-refs.ts       # Combine an internal ref with a consumer's forwarded ref
   utils.ts            # cn()
@@ -59,7 +60,7 @@ lib/
   guidelines/
     ui-guidelines             # CSS architecture, responsive, a11y, component rules
     style-guidelines.md       # Clean look design language — colors, radius, shadows, typography
-    motion-guidelines         # Animation system, framer-motion patterns
+    motion-guidelines         # Animation system, motion/react patterns
     chat-animation-guidelines.md
     figma-guidelines.md       # Figma kit — tier map, CSS→token mapping, shared atom rule, variant naming
     figma-sync-workflow.md    # How repo ↔ Figma sync works: catalog, drift check, #figbuild
