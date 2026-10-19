@@ -2,7 +2,21 @@
 
 Animation is part of the product, not decoration. Every component should feel alive — responsive to input, smooth in transition, and confident in movement. The goal is an immersive, premium experience that matches the quality of Airbnb or Qantas.
 
-All animation uses **framer-motion**. Do not use CSS keyframes or `transition` for anything more than color/shadow changes on hover.
+All animation uses the **`motion`** package (v12), imported from `motion/react` — never `framer-motion`. Do not use CSS keyframes or `transition` for anything more than color/shadow changes on hover.
+
+---
+
+## Tokens in code
+
+The tables below live in code in `lib/motion.ts` (and are exported from the package root):
+`duration`, `ease`, `spring`, `stagger`, plus named entrance presets via `getRevealPreset()` /
+`useRevealPreset()`. Import them rather than writing literal values in new code. For quick
+composition, the `Reveal`, `Stagger` and `CountUp` primitives wrap the presets; all of them are on
+one screen in Storybook under **Foundations/Motion**.
+
+Presets use full `transform` strings rather than `x`/`y`/`scale` shorthands, which stay hardware
+accelerated when the main thread is busy. Do not apply that rewrite where a value is driven by a
+`MotionValue`, `useTransform` or layout animation.
 
 ---
 
@@ -122,7 +136,7 @@ Do **not** apply `whileTap` to the shadcn `Button` directly — wrap the contain
 Wrap **every** conditional render that should animate in/out:
 
 ```tsx
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 
 <AnimatePresence initial={false}>
   {isVisible && (
@@ -187,7 +201,7 @@ Animate the **bubble container** entering, not the text inside it.
 Wrap the empty state in `AnimatePresence` with `key="empty"` so it fades out gracefully before the first bubble appears.
 
 ### Input Focus
-Use CSS for the ring transition (framer-motion is overkill here):
+Use CSS for the ring transition (motion is overkill here):
 ```tsx
 className="focus:ring-2 focus:ring-ring transition-shadow duration-150"
 ```
@@ -199,7 +213,7 @@ className="focus:ring-2 focus:ring-ring transition-shadow duration-150"
 Always respect the user's system preference:
 
 ```tsx
-import { useReducedMotion } from 'framer-motion'
+import { useReducedMotion } from 'motion/react'
 
 function MessageBubble({ ... }) {
   const shouldReduce = useReducedMotion()
@@ -252,6 +266,6 @@ function MessageBubble({ ... }) {
 **✅ DO:**
 - `ease.out` for entries (decelerate to rest = feels natural)
 - Stagger lists with `staggerChildren: 0.05` — not longer
-- `layout` prop for size/position changes — framer-motion does the math
+- `layout` prop for size/position changes — motion does the math
 - Subtle lift (`y: -3`) + shadow transition for hover on cards
 - Keep streaming text animation-free — the fill itself is the motion

@@ -331,6 +331,18 @@
       "status": "pending",
       "figmaPage": "Primitives",
       "notes": "Pill button \"Start your search\" that opens a search screen; rounded-full card with shadow."
+    },
+    "Reveal": {
+      "status": "skipped",
+      "reason": "motion wrapper \u2014 no static visual; documented in Storybook Foundations/Motion"
+    },
+    "Stagger": {
+      "status": "skipped",
+      "reason": "motion wrapper \u2014 no static visual; documented in Storybook Foundations/Motion"
+    },
+    "CountUp": {
+      "status": "skipped",
+      "reason": "motion wrapper \u2014 no static visual; documented in Storybook Foundations/Motion"
     }
   },
   "core": {

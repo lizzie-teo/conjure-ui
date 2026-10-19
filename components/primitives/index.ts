@@ -88,3 +88,12 @@ export type { FavoriteButtonProps } from './FavoriteButton/FavoriteButton'
 
 export { SearchButton } from './SearchButton/SearchButton'
 export type { SearchButtonProps } from './SearchButton/SearchButton'
+
+export { Reveal } from './Reveal/Reveal'
+export type { RevealProps } from './Reveal/Reveal'
+
+export { Stagger } from './Stagger/Stagger'
+export type { StaggerProps, StaggerItemProps } from './Stagger/Stagger'
+
+export { CountUp } from './CountUp/CountUp'
+export type { CountUpProps } from './CountUp/CountUp'

@@ -20,6 +20,16 @@ Adding a component, adding an optional prop, and adding a Tier 3 token are **min
 
 ## [Unreleased]
 
+### Added
+
+- **Motion tokens and presets in code.** `duration`, `ease`, `spring` and `stagger` are exported from
+  the package root, so a prototype can match the library's feel without copying literals. Named
+  entrances (`fade`, `fade-up`, `scale-in`, `slide-from-*`) come from `getRevealPreset()` /
+  `useRevealPreset()`, and each collapses to an opacity fade under reduced motion.
+- **`Reveal`, `Stagger` and `CountUp` primitives** — wrap content in an entrance, sequence a group,
+  or count a figure up to its value. `Reveal` and `Stagger` take `inView` to play once on scroll.
+  All three are on one Storybook page, **Foundations/Motion**.
+
 ### Changed — breaking
 
 - **Components renamed to the words people use when they ask for them.** A prompt like "add a
